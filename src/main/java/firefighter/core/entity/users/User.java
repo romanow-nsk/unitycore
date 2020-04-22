@@ -1,6 +1,6 @@
 package firefighter.core.entity.users;
 
-import firefighter.core.API.RestAPIFace;
+import firefighter.core.API.RestAPIBase;
 import firefighter.core.UniException;
 import firefighter.core.constants.Values;
 import firefighter.core.entity.EntityLink;
@@ -127,7 +127,7 @@ public class User extends Person implements I_Name {
     public EntityLink<Account> getAccountData() {
         return accountData; }
     //----------------- Код полиморфного вызова для загрузки нужного класса
-    public Option<User> apiUser(final RestAPIFace service,long id){
+    public Option<User> apiUser(final RestAPIBase service, long id){
         Response<User> res4=null;
         try {
             res4 = service.getUserById("",id,0).execute();

@@ -24,7 +24,7 @@ import retrofit2.http.*;
 
 import java.util.ArrayList;
 
-public interface RestAPIFace {
+public interface RestAPIBase {
     //========================== Универсальный интерфейс бизнес-объектов БД ===================
     @POST("/api/entity/add")
     Call<JLong> addEntity(@Header("SessionToken") String token, @Body DBRequest body, @Query("level") int level);
