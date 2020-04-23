@@ -1,13 +1,13 @@
 package firefighter.core.entity;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.artifacts.Artifact;
 
 /** Ссылка, совмещенная с Id-ом*/
 public class EntityLink<T extends Entity> {
     private long oid=0;
     private T ref=null;
-    private int operation= Values.OperationNone;    // Операция - в БД не пишется, используется при add/update/delete
+    private int operation= ValuesBase.OperationNone;    // Операция - в БД не пишется, используется при add/update/delete
     private transient Class typeT=null;             // Класс параметра шаблона для рефлексионной загрузки ссылок
     public EntityLink(){}
     public EntityLink(Class type0){
@@ -55,7 +55,7 @@ public class EntityLink<T extends Entity> {
     public T getRef() { return ref; }
     public void setRef(T ref) { this.ref = ref; }
     public String showHead(){
-        return (operation==Values.OperationNone ? "" : (Values.Operations[operation]+" "))+oid+" ";
+        return (operation== ValuesBase.OperationNone ? "" : (ValuesBase.Operations[operation]+" "))+oid+" ";
         }
     public String toString(){
         return showHead() + (ref==null ? "" : ":"+ref.toString()); }

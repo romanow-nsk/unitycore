@@ -1,13 +1,13 @@
 package firefighter.core.entity.artifacts;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityBack;
 import firefighter.core.utils.FileNameExt;
 import firefighter.core.utils.OwnDateTime;
 import org.joda.time.format.DateTimeFormat;
 
 public class Artifact extends EntityBack {
-    private int type=Values.UndefinedType;      // Тип файла
+    private int type= ValuesBase.UndefinedType;      // Тип файла
     private String name="";                     // Название артефакта
     private FileNameExt original = new FileNameExt("","");
     private OwnDateTime date=new OwnDateTime(); // Дата/время создания
@@ -23,15 +23,15 @@ public class Artifact extends EntityBack {
         }
     @Override
     public String getTitle() {
-        return Values.ArtifactTypeNames[type]+" "+name+" ["+getOriginalName()+"] "; }
+        return ValuesBase.ArtifactTypeNames[type]+" "+name+" ["+getOriginalName()+"] "; }
     public FileNameExt getOriginal() {
         return original; }
     public void setOriginal(FileNameExt original) {
         this.original = original; }
     public int type(){ return type; }
     public void setType(int type0){ type = type0; }
-    public String typeName() { return Values.ArtifactTypeNames[type]; }
-    public String directoryName() { return Values.ArtifactDirNames[type]; }
+    public String typeName() { return ValuesBase.ArtifactTypeNames[type]; }
+    public String directoryName() { return ValuesBase.ArtifactDirNames[type]; }
     public Artifact(int id){ setOid(id); }
     public String getOriginalName() {
         return original.fileName();

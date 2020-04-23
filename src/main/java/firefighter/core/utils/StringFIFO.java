@@ -1,6 +1,6 @@
 package firefighter.core.utils;
 
-import firefighter.core.entity.subjectarea.arrays.StringList;
+import firefighter.core.entity.base.StringList;
 
 public class StringFIFO {
     private String fifo[];

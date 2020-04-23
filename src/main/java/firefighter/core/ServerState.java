@@ -1,6 +1,6 @@
 package firefighter.core;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 
 public class ServerState extends Entity {
@@ -53,7 +53,7 @@ public class ServerState extends Entity {
         }
     public void setPid() {
         pid = Utils.getPID();
-        releaseNumber = Values.ReleaseNumber;
+        releaseNumber = ValuesBase.ReleaseNumber;
         }
     public long getTimeMin() {
         return timeMin; }

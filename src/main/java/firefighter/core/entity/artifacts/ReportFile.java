@@ -1,13 +1,13 @@
 package firefighter.core.entity.artifacts;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityLink;
 
 public class ReportFile extends Entity {
     public ReportFile(){}
     private String reportHeader="";
-    private int reportType= Values.RepOther;
+    private int reportType= ValuesBase.RepOther;
     private boolean archive=false;
     private EntityLink<Artifact> artifact = new EntityLink<>(Artifact.class);
     public String getReportHeader() {

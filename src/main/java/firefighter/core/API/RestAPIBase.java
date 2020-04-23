@@ -3,16 +3,15 @@ package firefighter.core.API;
 import firefighter.core.DBRequest;
 import firefighter.core.ServerState;
 import firefighter.core.constants.ConstList;
-import firefighter.core.entity.BugMessage;
+import firefighter.core.entity.base.BugMessage;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.artifacts.ArtifactList;
 import firefighter.core.entity.baseentityes.*;
 import firefighter.core.entity.notifications.NTMessage;
-import firefighter.core.entity.subjectarea.HelpFile;
-import firefighter.core.entity.subjectarea.WorkSettings;
-import firefighter.core.entity.subjectarea.arrays.StringList;
+import firefighter.core.entity.base.HelpFile;
+import firefighter.core.entity.base.StringList;
 import firefighter.core.entity.users.Account;
 import firefighter.core.entity.users.User;
 import firefighter.core.utils.Address;
@@ -61,10 +60,6 @@ public interface RestAPIBase {
     Call<BugMessage> getBug(@Header("SessionToken") String token,@Query("id") long id);
     @GET("/api/admin/exportdb")
     Call<Artifact> exportDBxls(@Header("SessionToken") String token);
-    @POST("/api/admin/asterisk/mailonoff")
-    Call<JBoolean> asteriskMailOnOff(@Header("SessionToken") String token,@Query("on") boolean on,@Query("pass") String pass);
-    @POST("/api/admin/asterisk/dialonoff")
-    Call<JBoolean> asteriskDialOnOff(@Header("SessionToken") String token,@Query("on") boolean on,@Query("pass") String pass);
     @POST("/api/admin/reboot")
     Call<JEmpty> rebootServer(@Header("SessionToken") String token, @Query("pass") String pass);
     @POST("/api/admin/importdb")
@@ -75,8 +70,6 @@ public interface RestAPIBase {
     Call<JString> execute(@Header("SessionToken") String token, @Query("pass") String pass,@Query("cmd") String cmd);
     @POST("/api/admin/shutdown")
     Call<JString> shutdown(@Header("SessionToken") String token, @Query("pass") String pass);
-    @POST ("/api/admin/asterisk/setmailcount")
-    Call<JEmpty> asteriskSetMailCount(@Header("SessionToken") String token, @Query("mailcount") int mailcount, @Query("pass") String pass);
     @GET("/api/admin/preparedb")
     Call<JString> prepareDB(@Header("SessionToken") String token,@Query("operation") int operation,@Query("pass") String pass);
     @GET("/api/admin/longpoll")
@@ -96,14 +89,9 @@ public interface RestAPIBase {
     /** Получить текущую версию системы */
     @GET("/api/version")
     Call<JString> currentVersion(@Header("SessionToken") String token);
-    /** Получить настройки - МК Техник и бизнес-процессы) */
-    @GET("/api/worksettings")
-    Call<WorkSettings> workSettings(@Header("SessionToken") String token);
     /** Получить состояние сервера */
     @GET("/api/serverstate")
     Call<ServerState> serverState(@Header("SessionToken") String token);
-    @POST("/api/worksettings/update")
-    Call<JEmpty> updateWorkSettings(@Header("SessionToken") String token,@Body WorkSettings ws);
     /** удаление по имени сущности и id */
     @POST("/api/entity/delete")
     Call<JBoolean> deleteById(@Header("SessionToken") String token,@Query("entity") String entity, @Query("id") long id);

@@ -9,8 +9,8 @@ import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
-import firefighter.core.constants.Values;
-import firefighter.core.entity.BugMessage;
+import firefighter.core.constants.ValuesBase;
+import firefighter.core.entity.base.BugMessage;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
@@ -28,7 +28,7 @@ public class MongoDB36 extends I_MongoDB {
         try {
             List<String> ss = mongo.getDatabaseNames();
             for (String zz : ss)
-                if (zz.equals(Values.mongoDBName))
+                if (zz.equals(ValuesBase.mongoDBName))
                     return true;
             return false;
         } catch (Exception ee){ System.out.println(ee); return false; }
@@ -40,14 +40,14 @@ public class MongoDB36 extends I_MongoDB {
         try {
             boolean auth=false;
             connect();
-            mongoDB = mongo.getDatabase(Values.mongoDBName+port);
+            mongoDB = mongo.getDatabase(ValuesBase.mongoDBName+port);
         } catch (Exception ee){ System.out.println(ee); return false; }
         return isOpen();
     }
 
     private void connect() throws UniException {
         try {
-            mongo = new MongoClient(Values.mongoServerIP, Values.mongoServerPort);
+            mongo = new MongoClient(ValuesBase.mongoServerIP, ValuesBase.mongoServerPort);
         } catch (Exception e) {
             throw UniException.sql(e);
         }
@@ -278,14 +278,14 @@ public class MongoDB36 extends I_MongoDB {
             xx.setName((String) obj.get("name"));
             out.add(xx);
         }
-        if (out.size()>Values.PopupListMaxSize)
+        if (out.size()> ValuesBase.PopupListMaxSize)
             out.clear();
         return out;
         }
     @Override
     public String clearDB(){
         clearCash();
-        Object olist[] = Values.EntityFactofy.classList().toArray();
+        Object olist[] = ValuesBase.EntityFactory.classList().toArray();
         String out="";
         TableItem item=null;
         for(int i=0;i<olist.length;i++){
@@ -303,13 +303,13 @@ public class MongoDB36 extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
             } catch (Exception ee){
-                String ss = "Не могу создать "+Values.EntityFactofy.get(item.clazz.getSimpleName())+"\n"+ee.toString();
+                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString();
                 System.out.println(ss);
                 out+=ss;
             }
         }
         try {
-            add(Values.superUser,0,false);
+            add(ValuesBase.superUser,0,false);
             } catch (UniException e) {
                 String ss = "Не могу создать суперадмина \n"+e.toString()+"\n";
                 System.out.print(ss);
@@ -320,7 +320,7 @@ public class MongoDB36 extends I_MongoDB {
     @Override
     public String clearTable(String table) throws UniException {
         try {
-            TableItem item = Values.EntityFactofy.getItemForSimpleName(table);
+            TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(table);
             if (item==null)
                 return "Entity не найден: "+table;
             if (!item.isTable)
@@ -336,7 +336,7 @@ public class MongoDB36 extends I_MongoDB {
             for(String ss : item.indexes)
                 createIndex(ent,ss);
         } catch (Exception ee){
-            String ss = "Не могу создать "+Values.EntityFactofy.get(table+"\n"+ee.toString());
+            String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(table+"\n"+ee.toString());
             System.out.println(ss);
             return ss;
             }

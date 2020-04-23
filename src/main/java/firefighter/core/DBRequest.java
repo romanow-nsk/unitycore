@@ -1,7 +1,7 @@
 package firefighter.core;
 
 import com.google.gson.Gson;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.mongo.DAO;
 
@@ -21,7 +21,7 @@ public class DBRequest extends DAO {
         jsonObject = gson.toJson(ent);
         }
     public Entity get(Gson gson) throws UniException{
-        Class cc = Values.EntityFactofy.getClassForSimpleName(className);
+        Class cc = ValuesBase.EntityFactory.getClassForSimpleName(className);
         if (cc==null)
             throw UniException.bug("Illegal class "+className);
         try {
