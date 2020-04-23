@@ -110,7 +110,9 @@ public interface RestAPIBase {
     /** Авторизация по Account в теле запроса (тест) = ТЕЛО МОЖЕТ СОДЕРЖАТЬ ТОЛЬКО POST */
     @POST("/api/user/login")
     Call<User> login(@Body Account body);
-    /** Объект-техник  по id user-а */
+    /** Авторизация по номеру телефона и паролю */
+    @GET("/api/user/login/phone")
+    Call<User> login(@Query("phone") String phone, @Query("pass") String pass);
     /** -------------- Стандартные операции с User --------------------- */
     @GET("/api/user/list")
     Call<EntityList<User>> getUserList(@Header("SessionToken") String token,  @Query("mode") int mode,@Query("level") int level);
@@ -200,4 +202,7 @@ public interface RestAPIBase {
     /** Режим кэширования сервера */
     @POST("/api/admin/cashmode")
     Call<JEmpty> setCashMode(@Header("SessionToken") String token,@Query("mode") boolean mode,@Query("pass") String pass);
-    }
+    /** Изменены параметры - добавляется вручную (без Яндекса) */
+    @POST("/api/address/setgps")
+    Call<JLong> setAddressGPS(@Header("SessionToken") String token,  @Query("id") long id, @Body GPSPoint gps);
+}
