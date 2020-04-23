@@ -5,7 +5,7 @@ import firefighter.core.entity.base.BugMessage;
 import firefighter.core.entity.EntityIndexedFactory;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.artifacts.ReportFile;
-import firefighter.core.entity.base.WorkSettingsBase;
+import firefighter.core.entity.base.WorkSettings;
 import firefighter.core.entity.contacts.Contact;
 import firefighter.core.entity.contacts.Mail;
 import firefighter.core.entity.contacts.Phone;
@@ -55,11 +55,11 @@ public class ValuesBase {
     public final static int FatalExceptionStackSize=20;         // Стек вызовов при исключении
     public final static User superUser  =new User(ValuesBase.UserSuperAdminType,"xxx","xxx","xxx","superadmin", ValuesBase.DebugTokenPass,"89230000000");
 
-    public final static void init(){}
+    public static void init(){}
 
     public final static EntityIndexedFactory EntityFactory = new EntityIndexedFactory();
     static {
-        EntityFactory.put(new TableItem("Настройки_0", WorkSettingsBase.class));
+        EntityFactory.put(new TableItem("Настройки", WorkSettings.class));
         EntityFactory.put(new TableItem("Метка GPS", GPSPoint.class));
         EntityFactory.put(new TableItem("Адрес", Address.class));
         EntityFactory.put(new TableItem("Артефакт", Artifact.class));

@@ -2,7 +2,7 @@ package firefighter.core.entity.base;
 
 import firefighter.core.entity.Entity;
 
-public class WorkSettingsBase extends Entity {
+public class WorkSettings extends Entity {
     private String MKVersion="1.0.01";
     private String dataServerFileDir="d:/temp";
     private boolean dataServerFileDirDefault=true;  // Используется текущий каталог запуска

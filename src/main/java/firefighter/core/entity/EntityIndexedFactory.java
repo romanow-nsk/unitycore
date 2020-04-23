@@ -13,6 +13,13 @@ public class EntityIndexedFactory {
     public EntityIndexedFactory(){ init(); }
     public void init(){}
     public void put(TableItem item){
+        String shortName = item.clazz.getSimpleName();
+        TableItem old = simpleNameMap.get(shortName);
+        if (old!=null){       // Замена по коротким именам
+            simpleNameMap.remove(shortName);
+            invertMap.remove(old.name);
+            foreMap.remove(old.clazz);
+            }
         foreMap.put(item.clazz,item);
         invertMap.put(item.name,item);
         simpleNameMap.put(item.clazz.getSimpleName(),item);
