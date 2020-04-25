@@ -8,7 +8,7 @@ import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.artifacts.ArtifactList;
-import firefighter.core.entity.base.WorkSettings;
+import firefighter.core.entity.base.WorkSettingsBase;
 import firefighter.core.entity.baseentityes.*;
 import firefighter.core.entity.notifications.NTMessage;
 import firefighter.core.entity.base.HelpFile;
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 public interface RestAPIBase {
     /** Получить настройки - МК Техник и бизнес-процессы) */
     @GET("/api/worksettings")
-    Call<WorkSettings> workSettings(@Header("SessionToken") String token);
+    Call<WorkSettingsBase> workSettings(@Header("SessionToken") String token);
     @POST("/api/worksettings/update")
-    Call<JEmpty> updateWorkSettings(@Header("SessionToken") String token,@Body WorkSettings ws);
+    Call<JEmpty> updateWorkSettings(@Header("SessionToken") String token,@Body WorkSettingsBase ws);
     //========================== Универсальный интерфейс бизнес-объектов БД ===================
     @POST("/api/entity/add")
     Call<JLong> addEntity(@Header("SessionToken") String token, @Body DBRequest body, @Query("level") int level);

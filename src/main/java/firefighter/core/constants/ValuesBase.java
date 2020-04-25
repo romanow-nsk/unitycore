@@ -5,7 +5,7 @@ import firefighter.core.entity.base.BugMessage;
 import firefighter.core.entity.EntityIndexedFactory;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.artifacts.ReportFile;
-import firefighter.core.entity.base.WorkSettings;
+import firefighter.core.entity.base.WorkSettingsBase;
 import firefighter.core.entity.contacts.Contact;
 import firefighter.core.entity.contacts.Mail;
 import firefighter.core.entity.contacts.Phone;
@@ -59,7 +59,7 @@ public class ValuesBase {
 
     public final static EntityIndexedFactory EntityFactory = new EntityIndexedFactory();
     static {
-        EntityFactory.put(new TableItem("Настройки", WorkSettings.class));
+        EntityFactory.put(new TableItem("Настройки_0", WorkSettingsBase.class));
         EntityFactory.put(new TableItem("Метка GPS", GPSPoint.class));
         EntityFactory.put(new TableItem("Адрес", Address.class));
         EntityFactory.put(new TableItem("Артефакт", Artifact.class));
