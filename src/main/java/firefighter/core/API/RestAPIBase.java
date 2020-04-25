@@ -161,6 +161,9 @@ public interface RestAPIBase {
     /* 642 - создать объект-артефакт */
     @POST("/api/artifact/create")
     Call<Artifact> createArtifact(@Header("SessionToken") String token,@Query("description") String description,@Query("origname") String origName, @Query("filesize") long filesize);
+    /* 645 Конвертация артефакта */
+    @POST("/api/artifact/convert")
+    Call<JEmpty> convertArtifact(@Header("SessionToken") String token,@Query("id") long id);
     //----------------- Для Example ----------------------------------------------------------------------
     @Streaming
     @GET ("/api/file/load2")
