@@ -10,7 +10,7 @@ public class NTMessage extends Entity {
     private User user = new User();                     // Для техника, id по таблице USERов
     private Artifact artifact=null;                     // Связанный артефакт
     private String message="";                          // Текст сообщения
-    private String header="";                           // Заголвок сообщения
+    private String header="";                           // Заголовок сообщения
     private int userSenderType= ValuesBase.UndefinedType;    // Тип (роль) отправителя
     private int userReceiverType= ValuesBase.UndefinedType;  // Тип (роль) приемника
     private long param=0;                               // id сущности или индекс формы для МК
