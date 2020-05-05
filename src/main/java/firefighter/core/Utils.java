@@ -75,7 +75,10 @@ public class Utils {
         return new String(cc);
         }
     public static String timeInMinToString(int time){
-        return String.format("%2d:%2d",time/60,time%60);
+        if (time/(60*24)==0)
+            return String.format("%2d:%2d",time/60,time%60);
+        else
+            return String.format("%d:%2d ч",time/60,time%60);
         }
     public static String timeInSecToString(int time){
         if (time/3600==0)

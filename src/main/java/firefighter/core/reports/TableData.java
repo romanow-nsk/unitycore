@@ -12,9 +12,9 @@ public class TableData implements I_Report{
     protected String title="";
     ArrayList<String> bottoms = new ArrayList<>();
     protected ArrayList<TableCol> cols=new ArrayList<>();
-    protected ArrayList<TableCell []> data =new ArrayList();
+    protected ArrayList<ArrayList<TableCell>> data =new ArrayList();
     //----------------------------------------------------------------------------
-    public ArrayList<TableCell []> data(){ return  data; }
+    public ArrayList<ArrayList<TableCell>> data(){ return  data; }
     public ArrayList<String> bottoms(){ return bottoms; }
     public ArrayList<TableCol> columns(){ return cols; }
     public int getTableType(){ return tableType; }
@@ -26,9 +26,9 @@ public class TableData implements I_Report{
     public TableData(DocumentParamList ss){ paramList=ss; }
     public void addBottom(String ss){ bottoms.add(ss); }
     public int nextRow(){
-        TableCell ros[] = new TableCell[cols.size()];
-        for(int i=0;i<ros.length;i++)
-            ros[i]=new TableCell();
+        ArrayList<TableCell> ros = new ArrayList<>();
+        for(int i=0;i<cols.size();i++)
+            ros.add(new TableCell());
         data.add(ros);
         return data.size();
         }
@@ -48,56 +48,56 @@ public class TableData implements I_Report{
     public boolean setCellValue(int rowIdx, int colIdx, String text) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].value = text;
+        data.get(rowIdx).get(colIdx).value = text;
         return true;
         }
     @Override
     public boolean setCellValue(int rowIdx, int colIdx, int text) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].value = ""+text;
+        data.get(rowIdx).get(colIdx).value = ""+text;
         return true;
     }
     @Override
     public boolean setCellValue(int rowIdx, int colIdx, long text) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].value = ""+text;
+        data.get(rowIdx).get(colIdx).value = ""+text;
         return true;
     }
     @Override
     public boolean setCellValue(int rowIdx, int colIdx, boolean bb) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].value = bb ? "+" : "-";
+        data.get(rowIdx).get(colIdx).value = bb ? "+" : "-";
         return true;
         }
     @Override
     public boolean setCellValue(int rowIdx, int colIdx, double dd) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].value = ""+String.format("%5.3f",dd);
+        data.get(rowIdx).get(colIdx).value = ""+String.format("%5.3f",dd);
         return true;
         }
     @Override
     public boolean setCellBackColor(int rowIdx, int colIdx, int hexColor) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].hexBackColor = hexColor;
+        data.get(rowIdx).get(colIdx).hexBackColor = hexColor;
         return true;
         }
     @Override
     public boolean setCellTextColor(int rowIdx, int colIdx, int hexColor) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].hexTextColor = hexColor;
+        data.get(rowIdx).get(colIdx).hexTextColor = hexColor;
         return true;
         }
     @Override
     public boolean setCellTextSize(int rowIdx, int colIdx, int size) throws UniException {
         if (rowIdx >=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].textSize = size;
+        data.get(rowIdx).get(colIdx).textSize = size;
         return true;
         }
     @Override
@@ -109,7 +109,7 @@ public class TableData implements I_Report{
     public boolean setCellSelected(int rowIdx, int colIdx, boolean sel) throws UniException {
         if (rowIdx>=rows()) return false;
         if (colIdx>=cols()) return false;
-        data.get(rowIdx)[colIdx].selected = sel;
+        data.get(rowIdx).get(colIdx).selected = sel;
         return true;
         }
 
@@ -122,5 +122,31 @@ public class TableData implements I_Report{
         }
     @Override
     public void saveReport() throws UniException {
+        }
+    public void removeCols(long mask){
+        int size = cols.size();
+        int idx, rIdx;
+        long mm = mask;
+        for(idx=rIdx=0;idx<size;idx++){
+            boolean shift = (mm & 1)!=0;
+            mm >>=1;
+            if (shift){
+                cols.remove(rIdx);
+                }
+            else
+                rIdx++;
+            }
+        for(ArrayList<TableCell> row : data){
+            mm = mask;
+            for(idx=rIdx=0;idx<size;idx++){
+                boolean shift = (mm & 1)!=0;
+                mm >>=1;
+                if (shift){
+                    row.remove(rIdx);
+                    }
+                else
+                    rIdx++;
+                }
+            }
         }
 }

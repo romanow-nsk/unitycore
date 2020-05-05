@@ -20,7 +20,7 @@ import firefighter.core.utils.*;
 import java.util.HashMap;
 
 public class ValuesBase {
-    public final static int ReleaseNumber=645;                  // номер сборки сервера
+    public final static int ReleaseNumber=648;                  // номер сборки сервера
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
     public final static String dataServerIP = "localhost";
@@ -41,7 +41,7 @@ public class ValuesBase {
     public final static String mongoDBUser = "firefighter";
     public final static String mongoDBPassword = "firefighter";
     public final static String GeoCoderCity = "Новосибирск";
-    public final static int ConsoleLogSize = 200;               // Количество строк лога
+    public final static int ConsoleLogSize = 1000;              // Количество строк лога
     public final static int CKeepALiveTime=10;                  // Интервал времени проверки соединения
     public final static String DebugTokenPass="pi31415926";     // Пароль отладочного токена
     public final static int PopupListMaxSize=25;                // Максимальный размер выпадающего списка

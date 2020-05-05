@@ -78,6 +78,9 @@ public class Excel {
             Sheet sh = workbook.getSheetAt(idx);
             ArrayList<Entity> out = new ArrayList<>();
             int sz = sh.getLastRowNum();
+            if (sz<=0){
+                return "Пустая таблица "+proto.getClass().getSimpleName()+"\n";
+                }
             for (int i = 1; i <= sz; i++) {     // Пропустить пустую
                 Entity xx = proto.getClass().newInstance();
                 Row row = sh.getRow(i);

@@ -53,8 +53,11 @@ public class TablePDF extends TableData{
 
     @Override
     public void openPage(String title0, ArrayList<TableCol> cols0, int nrow0, boolean verticalHeader0) {
+        super.openPage(title0, cols0, nrow0, verticalHeader0);
+        }
+    @Override
+    public void savePage(){
         try {
-            super.openPage(title0, cols0, nrow0, verticalHeader0);
             int ncol = cols();
             int nrow = rows();
             document.add(new Paragraph(title, titleFont));
@@ -66,18 +69,11 @@ public class TablePDF extends TableData{
                 ww[i] = cols.get(i).size;
             table.setWidths(ww);
             for (int j = 0; j < ncol; j++) {
-                addHeaderCell(table, cols.get(j).name);
+                addHeaderCell(table, cols.get(j));
                 }
-            } catch (Exception ee) { UniException.user(ee); }
-        }
-    @Override
-    public void savePage(){
-        try{
-            int ncol = cols();
-            int nrow = rows();
             for (int i = 0; i < nrow; i++) {
                 for (int j = 0; j < ncol; j++) {
-                    addRegularCell(table, data.get(i)[j]);
+                    addRegularCell(table, data.get(i).get(j));
                 }
             }
             document.add(table);
@@ -89,11 +85,13 @@ public class TablePDF extends TableData{
                 }
         }
 
-    private void addHeaderCell(PdfPTable table, String value) {
-        PdfPCell cell = new PdfPCell(new Phrase(value, cellHeaderFont));
+    private void addHeaderCell(PdfPTable table, TableCol col) {
+        PdfPCell cell = new PdfPCell(new Phrase(col.name, cellHeaderFont));
         if (verticalHeader) cell.setRotation(90);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        if (col.hexBackColor!=0)
+            cell.setBackgroundColor(new BaseColor(col.hexBackColor));
         //cell.setPaddingBottom(3);
         table.addCell(cell);
         }
