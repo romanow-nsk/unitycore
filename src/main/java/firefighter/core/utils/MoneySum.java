@@ -35,8 +35,8 @@ public class MoneySum extends DAO {
         }
     public String toString(){
         if (money%100==0)
-            return String.format("%dр.",money/100);
-        return String.format("%d,%2dр.",money/100,money%100);
+            return String.format("%d",money/100);
+        return String.format("%d, %2d",money/100,money%100);
         }
     public MoneySum add(MoneySum two){
         money+=two.money;
@@ -91,7 +91,7 @@ public class MoneySum extends DAO {
     @Override
     public String toStringValue() {
         return ""+money;
-    }
+        }
     @Override
     public void parseValue(String ss) throws Exception {
         money = Integer.parseInt(ss);

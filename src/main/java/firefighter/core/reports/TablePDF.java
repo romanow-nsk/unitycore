@@ -16,10 +16,10 @@ public class TablePDF extends TableData{
     protected Font titleFont;
     protected Font cellHeaderFont;
     protected Font cellRegularFont;
-    protected static int cellHeight=13;
-    protected static int cellWidth=20;
-    protected static int cellWidthFirst=120;
-    protected static int cellWidthLast=30;
+    protected int cellHeight=26;
+    protected int cellWidth=20;
+    protected int cellWidthFirst=120;
+    protected int cellWidthLast=30;
     private PdfPTable table;
     private Document document;
     public void setFontPath(String path){
@@ -44,6 +44,8 @@ public class TablePDF extends TableData{
                 document = new Document(PageSize.A4.rotate());
             else
                 document = new Document();
+            int nLines = paramList.getnLines();
+            cellHeight = nLines*10;
             document.setMargins(50, 20, 20, 20);
             PdfWriter.getInstance(document, new FileOutputStream(fname));
             document.open();

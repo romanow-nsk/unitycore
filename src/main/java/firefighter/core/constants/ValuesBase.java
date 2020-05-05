@@ -20,7 +20,7 @@ import firefighter.core.utils.*;
 import java.util.HashMap;
 
 public class ValuesBase {
-    public final static int ReleaseNumber=648;                  // номер сборки сервера
+    public final static int ReleaseNumber=649;                  // номер сборки сервера
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
     public final static String dataServerIP = "localhost";

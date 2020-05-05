@@ -3,6 +3,7 @@ package firefighter.core.reports;
 public class DocumentParamList {
     private boolean landscape=false;
     private boolean full=false;
+    private int nLines=1;
     public boolean isLandscape() { return landscape; }
     public DocumentParamList setLandscape() {
         landscape = true;
@@ -13,4 +14,9 @@ public class DocumentParamList {
         full = true;
         return this;
         }
+    public int getnLines() {
+        return nLines; }
+    public DocumentParamList setnLines(int nLines) {
+        this.nLines = nLines;
+        return this; }
 }
