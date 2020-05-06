@@ -45,7 +45,7 @@ public class TablePDF extends TableData{
             else
                 document = new Document();
             int nLines = paramList.getnLines();
-            cellHeight = nLines*10;
+            cellHeight = nLines==1 ? 13 : nLines*10;
             document.setMargins(50, 20, 20, 20);
             PdfWriter.getInstance(document, new FileOutputStream(fname));
             document.open();
