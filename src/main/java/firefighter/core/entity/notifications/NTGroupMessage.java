@@ -49,7 +49,7 @@ public class NTGroupMessage extends ArrayList<NTMessage> implements I_TextFile {
         return false;
         }
     public int getType(){ return get(0).getType(); }
-    public User getUser(){ return get(0).getUser(); }
+    public User getUser(){ return get(0).getUser().getRef(); }
     public int getExecuteMode(){ return get(0).getExecuteMode(); }
 
 }

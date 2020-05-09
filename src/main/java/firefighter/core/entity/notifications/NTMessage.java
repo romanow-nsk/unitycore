@@ -2,23 +2,24 @@ package firefighter.core.entity.notifications;
 
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
+import firefighter.core.entity.EntityLink;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.users.User;
 import firefighter.core.utils.OwnDateTime;
 
 public class NTMessage extends Entity {
-    private User user = new User();                     // Для техника, id по таблице USERов
-    private Artifact artifact=null;                     // Связанный артефакт
-    private String message="";                          // Текст сообщения
-    private String header="";                           // Заголовок сообщения
-    private int userSenderType= ValuesBase.UndefinedType;    // Тип (роль) отправителя
-    private int userReceiverType= ValuesBase.UndefinedType;  // Тип (роль) приемника
-    private long param=0;                               // id сущности или индекс формы для МК
-    private OwnDateTime sndTime=new OwnDateTime();      // Дата/время отправки
-    private OwnDateTime recTime=new OwnDateTime();      // Дата/время получения
-    private int executeMode= ValuesBase.NMUserAck;           // Важное (не сбрасывается при просмотре, выполняется сразу)
-    private int state= ValuesBase.NSSend;                    // Состояние приема
-    private int type= ValuesBase.UndefinedType;             // Тип уведомления
+    private EntityLink<User> user = new EntityLink<>(User.class);           // Для техника, id по таблице USERов
+    private EntityLink<Artifact> artifact=new EntityLink<>(Artifact.class); // Связанный артефакт
+    private String message="";                                  // Текст сообщения
+    private String header="";                                   // Заголовок сообщения
+    private int userSenderType= ValuesBase.UndefinedType;       // Тип (роль) отправителя
+    private int userReceiverType= ValuesBase.UndefinedType;     // Тип (роль) приемника
+    private long param=0;                                       // id сущности или индекс формы для МК
+    private OwnDateTime sndTime=new OwnDateTime();              // Дата/время отправки
+    private OwnDateTime recTime=new OwnDateTime();              // Дата/время получения
+    private int executeMode= ValuesBase.NMUserAck;              // Важное (не сбрасывается при просмотре, выполняется сразу)
+    private int state= ValuesBase.NSSend;                       // Состояние приема
+    private int type= ValuesBase.UndefinedType;                 // Тип уведомления
     public NTMessage(NTMessage two){
         user = two.user;
         artifact = two.artifact;
@@ -30,6 +31,8 @@ public class NTMessage extends Entity {
         executeMode = two.executeMode;
         type = two.type;
         state = two.state;
+        user.setOid(two.getUser().getOid());
+        artifact.setOid(two.getArtifact().getOid());
         }
     public String getTitle(){
         String ss = ValuesBase.UserTypeList[userSenderType]+" "+user.getTitle()+" "+ ValuesBase.NTypes[type]+": "+sndTime.timeToString()+" "+header;
@@ -40,7 +43,7 @@ public class NTMessage extends Entity {
         }
     public String toString(){
         String ss = toShortString()+ " "+ ValuesBase.UserTypeList[userSenderType]+"-->"+ ValuesBase.UserTypeList[userReceiverType];
-        if (user.getOid()!=0) ss+=" "+user.shortUserName();
+        if (user.getOid()!=0) ss+=" "+user.getTitle();
         ss+="\n"+sndTime.timeToString()+" "+header+": "+message;
         return ss;
         }
@@ -58,9 +61,6 @@ public class NTMessage extends Entity {
         userSenderType = sndType0;
         userReceiverType = recType0;
         user.setOid(uu.getOid());
-        user.setMiddleName(uu.getMiddleName());
-        user.setFirstName(uu.getFirstName());
-        user.setLastName(uu.getLastName());
         header = head;
         message=mes;
     }
@@ -68,16 +68,10 @@ public class NTMessage extends Entity {
         return header; }
     public void setHeader(String header) {
         this.header = header; }
-    public User getUser() {
+    public EntityLink<User> getUser() {
         return user; }
-    public NTMessage setUser(User user) {
-        this.user = user;
-        return this; }
-    public Artifact getArtifact() {
+    public EntityLink<Artifact> getArtifact() {
         return artifact; }
-    public NTMessage setArtifact(Artifact artifact) {
-        this.artifact = artifact;
-        return this; }
     public String getMessage() {
         return message; }
     public void setMessage(String message) {

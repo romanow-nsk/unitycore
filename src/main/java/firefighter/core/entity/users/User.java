@@ -16,7 +16,7 @@ import java.io.IOException;
 public class User extends Person implements I_Name {
     private int typeId= ValuesBase.UndefinedType;
     //private Account account=null;
-    private EntityLink<Account>  accountData = new EntityLink<>();           // Загружается по API
+    private EntityLink<Account>  accountData = new EntityLink<>();          // Загружается по API
     private EntityLink<Artifact> photo=new EntityLink<>(Artifact.class);    // Фотография
     private long secondTableId=0;                                           // ID для производного класса
     private String sessionToken="";
