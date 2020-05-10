@@ -38,13 +38,22 @@ public class NTGroupMessage extends ArrayList<NTMessage> implements I_TextFile {
                 }
             } catch (Exception ee){ throw UniException.io(ee); }
         }
-    public boolean addToOld(NTMessage mes){
-        for(NTMessage mm : this)
-            if (mm.getType()==mes.getType() && mm.getExecuteMode()==mes.getExecuteMode()){
-                if (mm.getType()== ValuesBase.NTTechnicianAction && mm.getParam()!=mes.getParam())      // Разные действия
-                    continue;
-                add(mes);
-                return true;
+    public boolean addToOld(NTMessage mes, boolean withText){
+        for(NTMessage mm : this){
+            if (mm.getType()!=mes.getType())
+                continue;
+            if (mm.getExecuteMode()!=mes.getExecuteMode())
+                continue;
+            if (mm.getUserSenderType()!=mes.getUserSenderType())
+                continue;
+            if (withText && !mm.getHeader().equals(mes.getHeader()))
+                continue;
+            if (withText && !mm.getMessage().equals(mes.getMessage()))
+                continue;
+            if (mm.getType()== ValuesBase.NTTechnicianAction && mm.getParam()!=mes.getParam())      // Разные действия
+                continue;
+            add(mes);
+            return true;
             }
         return false;
         }

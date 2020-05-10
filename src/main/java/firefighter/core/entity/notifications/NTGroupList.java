@@ -30,18 +30,18 @@ public class NTGroupList extends ArrayList<NTGroupMessage> implements I_TextFile
                 }
             } catch (Exception ee){ throw UniException.io(ee); }
         }
-    public void add(NTMessage mes){
+    public void add(NTMessage mes, boolean withText){
         for(NTGroupMessage group : this){
-            if (group.addToOld(mes))
+            if (group.addToOld(mes,withText))
                 return;
             }
         NTGroupMessage xx = new NTGroupMessage();
         xx.add(mes);
         add(xx);
         }
-    public NTGroupList(NTList list){
+    public NTGroupList(NTList list, boolean withText){
         clear();
         for(NTMessage mes : list.getData())
-            add(mes);
+            add(mes,withText);
         }
 }
