@@ -63,7 +63,7 @@ public class Person extends Entity {
     public String fullUserName(){
         String out = lastName;
         if (firstName.length()==0) return out;
-        out+=" "+lastName;
+        out+=" "+firstName;
         if (middleName.length()==0) return out;
         out+=" "+middleName;
         return out;
