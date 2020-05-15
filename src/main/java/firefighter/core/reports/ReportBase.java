@@ -11,7 +11,7 @@ public abstract class ReportBase {
     protected long invertColumnMask=0;              // Инверсная маска столбцов
     public Artifact reportFile = new Artifact();
     public int reportType= ValuesBase.RepOther;
-    abstract public void createReportFile(TableData table, String fspec) throws UniException;
+    abstract public void createReportFile(TableData table, String fspec) throws Exception;
     abstract public String getTitle();
     public ReportBase(int type){
         reportType = type;
