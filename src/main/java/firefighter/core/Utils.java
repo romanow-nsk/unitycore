@@ -123,6 +123,24 @@ public class Utils {
     public static void printFatalMessage(Throwable ee) {
         System.out.println(createFatalMessage(ee));
         }
+    public static String when(String ss){
+        if (ss.length()==0) return ss;
+        int idx=ss.length();
+        char cc = ss.charAt(idx-1);
+        switch (cc){
+            case 'а': return ss.substring(0,idx-1)+'у';
+            case 'о': return ss;
+            case 'й': return ss.substring(0,idx-1)+'я';
+            case 'я': return ss.substring(0,idx-1)+'ю';
+            default:  return ss+'a';
+            }
+        }
     public static void main(String a[]){
+        System.out.println(when("Иванов"));
+        System.out.println(when("Зуева"));
+        System.out.println(when("Евгений"));
+        System.out.println(when("Петр"));
+        System.out.println(when("Мария"));
+        System.out.println(when("Семенович"));
     }
 }

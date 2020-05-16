@@ -1,6 +1,7 @@
 package firefighter.core.entity.users;
 
 
+import firefighter.core.Utils;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.contacts.Mail;
 import firefighter.core.entity.contacts.Phone;
@@ -68,6 +69,14 @@ public class Person extends Entity {
         out+=" "+middleName;
         return out;
         }
+    public String fullUserNameWhen(){
+        String out = Utils.when(lastName);
+        if (firstName.length()==0) return out;
+        out+=" "+Utils.when(firstName);
+        if (middleName.length()==0) return out;
+        out+=" "+Utils.when(middleName);
+        return out;
+    }
     @Override
     public String getTitle() {
         return shortUserName()+","+post + ","+phone.toString()+","+mail.toString(); }
