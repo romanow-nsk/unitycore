@@ -20,7 +20,7 @@ import firefighter.core.utils.*;
 import java.util.HashMap;
 
 public class ValuesBase {
-    public final static int ReleaseNumber=654;                  // номер сборки сервера
+    public final static int ReleaseNumberBase=1;                // номер сборки сервера
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
     public final static String dataServerIP = "localhost";
@@ -71,10 +71,10 @@ public class ValuesBase {
         EntityFactory.put(new TableItem("Ошибка", BugMessage.class));
         EntityFactory.put(new TableItem("Персоналия", Person.class));
         EntityFactory.put(new TableItem("Отчет", ReportFile.class));
+        Class zz = ServerState.class;
         EntityFactory.put(new TableItem("Состояние", ServerState.class));
         EntityFactory.put(new TableItem("Подсказка", HelpFile.class));                     // Сборка 586
         EntityFactory.put(new TableItem("Контакт", Contact.class,false));          // Сборка 623 - не таблица
-        EntityFactory.put(new TableItem("Аккаунт", Account.class,false));          // Сборка 623 - не таблица
         EntityFactory.put(new TableItem("Спец.файла", FileNameExt.class,false));   // Сборка 623 - не таблица
         EntityFactory.put(new TableItem("Дата/время", OwnDateTime.class,false));   // Сборка 623 - не таблица
         EntityFactory.put(new TableItem("E-mail", Mail.class,false));              // Сборка 623 - не таблица
