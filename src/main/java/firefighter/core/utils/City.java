@@ -1,11 +1,11 @@
 package firefighter.core.utils;
 
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.Entity;
 
 public class City extends Entity {
     private String name="";
-    private int type= ValuesBase.CTown;
+    private int type= Values.CTown;
     public City(){}
     public City(String nm){
         name = nm; }
@@ -31,10 +31,10 @@ public class City extends Entity {
     public int cityType(){return  type & 0x0F; }
     public String getTitle(){ return toString(); }
     public String toFullString() {
-        return super.toFullString()+(cityType() == 0 ? "" : ValuesBase.TypesCity[cityType()]) + name;
+        return super.toFullString()+(cityType() == 0 ? "" : Values.TypesCity[cityType()]) + name;
         }
     public String toString() {
-        return cityType() == 0 ? "" : ValuesBase.TypesCity[cityType()] + name;
+        return cityType() == 0 ? "" : Values.TypesCity[cityType()] + name;
     }
     @Override
     public String objectName() {

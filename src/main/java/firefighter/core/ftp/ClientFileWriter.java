@@ -1,8 +1,11 @@
 package firefighter.core.ftp;
 
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientFileWriter extends Thread{
@@ -57,7 +60,7 @@ public class ClientFileWriter extends Thread{
              os.writeUTF(dstName);
              os.writeLong(fileSize);
              os.flush();
-             int sz = ValuesBase.FileBufferSize;
+             int sz = Values.FileBufferSize;
              byte bb[] = new byte[(int)fileSize];
              fs.read(bb);
              os.write(bb);

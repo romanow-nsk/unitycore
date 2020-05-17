@@ -1,16 +1,17 @@
 package firefighter.core.constants;
 
 import firefighter.core.ServerState;
-import firefighter.core.entity.base.BugMessage;
 import firefighter.core.entity.EntityIndexedFactory;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.artifacts.ReportFile;
+import firefighter.core.entity.base.BugMessage;
+import firefighter.core.entity.base.HelpFile;
 import firefighter.core.entity.base.WorkSettingsBase;
 import firefighter.core.entity.contacts.Contact;
 import firefighter.core.entity.contacts.Mail;
 import firefighter.core.entity.contacts.Phone;
 import firefighter.core.entity.contacts.PhoneList;
-import firefighter.core.entity.base.HelpFile;
+import firefighter.core.entity.notifications.NTMessage;
 import firefighter.core.entity.users.Account;
 import firefighter.core.entity.users.Person;
 import firefighter.core.entity.users.User;
@@ -21,6 +22,25 @@ import java.util.HashMap;
 
 public class ValuesBase {
     public final static int ReleaseNumberBase=1;                // номер сборки сервера
+    private final static String ApkName = "Unity.apk";           // Имя файла
+    private final static String mongoDBName = "unity";
+    private final static String mongoDBUser = "unity";
+    private final static String ServerName="UnityDataserver.jar";
+    private final static String mongoDBPassword = "unity";
+    private final static User superUser=new User(Values.UserSuperAdminType, "Система", "", "", "UnityDataserver", "pi31415926","9130000000");
+    public static String getMongoDBName() {
+        return mongoDBName; }
+    public static String getMongoDBUser() {
+        return mongoDBUser; }
+    public static String getMongoDBPassword() {
+        return mongoDBPassword; }
+    public static String getApkName() {
+        return ApkName; }
+    public static String getServerName() {
+        return ServerName; }
+    public static User getSuperUser() {
+        return superUser; }
+    //------------------------------------------------------------------------------------------------------
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
     public final static String dataServerIP = "localhost";
@@ -30,16 +50,12 @@ public class ValuesBase {
     public final static String dataServerFileDir = "d:/temp";
     public final static String webServerWebLocation = "d:/temp/webserver";
     public final static String mongoStartCmd = "\"c:/Program Files/MongoDB/Server/3.0/bin/mongod\" --dbpath " + dataServerFileDir + "/mongo";
-    public final static String ApkName = "FireFighter.apk";     // Имя файла
-    public final static String ServerName="FirefighterDataserver.jar";
-    public final static String DeployScriptName="deploy";
     public final static int FileBufferSize = 8192;              // РАзмер буфера передачи файла
     public final static int FTPFileNotFound = -1;
     public final static int mongoServerPort = 27017;
     public final static String mongoServerIP = "127.0.0.1";
-    public final static String mongoDBName = "firefighter";
-    public final static String mongoDBUser = "firefighter";
-    public final static String mongoDBPassword = "firefighter";
+    public final static String DeployScriptName="deploy";
+
     public final static String GeoCoderCity = "Новосибирск";
     public final static int ConsoleLogSize = 1000;              // Количество строк лога
     public final static int CKeepALiveTime=10;                  // Интервал времени проверки соединения
@@ -48,12 +64,9 @@ public class ValuesBase {
     public final static int ServerRebootDelay=10;               // Задержка сервера при перезагрузке
     public final static int HTTPTimeOut=60;                     // Тайм-аут клиента
     public final static int BackgroundOperationMaxDelay=300;    //
-    public final static int AsteriskDialPeriod=2;               // Периодичность звонка технику
-    public final static int ProxyServerPortOffset=100;          // Смещение номеров портов для прокси
     public final static int MongoDBType=0;
     public final static int MongoDBType36=1;
     public final static int FatalExceptionStackSize=20;         // Стек вызовов при исключении
-    public final static User superUser  =new User(ValuesBase.UserSuperAdminType,"xxx","xxx","xxx","superadmin", ValuesBase.DebugTokenPass,"89230000000");
 
     public static void init(){}
 
@@ -64,14 +77,14 @@ public class ValuesBase {
         EntityFactory.put(new TableItem("Адрес", Address.class));
         EntityFactory.put(new TableItem("Артефакт", Artifact.class));
         EntityFactory.put(new TableItem("Пользователь", User.class));
-        //---------- Реализовано в памяти ----------------------------------------
-        //EntityFactory.put(new TableItem("Уведомление",FireNotification.class));
+        EntityFactory.put(new TableItem("Уведомление", NTMessage.class)
+                .add("type").add("state").add("param").add("r_timeInMS").add("s_timeInMS")
+                .add("recType").add("sndType"));   // 651 - в БД
         EntityFactory.put(new TableItem("Улица", Street.class));
         EntityFactory.put(new TableItem("Нас.пункт", City.class));
         EntityFactory.put(new TableItem("Ошибка", BugMessage.class));
         EntityFactory.put(new TableItem("Персоналия", Person.class));
         EntityFactory.put(new TableItem("Отчет", ReportFile.class));
-        Class zz = ServerState.class;
         EntityFactory.put(new TableItem("Состояние", ServerState.class));
         EntityFactory.put(new TableItem("Подсказка", HelpFile.class));                     // Сборка 586
         EntityFactory.put(new TableItem("Контакт", Contact.class,false));          // Сборка 623 - не таблица
@@ -91,20 +104,21 @@ public class ValuesBase {
         PrefixMap.put("Artifact.original","f");             //636
         PrefixMap.put("Person.phone","p");                  //636
         PrefixMap.put("Person.mail","m");                   //636
-        PrefixMap.put("User.account","a");                  //636
         PrefixMap.put("User.phone","p");                    //636
         PrefixMap.put("User.mail","m");                     //636
         PrefixMap.put("GPSPoint.gpsTime","a");              //636
         PrefixMap.put("Street.location","s");               //636
         PrefixMap.put("Account.loginPhone","p");            //636
         PrefixMap.put("AccountData.loginPhone","p");        //637
-    }
+        PrefixMap.put("NTMessage.sndTime","s");             //651
+        PrefixMap.put("NTMessage.recTime","r");             //651
+        PrefixMap.put("Street.location","s");               //636
+        }
     //------------- Аутентификация и сессия ---------------------------------------------------
     public final static int SessionTokenLength = 32;                // Размер сессионного ключа
     public final static int SessionSilenceTime = 30 * 60;           // Время молчания до разрыва сессии (сек)
     public final static int SessionCycleTime = 30;                  // Цикл проверки сессией (сек)
     public final static int ClockCycleTime = 30;                    // Цикл проверки событий (процессы) (сек)
-    public final static int TechnicianAnswerTime = 5;               // Время реакции на голосовое сообщение (мин)
     public final static String SessionHeaderName = "SessionToken";  // Параметр заголовка - id сессии
     public final static String JWTSessionSecretKey = "FireFighterTopSecret";
     public final static boolean JWTSessionMode = true;
@@ -157,52 +171,13 @@ public class ValuesBase {
     public final static int UserSuperAdminType = 1;
     @CONST(group = "User", title = "Администратор")
     public final static int UserAdminType = 2;
-    @CONST(group = "User", title = "Начальник ТО")
-    public final static int UserMaintenanceChefType = 3; //Начальник ТО
-    @CONST(group = "User", title = "Техник")
-    public final static int UserTechnicianType = 4;
-    @CONST(group = "User", title = "Руководитель")
-    public final static int UserBossType = 5;
-    @CONST(group = "User", title = "Бухгалтер")
-    public final static int UserBookKeeperType = 6;      // Бухгалтер
-    @CONST(group = "User", title = "Кладовщик")
-    public final static int UserStoreKeeperType = 7;     // Кладовщик
-    @CONST(group = "User", title = "Юрист")
-    public final static int UserLawyerType = 8;          // Юрист
-    @CONST(group = "User", title = "Заказчик")
-    public final static int UserCustomerType = 9;        // Заказчик
-    @CONST(group = "User", title = "Система")
-    public final static int UserSystemType = 10;        // Система
-    public final static String UserTypeList[] = {"Гость", "Суперадмин", "Администратор", "Начальник ТО", "Техник",
-            "Руководитель", "Бухгалтер", "Кладовщик", "Юрист", "Заказчик","Система"};
+    public final static String UserTypeList[] = {"Гость", "Суперадмин", "Администратор"};
     //------------------- Вид уведомления  -------------------------------------------------------------------------
     @CONST(group = "NotificationType", title = "Не определено")
     public final static int NTUndefined = 0;
-    @CONST(group = "NotificationType", title = "Превышено время")
-    public final static int NTOverTime = 1;
-    @CONST(group = "NotificationType", title = "Изменен план смены")
-    public final static int NTShiftChanged = 2;
-    @CONST(group = "NotificationType", title = "Не в сети")
-    public final static int NTInaccessible = 3;
-    @CONST(group = "NotificationType", title = "В сети")
-    public final static int NTAccessible = 4;
-    @CONST(group = "NotificationType", title = "Покинул объект")
-    public final static int NTLeaveFacility = 5;
-    @CONST(group = "NotificationType", title = "Вернулся на объект")
-    public final static int NTBackToFacility = 6;
-    @CONST(group = "NotificationType", title = "Проблема у техника")
-    public final static int NTProblem = 7;
-    @CONST(group = "NotificationType", title = "Сообщение")
-    public final static int NTWarning = 8;
-    @CONST(group = "NotificationType", title = "Действие в МК")
-    public final static int NTTechnicianAction = 9;
-    @CONST(group = "NotificationType", title = "Перенос заявки")
-    public final static int NTMaintenanceClose = 10;
-    @CONST(group = "NotificationType", title = "Голосовая заявка")
-    public final static int NTVoiceCall = 11;
-    public final static String NTypes[] = {"Не определено", "Превышено время", "Изменен план смены", "Не в сети", "В сети", "Покинул объект",
-            "Вернулся на объект", "Проблема у техника", "Сообщение","Действие в МК","Перенос заявки","Голосовая заявка"
-        };
+    @CONST(group = "NotificationType", title = "Действие за клиента")
+    public final static int NTUserAction = 1;
+    public final static String NTypes[] = {"Не определено","Действие за клиента"};
     //------------------- Состояние уведомлнния  -------------------------------------------------------------------------
     @CONST(group = "NotificationState", title = "Не определено")
     public final static int NSUndefined = 0;
@@ -259,15 +234,6 @@ public class ValuesBase {
     @CONST(group = "ReportType", title = "html")
     public final static int ReportHTML = 3;
     public final static String ReportTypes[] = {"Нет", "pdf", "xls","html"};
-    //------------------------ Коды форм МК (только прямое управление) ---------------------------------------------------------------------------
-    public final static int FormRestart=-6;             // Перезагрузка
-    public final static int FormRetry=-5;               // Повторно вызвать текущую форму
-    public final static int FormLogout=-4;              // По умолчанию - разлогиниться
-    public final static int FormByUserState=-1;         // По состоянию техника
-    public final static int FormToPrev=-2;              // Предыдущая форма
-    public final static int FormExit=-3;                // Закрыть приложение
-    public final static int FormLogin=0;
-    public final static int FormUpdate=13;
     //----------------------- Типы выполнения уведомлений ---------------------------------------------
     @CONST(group = "NotificationMode", title = "Принудительно")
     public final static int NMHard = 0;
@@ -291,29 +257,7 @@ public class ValuesBase {
     //----------------------- Отчеты  ---------------------------------------------
     @CONST(group = "Report", title = "Прочее")
     public final static int RepOther = 0;
-    @CONST(group = "Report", title = "По техникам")
-    public final static int RepTechnicians = 1;
-    @CONST(group = "Report", title = "Регламент ЕТО")
-    public final static int RepMonthly = 2;
-    @CONST(group = "Report", title = "Выст.оплаты")
-    public final static int RepDept = 3;
-    @CONST(group = "Report", title = "Списание")
-    public final static int RepDistrib = 4;
-    @CONST(group = "Report", title = "Импорт оплат")
-    public final static int RepPayImport = 5;
-    @CONST(group = "Report", title = "Оплата ЕТО")
-    public final static int RepMainPaiment = 6;
-    @CONST(group = "Report", title = "Зависшие заявки")
-    public final static int RepMainLost = 7;
-    @CONST(group = "Report", title = "Контрагенты")
-    public final static int RepContractors = 8;
-    @CONST(group = "Report", title = "Приказ")
-    public final static int RepDirection = 9;
-    @CONST(group = "Report", title = "Обслуж.организации")
-    public final static int RepServiceCompany = 10;
-    @CONST(group = "Report", title = "Объекты")
-    public final static int RepFacilities = 11;
-    public final static String Reports[] = {"Прочее", "По техникам","Регламент ЕТО","Выст.оплаты","Списание","Импорт оплат","Оплата ЕТО","Зависшие заявки","Контрагенты","Приказ","Обслуж.организации","Объекты"};
+    public final static String Reports[] = {"Прочее"};
     //------------------------ Препарирования БД --------------------------------------
     @CONST(group = "DBOperation", title = "Очистка контента (заявки)")
     public final static int DBOClearContent1 = 0;
@@ -337,6 +281,5 @@ public class ValuesBase {
             "Сжать таблицы","Обновить поля","Сбор мусора","Наличие артефактов",
             "Тест - задержка 60 сек","Пересчет задолженностей","637:Аккаунт"};
     //------------------------ Источники артефактов ------------------------------------------------------
-    public final static String ArtifactParentList[] = {"ReportFile", "User","Contract","DefectSheet","Document",
-            "Problem","Facility","Maintenance","MaintenanceJob"};
+    public final static String ArtifactParentList[] = {"ReportFile", "User"};
 }

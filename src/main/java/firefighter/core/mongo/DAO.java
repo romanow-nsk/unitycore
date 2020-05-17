@@ -3,7 +3,7 @@ package firefighter.core.mongo;
 import firefighter.core.I_ExcelRW;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityField;
 import firefighter.core.entity.EntityLink;
@@ -33,7 +33,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
     public void getFields() throws UniException {
         if (fld!=null)
             return;
-        TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(getClass().getSimpleName());
+        TableItem item = Values.EntityFactory.getItemForSimpleName(getClass().getSimpleName());
         fld = item.getFields();
         }
     final public void getDBValues(String prefix, org.bson.Document out) throws UniException{
@@ -138,7 +138,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         }
     public String getFieldPrefix(EntityField ff){
         String key = getClass().getSimpleName()+"."+ff.name;
-        String out = ValuesBase.PrefixMap.get(key);
+        String out = Values.PrefixMap.get(key);
         return out;
         }
     final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo) throws UniException{
@@ -273,11 +273,11 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                 long oid = link.getOid();
                 if (level!=0 && link.getRef()!=null){
                     switch(link.getOperation()){
-                        case ValuesBase.OperationAdd:
+                        case Values.OperationAdd:
                             oid = mongo.add(link.getRef(),level-1);
                             link.setOid(oid);
                             break;
-                        case ValuesBase.OperationUpdate:
+                        case Values.OperationUpdate:
                             mongo.update(link.getRef(),level-1);
                             break;
                     }
@@ -292,11 +292,11 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         if (link2.getRef()==null)
                             continue;
                         switch(link2.getOperation()){
-                            case ValuesBase.OperationAdd:
+                            case Values.OperationAdd:
                                 long oid2 = mongo.add(link2.getRef(),level-1);
                                 link2.setOid(oid2);
                                 break;
-                            case ValuesBase.OperationUpdate:
+                            case Values.OperationUpdate:
                                 mongo.update(link2.getRef(),level-1);
                                 break;
                             }

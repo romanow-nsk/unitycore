@@ -63,7 +63,7 @@ public class ConstList extends ArrayList<ConstValue> {
         }
     public void createConstList(){
         Object oo = new ValuesBase();
-        Class cl = ValuesBase.class;
+        Class cl = Values.class;
         Field[] fields = cl.getFields();
         for(Field fd: fields){
             if ((fd.getModifiers() & Modifier.STATIC)==0) continue;
@@ -74,7 +74,9 @@ public class ConstList extends ArrayList<ConstValue> {
                 int vv = 0;
                 try {
                     vv = fd.getInt(oo);
-                    } catch (IllegalAccessException e) { vv=0; }
+                    } catch (Exception e) {
+                        vv=0;
+                        }
                 //System.out.println(about.group()+":"+mname + " ="+vv+" "+about.title());
                 ConstValue cc = new ConstValue(about.group(),mname,about.title(),vv);
                 add(cc);

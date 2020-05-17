@@ -1,12 +1,12 @@
 package firefighter.core.utils;
 
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityLink;
 
 public class Street extends Entity {
     private String name="";
-    private int type= ValuesBase.SStreet;
+    private int type= Values.SStreet;
     private EntityLink<City> city = new EntityLink<>(City.class);
     private GPSPoint location = new GPSPoint();
     public GPSPoint getLocation() {
@@ -53,13 +53,13 @@ public class Street extends Entity {
     public int cityType(){ return city.getRef().getType(); }
     public String getTitle(){ return toString(); }
     public String toString(){
-        return city.getTitle()+":"+(streetType()==0 ? "" : ValuesBase.TypesStreet[streetType()]+name);
+        return city.getTitle()+":"+(streetType()==0 ? "" : Values.TypesStreet[streetType()]+name);
         }
     public String toFullString(){
-        return super.toFullString()+city.toFullString()+":"+(streetType()==0 ? "" : ValuesBase.TypesStreet[streetType()]+name);
+        return super.toFullString()+city.toFullString()+":"+(streetType()==0 ? "" : Values.TypesStreet[streetType()]+name);
     }
     public String toShortString(){
-        return (streetType()==0 ? "" : ValuesBase.TypesStreet[streetType()]+name);
+        return (streetType()==0 ? "" : Values.TypesStreet[streetType()]+name);
     }
     //------------------------------------------------------------------------------------------------------------------
     /*

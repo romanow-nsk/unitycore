@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import firefighter.core.I_SelectObject;
 import firefighter.core.I_TextFile;
 import firefighter.core.UniException;
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.users.User;
 
 import java.io.BufferedReader;
@@ -50,7 +50,7 @@ public class NTGroupMessage extends ArrayList<NTMessage> implements I_TextFile {
                 continue;
             if (withText && !mm.getMessage().equals(mes.getMessage()))
                 continue;
-            if (mm.getType()== ValuesBase.NTTechnicianAction && mm.getParam()!=mes.getParam())      // Разные действия
+            if (mm.getType()== Values.NTUserAction && mm.getParam()!=mes.getParam())      // Разные действия
                 continue;
             add(mes);
             return true;

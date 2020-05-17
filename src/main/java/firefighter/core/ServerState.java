@@ -1,6 +1,5 @@
 package firefighter.core;
 
-import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 
 public class ServerState extends Entity {
@@ -64,6 +63,7 @@ public class ServerState extends Entity {
         return timeCount; }
     public long getTimeMiddle() {
         return timeCount==0 ? 0 : timeSum/timeCount; }
+    public ServerState(){}
     public ServerState(I_LongEvent back){
         release = back;
         }

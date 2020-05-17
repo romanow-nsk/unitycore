@@ -2,7 +2,7 @@ package firefighter.core.entity.users;
 
 import firefighter.core.API.RestAPIBase;
 import firefighter.core.UniException;
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.EntityLink;
 import firefighter.core.entity.I_Name;
 import firefighter.core.entity.Option;
@@ -14,7 +14,7 @@ import retrofit2.Response;
 import java.io.IOException;
 
 public class User extends Person implements I_Name {
-    private int typeId= ValuesBase.UndefinedType;
+    private int typeId= Values.UndefinedType;
     //private Account account=null;
     private EntityLink<Account>  accountData = new EntityLink<>();          // Загружается по API
     private EntityLink<Artifact> photo=new EntityLink<>(Artifact.class);    // Фотография
@@ -57,11 +57,11 @@ public class User extends Person implements I_Name {
     */
     //--------------------------------------------------------------------------------------------------
     public User(){
-        this(ValuesBase.UndefinedType,"","","","","","");
+        this(Values.UndefinedType,"","","","","","");
     }
-    public String typeName() { return ValuesBase.UserTypeList[typeId]; }
+    public String typeName() { return Values.UserTypeList[typeId]; }
     public User(String log, String loginPh, String pass){
-        this(ValuesBase.UndefinedType,"","","",log,pass,loginPh);
+        this(Values.UndefinedType,"","","",log,pass,loginPh);
         }
     public User(int typeId0, String nm1, String nm2, String nm3, String log, String pass,String loginPh){
         super(nm1,nm2,nm3);
@@ -86,7 +86,7 @@ public class User extends Person implements I_Name {
         return shortUserName();
         }
     public String getHeader() {
-        return shortUserName()+" ["+ ValuesBase.UserTypeList[typeId]+"]";
+        return shortUserName()+" ["+ Values.UserTypeList[typeId]+"]";
         }
     public EntityLink<Artifact >getPhoto() {
         return photo; }
@@ -138,9 +138,9 @@ public class User extends Person implements I_Name {
             } catch (IOException ee) { return new Option<User>(ee.getMessage()); }
         }
     public static void main(String ss[]) throws UniException {
-        MongoDB db = new MongoDB();
-        db.openDB(ValuesBase.dataServerPort);
-        User uu = new User(ValuesBase.UserTechnicianType,"Романов","Евгений","Леонидович","root","1234","89139449081");
+        MongoDB db = new MongoDB(MongoDB.appParams);
+        db.openDB(Values.dataServerPort);
+        User uu = new User(Values.UserSuperAdminType,"Романов","Евгений","Леонидович","root","1234","89139449081");
         db.add(uu,0);
         System.out.println(uu.getOid());
         User xx = new User();

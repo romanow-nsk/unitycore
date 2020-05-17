@@ -3,10 +3,11 @@ package firefighter.core.mongo;
 import com.mongodb.*;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
+import firefighter.core.entity.users.User;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -14,7 +15,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static firefighter.core.constants.Values.EntityFactory;
+
 public class MongoDB extends I_MongoDB {
+    private I_AppParams app;
+    public MongoDB(I_AppParams app0){
+        app = app0;
+        }
     private MongoClient mongo = null;
     //private MongoDatabase mongoDB=null;
     private DB mongoDB=null;
@@ -23,7 +30,7 @@ public class MongoDB extends I_MongoDB {
         try {
             List<String> ss = mongo.getDatabaseNames();
             for (String zz : ss)
-                if (zz.equals(ValuesBase.mongoDBName))
+                if (zz.equals(app.mongoDBName()))
                     return true;
             return false;
             } catch (Exception ee){ System.out.println(ee); return false; }
@@ -37,8 +44,8 @@ public class MongoDB extends I_MongoDB {
             connect();
             if (testDB()){
                 //MongoDatabase mongoDB = mongo.getDatabase(Values.mongoDBName+port);
-                mongoDB = mongo.getDB(ValuesBase.mongoDBName+port);
-                mongoDB.addUser(ValuesBase.mongoDBUser, ValuesBase.mongoDBPassword.toCharArray());
+                mongoDB = mongo.getDB(app.mongoDBName()+port);
+                mongoDB.addUser(app.mongoDBUser(), app.mongoDBPassword().toCharArray());
                 }
             else{
                 return false;
@@ -52,12 +59,12 @@ public class MongoDB extends I_MongoDB {
             boolean auth=false;
             connect();
             if (testDB()){
-                mongoDB = mongo.getDB(Values.mongoDBName+port);
-                mongoDB.addUser(Values.mongoDBUser,Values.mongoDBPassword.toCharArray());
+                mongoDB = mongo.getDB(app.mongoDBName+port);
+                mongoDB.addUser(app.mongoDBUser,app.mongoDBPassword.toCharArray());
                 }
             else{
-                mongoDB = mongo.getDB(Values.mongoDBName+port);
-                auth = mongoDB.authenticate(Values.mongoDBUser,Values.mongoDBPassword.toCharArray());
+                mongoDB = mongo.getDB(app.mongoDBName+port);
+                auth = mongoDB.authenticate(app.mongoDBUser,app.mongoDBPassword.toCharArray());
                 }
             } catch (Exception ee){ System.out.println(ee); return false; }
         return isOpen();
@@ -65,7 +72,7 @@ public class MongoDB extends I_MongoDB {
     */
     private void connect() throws UniException {
         try {
-            mongo = new MongoClient(ValuesBase.mongoServerIP, ValuesBase.mongoServerPort);
+            mongo = new MongoClient(Values.mongoServerIP, Values.mongoServerPort);
             } catch (Exception e) {
                 throw UniException.sql(e);
                 }
@@ -267,7 +274,7 @@ public class MongoDB extends I_MongoDB {
         BasicDBObject query = new BasicDBObject();
         query.put("$and", zz);
         DBCursor cursor = table.find(query);
-        if (cursor.count()> ValuesBase.PopupListMaxSize)
+        if (cursor.count()> Values.PopupListMaxSize)
             return out;
         while(cursor.hasNext()) {
             DBObject obj = cursor.next();
@@ -282,7 +289,7 @@ public class MongoDB extends I_MongoDB {
     @Override
     public String clearDB() {
         clearCash();
-        Object olist[] = ValuesBase.EntityFactory.classList().toArray();
+        Object olist[] = Values.EntityFactory.classList().toArray();
         String out="";
         TableItem item=null;
         for(int i=0;i<olist.length;i++){
@@ -300,24 +307,24 @@ public class MongoDB extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
                 } catch (Exception ee){
-                    String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString()+"\n";
+                    String ss = "Не могу создать "+ Values.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString()+"\n";
                     System.out.print(ss);
                     out+=ss;
                 }
             }
-        try {
-            add(ValuesBase.superUser,0,false);
-            } catch (UniException e) {
-                String ss = "Не могу создать суперадмина \n"+e.toString()+"\n";
-                System.out.print(ss);
-                out+=ss;
-                }
+    //    try {
+    //        add(Values.superUser,0,false);
+    //        } catch (UniException e) {
+    //            String ss = "Не могу создать суперадмина \n"+e.toString()+"\n";
+    //            System.out.print(ss);
+    //            out+=ss;
+    //            }
         return out;
         }
     @Override
     public String clearTable(String table) throws UniException {
             try {
-                TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(table);
+                TableItem item = EntityFactory.getItemForSimpleName(table);
                 if (item==null)
                     return "Entity не найден: "+table;
                 if (!item.isTable)
@@ -333,15 +340,36 @@ public class MongoDB extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
             } catch (Exception ee){
-                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(table+"\n"+ee.toString());
+                String ss = "Не могу создать "+ Values.EntityFactory.get(table+"\n"+ee.toString());
                 System.out.println(ss);
                 return ss;
             }
         return "";
         }
     //--------------------------------------------------------------------------------------------------------------
+    public static I_AppParams appParams = new I_AppParams() {
+        @Override
+        public String mongoDBName() {
+            return Values.getMongoDBName(); }
+        @Override
+        public String mongoDBUser() {
+            return Values.getMongoDBUser(); }
+        @Override
+        public String mongoDBPassword() {
+            return Values.getMongoDBPassword(); }
+        @Override
+        public String ServerName() {
+            return Values.getServerName(); }
+        @Override
+        public String apkName() {
+            return Values.getApkName();}
+        @Override
+        public User superUser() {
+            return Values.getSuperUser(); }
+        };
+
     public static void main(String ss[]){
-        MongoDB db = new MongoDB();
+        MongoDB db = new MongoDB(appParams);
         try {
             db.openDB(4567);
             db.showTables();

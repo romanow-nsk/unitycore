@@ -1,15 +1,15 @@
 package firefighter.core.settings;
 
-import firefighter.core.constants.ValuesBase;
+import firefighter.core.constants.Values;
 
 public class Settings {
-    private String dataServerIP = ValuesBase.dataServerIP;
-    private int dataServerPort = ValuesBase.dataServerPort;
-    private String dataServerFileDir = ValuesBase.dataServerFileDir;
-    private String webServerWebLocation = ValuesBase.webServerWebLocation;
-    private String mongoStartCmd = ValuesBase.mongoStartCmd;
-    private String ClientVersion= ValuesBase.ClientVersion;
-    private String ServerVersion= ValuesBase.ServerVersion;
+    private String dataServerIP = Values.dataServerIP;
+    private int dataServerPort = Values.dataServerPort;
+    private String dataServerFileDir = Values.dataServerFileDir;
+    private String webServerWebLocation = Values.webServerWebLocation;
+    private String mongoStartCmd = Values.mongoStartCmd;
+    private String ClientVersion= Values.ClientVersion;
+    private String ServerVersion= Values.ServerVersion;
     //-----------------------------------------------------------------------------------------
     public String clientVersion() { return ClientVersion; }
     public void clientVersion(String clientVersion) { ClientVersion = clientVersion; }
