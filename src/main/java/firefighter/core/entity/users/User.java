@@ -1,6 +1,5 @@
 package firefighter.core.entity.users;
 
-import firefighter.core.API.RestAPIBase;
 import firefighter.core.UniException;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityLink;
@@ -126,17 +125,6 @@ public class User extends Person implements I_Name {
     public void setLogin (String ss){ getAccount().setLogin(ss);}
     public EntityLink<Account> getAccountData() {
         return accountData; }
-    //----------------- Код полиморфного вызова для загрузки нужного класса
-    public Option<User> apiUser(final RestAPIBase service, long id){
-        Response<User> res4=null;
-        try {
-            res4 = service.getUserById("",id,0).execute();
-            if (!res4.isSuccessful())
-                return new Option<User>(res4.message());
-            else
-                return new Option<User>(res4.body());
-            } catch (IOException ee) { return new Option<User>(ee.getMessage()); }
-        }
     public static void main(String ss[]) throws UniException {
         MongoDB db = new MongoDB(MongoDB.appParams);
         db.openDB(ValuesBase.dataServerPort);
