@@ -1,6 +1,6 @@
 package firefighter.core.ftp;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -50,7 +50,7 @@ public class ClientFileReader extends Thread{
                  });
                  return;
              }
-             int sz = Values.FileBufferSize;
+             int sz = ValuesBase.FileBufferSize;
              byte bb[] = new byte[sz];
              int fileSize = fileSize0;
              int oldProc = 0;

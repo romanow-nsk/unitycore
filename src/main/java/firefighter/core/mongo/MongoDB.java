@@ -3,7 +3,7 @@ package firefighter.core.mongo;
 import com.mongodb.*;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static firefighter.core.constants.Values.EntityFactory;
+import static firefighter.core.constants.ValuesBase.EntityFactory;
 
 public class MongoDB extends I_MongoDB {
     private I_AppParams app;
@@ -43,7 +43,7 @@ public class MongoDB extends I_MongoDB {
             boolean auth=false;
             connect();
             if (testDB()){
-                //MongoDatabase mongoDB = mongo.getDatabase(Values.mongoDBName+port);
+                //MongoDatabase mongoDB = mongo.getDatabase(ValuesBase.mongoDBName+port);
                 mongoDB = mongo.getDB(app.mongoDBName()+port);
                 mongoDB.addUser(app.mongoDBUser(), app.mongoDBPassword().toCharArray());
                 }
@@ -72,7 +72,7 @@ public class MongoDB extends I_MongoDB {
     */
     private void connect() throws UniException {
         try {
-            mongo = new MongoClient(Values.mongoServerIP, Values.mongoServerPort);
+            mongo = new MongoClient(ValuesBase.mongoServerIP, ValuesBase.mongoServerPort);
             } catch (Exception e) {
                 throw UniException.sql(e);
                 }
@@ -274,7 +274,7 @@ public class MongoDB extends I_MongoDB {
         BasicDBObject query = new BasicDBObject();
         query.put("$and", zz);
         DBCursor cursor = table.find(query);
-        if (cursor.count()> Values.PopupListMaxSize)
+        if (cursor.count()> ValuesBase.PopupListMaxSize)
             return out;
         while(cursor.hasNext()) {
             DBObject obj = cursor.next();
@@ -289,7 +289,7 @@ public class MongoDB extends I_MongoDB {
     @Override
     public String clearDB() {
         clearCash();
-        Object olist[] = Values.EntityFactory.classList().toArray();
+        Object olist[] = ValuesBase.EntityFactory.classList().toArray();
         String out="";
         TableItem item=null;
         for(int i=0;i<olist.length;i++){
@@ -307,13 +307,13 @@ public class MongoDB extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
                 } catch (Exception ee){
-                    String ss = "Не могу создать "+ Values.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString()+"\n";
+                    String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString()+"\n";
                     System.out.print(ss);
                     out+=ss;
                 }
             }
     //    try {
-    //        add(Values.superUser,0,false);
+    //        add(ValuesBase.superUser,0,false);
     //        } catch (UniException e) {
     //            String ss = "Не могу создать суперадмина \n"+e.toString()+"\n";
     //            System.out.print(ss);
@@ -340,7 +340,7 @@ public class MongoDB extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
             } catch (Exception ee){
-                String ss = "Не могу создать "+ Values.EntityFactory.get(table+"\n"+ee.toString());
+                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(table+"\n"+ee.toString());
                 System.out.println(ss);
                 return ss;
             }
@@ -350,22 +350,22 @@ public class MongoDB extends I_MongoDB {
     public static I_AppParams appParams = new I_AppParams() {
         @Override
         public String mongoDBName() {
-            return Values.getMongoDBName(); }
+            return ValuesBase.getMongoDBName(); }
         @Override
         public String mongoDBUser() {
-            return Values.getMongoDBUser(); }
+            return ValuesBase.getMongoDBUser(); }
         @Override
         public String mongoDBPassword() {
-            return Values.getMongoDBPassword(); }
+            return ValuesBase.getMongoDBPassword(); }
         @Override
         public String ServerName() {
-            return Values.getServerName(); }
+            return ValuesBase.getServerName(); }
         @Override
         public String apkName() {
-            return Values.getApkName();}
+            return ValuesBase.getApkName();}
         @Override
         public User superUser() {
-            return Values.getSuperUser(); }
+            return ValuesBase.getSuperUser(); }
         };
 
     public static void main(String ss[]){
@@ -383,9 +383,9 @@ public class MongoDB extends I_MongoDB {
             db.dropTable(tc);
             db.dropTable(new Shift());
             db.dropTable(new Artifact());
-            long id1 = db.add(new User(Values.UserBossType,"Турков","Александр","Иванович","boss","1234",""));
+            long id1 = db.add(new User(ValuesBase.UserBossType,"Турков","Александр","Иванович","boss","1234",""));
             long id2 = db.add(new User(0,"Иванов","Иван","Иванович","","1234","9139999999"));
-            long id3 = db.add(new User(Values.UserBookKeeperType,"Юдина","Наталья","Семеновна","","1234","89131234567"));
+            long id3 = db.add(new User(ValuesBase.UserBookKeeperType,"Юдина","Наталья","Семеновна","","1234","89131234567"));
             System.out.println(db.getAll(us));
             db.deleteById(new User(),id2,false);
             System.out.println(db.getAll(us));

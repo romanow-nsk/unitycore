@@ -63,7 +63,7 @@ public class ConstList extends ArrayList<ConstValue> {
         }
     public void createConstList(){
         Object oo = new ValuesBase();
-        Class cl = Values.class;
+        Class cl = ValuesBase.class;
         Field[] fields = cl.getFields();
         for(Field fd: fields){
             if ((fd.getModifiers() & Modifier.STATIC)==0) continue;

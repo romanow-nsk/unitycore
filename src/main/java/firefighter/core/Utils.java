@@ -1,6 +1,6 @@
 package firefighter.core;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import retrofit2.Response;
 
 import javax.swing.*;
@@ -58,7 +58,7 @@ public class Utils {
             }
         }
     public static String generateToken(){
-        return generateToken(Values.SessionTokenLength);
+        return generateToken(ValuesBase.SessionTokenLength);
         }
     public static String generateToken(int sz){
         char cc[]=new char[sz];
@@ -114,7 +114,7 @@ public class Utils {
     public static String createFatalMessage(Throwable ee) {
         String ss = ee.toString() + "\n";
         StackTraceElement dd[] = ee.getStackTrace();
-        for (int i = 0; i < dd.length && i < Values.FatalExceptionStackSize; i++) {
+        for (int i = 0; i < dd.length && i < ValuesBase.FatalExceptionStackSize; i++) {
             ss += dd[i].getClassName() + "." + dd[i].getMethodName() + ":" + dd[i].getLineNumber() + "\n";
         }
         String out = "Необработанное исключение:\n" + ss;

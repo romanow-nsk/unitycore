@@ -2,7 +2,7 @@ package firefighter.core.mongo;
 
 import com.mongodb.BasicDBObject;
 import firefighter.core.UniException;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
@@ -45,11 +45,11 @@ public abstract class I_MongoDB {
         }
     public EntityList<Entity> getAll(Entity ent, int mode, int level) throws UniException{
         switch (mode){
-            case Values.GetAllModeTotal:
+            case ValuesBase.GetAllModeTotal:
                 return getAllRecords(ent,level);
-            case Values.GetAllModeActual:
+            case ValuesBase.GetAllModeActual:
                 return getAllByQuery(ent,new BasicDBObject("valid", true),level);
-            case Values.GetAllModeDeleted:
+            case ValuesBase.GetAllModeDeleted:
                 return getAllByQuery(ent,new BasicDBObject("valid", false),level);
             default:
                 throw UniException.bug("MongoDB:Illegal get mode="+mode);
@@ -74,13 +74,13 @@ public abstract class I_MongoDB {
         return delete(entity,id,false);
     }
     public EntityList<Entity> getAll(Entity ent) throws UniException{
-        return getAll(ent, Values.GetAllModeActual,0);
+        return getAll(ent, ValuesBase.GetAllModeActual,0);
         }
     public boolean getById(Entity ent, long id) throws UniException{
         return getById(ent,id,0);
         }
     public boolean getById(Entity ent, long id, int level) throws UniException{
-        return  getById(ent, id, level, Values.DeleteMode);
+        return  getById(ent, id, level, ValuesBase.DeleteMode);
         }
     //-------------------------------------- КЭШ объектов ------------------------------------------
     private int totalGetCount=0;            // Общее количество чтений

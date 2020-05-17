@@ -27,7 +27,7 @@ public class ValuesBase {
     private final static String mongoDBUser = "unity";
     private final static String ServerName="UnityDataserver.jar";
     private final static String mongoDBPassword = "unity";
-    private final static User superUser=new User(Values.UserSuperAdminType, "Система", "", "", "UnityDataserver", "pi31415926","9130000000");
+    private final static User superUser=new User(ValuesBase.UserSuperAdminType, "Система", "", "", "UnityDataserver", "pi31415926","9130000000");
     public static String getMongoDBName() {
         return mongoDBName; }
     public static String getMongoDBUser() {

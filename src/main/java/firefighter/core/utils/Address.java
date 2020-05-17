@@ -1,7 +1,7 @@
 package firefighter.core.utils;
 
 import firefighter.core.UniException;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityBack;
 import firefighter.core.entity.EntityLink;
 import firefighter.core.export.ExCellCounter;
@@ -29,12 +29,12 @@ public class Address extends EntityBack {
         street.setOidRef(str);
         home=hh;
         office=off;
-        type= Values.HHome | Values.OOffice;
+        type= ValuesBase.HHome | ValuesBase.OOffice;
         }
     public Address (Street str, String hh){
         street.setOidRef(str);
         home=hh;
-        type= Values.HHome;
+        type= ValuesBase.HHome;
     }
     public Address(){}
     public int getType() {
@@ -50,13 +50,13 @@ public class Address extends EntityBack {
         return super.toFullString()+street.toFullString()+","+ownData()+","+location.toFullString();
         }
     public String ownData(){
-        return Values.TypesHome[homeType()]+home+
-                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ Values.TypesOffice[officeType()]+office)));
+        return ValuesBase.TypesHome[homeType()]+home+
+                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ ValuesBase.TypesOffice[officeType()]+office)));
         }
     public String toShortString(){
         return street.toShortString()+","+
-                " "+ Values.TypesHome[homeType()]+home+
-                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ Values.TypesOffice[officeType()]+office)));
+                " "+ ValuesBase.TypesHome[homeType()]+home+
+                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ ValuesBase.TypesOffice[officeType()]+office)));
             }
     public String toStringFull(){
         return toString()+"["+location+"]";
@@ -65,17 +65,17 @@ public class Address extends EntityBack {
         if (street.getRef()==null)
             return "";
         return street.getTitle()+","+
-                " "+ Values.TypesHome[homeType()]+home+
-                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ Values.TypesOffice[officeType()]+office)));
+                " "+ ValuesBase.TypesHome[homeType()]+home+
+                (office.length()==0 ? "" : (officeType()==0 ? "" : (", "+ ValuesBase.TypesOffice[officeType()]+office)));
     }
     public String toStringHome(){
-        return Values.TypesStreet[streetType()]+street.getRef().getName()+","+ " "+ Values.TypesHome[homeType()]+home;
+        return ValuesBase.TypesStreet[streetType()]+street.getRef().getName()+","+ " "+ ValuesBase.TypesHome[homeType()]+home;
         }
     public String getTitle(){
         return toString();
         }
     public String toStringCityHome(){
-        return Values.TypesCity[cityType()]+street.getRef().getCity().getRef().getName()+","+ Values.TypesStreet[streetType()]+street.getRef().getName()+","+ " "+ Values.TypesHome[homeType()]+home;
+        return ValuesBase.TypesCity[cityType()]+street.getRef().getCity().getRef().getName()+","+ ValuesBase.TypesStreet[streetType()]+street.getRef().getName()+","+ " "+ ValuesBase.TypesHome[homeType()]+home;
     }
     //------------------------------------------------------------------------------------------------------------------
     @Override

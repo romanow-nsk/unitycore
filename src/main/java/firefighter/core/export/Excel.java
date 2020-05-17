@@ -1,7 +1,7 @@
 package firefighter.core.export;
 
 import firefighter.core.UniException;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.mongo.I_MongoDB;
 import firefighter.core.utils.FileNameExt;
@@ -113,7 +113,7 @@ public class Excel {
                 Sheet sh = workbook.getSheetAt(i);
                 String ss = sh.getSheetName();
                 try {
-                    Class zz = Values.EntityFactory.getClassForSimpleName(ss);
+                    Class zz = ValuesBase.EntityFactory.getClassForSimpleName(ss);
                     if (zz==null){
                         pp = "Класс не найден "+ss;
                         xx+=pp+"\n";

@@ -1,6 +1,6 @@
 package firefighter.core.entity.notifications;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityLink;
 import firefighter.core.entity.artifacts.Artifact;
@@ -12,14 +12,14 @@ public class NTMessage extends Entity {
     private EntityLink<Artifact> artifact=new EntityLink<>(Artifact.class); // Связанный артефакт
     private String message="";                                  // Текст сообщения
     private String header="";                                   // Заголовок сообщения
-    private int userSenderType= Values.UndefinedType;       // Тип (роль) отправителя
-    private int userReceiverType= Values.UndefinedType;     // Тип (роль) приемника
+    private int userSenderType= ValuesBase.UndefinedType;       // Тип (роль) отправителя
+    private int userReceiverType= ValuesBase.UndefinedType;     // Тип (роль) приемника
     private long param=0;                                       // id сущности или индекс формы для МК
     private OwnDateTime sndTime=new OwnDateTime();              // Дата/время отправки
     private OwnDateTime recTime=new OwnDateTime();              // Дата/время получения
-    private int executeMode= Values.NMUserAck;              // Важное (не сбрасывается при просмотре, выполняется сразу)
-    private int state= Values.NSSend;                       // Состояние приема
-    private int type= Values.UndefinedType;                 // Тип уведомления
+    private int executeMode= ValuesBase.NMUserAck;              // Важное (не сбрасывается при просмотре, выполняется сразу)
+    private int state= ValuesBase.NSSend;                       // Состояние приема
+    private int type= ValuesBase.UndefinedType;                 // Тип уведомления
     public NTMessage(NTMessage two){
         user = two.user;
         artifact = two.artifact;
@@ -35,14 +35,14 @@ public class NTMessage extends Entity {
         artifact.setOid(two.getArtifact().getOid());
         }
     public String getTitle(){
-        String ss = Values.UserTypeList[userSenderType]+" "+user.getTitle()+" "+ Values.NTypes[type]+": "+sndTime.timeToString()+" "+header;
+        String ss = ValuesBase.UserTypeList[userSenderType]+" "+user.getTitle()+" "+ ValuesBase.NTypes[type]+": "+sndTime.timeToString()+" "+header;
         return ss;
         }
     public String toShortString(){
-        return getOid()+" "+ Values.NState[state]+" "+ Values.NTypes[type];
+        return getOid()+" "+ ValuesBase.NState[state]+" "+ ValuesBase.NTypes[type];
         }
     public String toString(){
-        String ss = toShortString()+ " "+ Values.UserTypeList[userSenderType]+"-->"+ Values.UserTypeList[userReceiverType];
+        String ss = toShortString()+ " "+ ValuesBase.UserTypeList[userSenderType]+"-->"+ ValuesBase.UserTypeList[userReceiverType];
         if (user.getOid()!=0) ss+=" "+user.getTitle();
         ss+="\n"+sndTime.timeToString()+" "+header+": "+message;
         return ss;

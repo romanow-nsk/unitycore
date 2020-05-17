@@ -1,11 +1,11 @@
 package firefighter.core.utils;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityBack;
 
 public class GPSPoint extends EntityBack {
     final static double gradus=111.12;
-    private int state= Values.GeoNone;
+    private int state= ValuesBase.GeoNone;
     private double geoy=0;           // Широта
     private double geox=0;           // Долгота
     private OwnDateTime gpsTime = new OwnDateTime();
@@ -18,20 +18,20 @@ public class GPSPoint extends EntityBack {
     }
     public OwnDateTime geoTime(){ return gpsTime; }
     public void setCurrentTime(){ gpsTime = new OwnDateTime(); }
-    public GPSPoint(){ state = Values.GeoNone; }
+    public GPSPoint(){ state = ValuesBase.GeoNone; }
     public GPSPoint(String y0,String x0, boolean exact){
         try {
             geoy=fromStr(y0); geox=fromStr(x0);
-            state = exact ? Values.GeoGPS : Values.GeoNet;
-            } catch(Throwable ee){ state = Values.GeoNone; }
+            state = exact ? ValuesBase.GeoGPS : ValuesBase.GeoNet;
+            } catch(Throwable ee){ state = ValuesBase.GeoNone; }
         }
     public GPSPoint(double y0,double x0, boolean exact){
         geoy=y0; geox=x0;
-        state = exact ? Values.GeoGPS : Values.GeoNet;
+        state = exact ? ValuesBase.GeoGPS : ValuesBase.GeoNet;
         }
     public GPSPoint(double y0,double x0, boolean exact,long timeMs){
         geoy=y0; geox=x0;
-        state = exact ? Values.GeoGPS : Values.GeoNet;
+        state = exact ? ValuesBase.GeoGPS : ValuesBase.GeoNet;
         gpsTime = new OwnDateTime(timeMs);
         }
     public int elapsedTimeInSec(){ return geoTime().elapsedTimeInSec(); }
@@ -42,12 +42,12 @@ public class GPSPoint extends EntityBack {
         state = st;
     }
     public boolean gpsValid(){
-        return state != Values.GeoNone;
+        return state != ValuesBase.GeoNone;
     }
     public void setCoord(double y, double x, boolean exact){
         geox=x;
         geoy=y;
-        state = exact ? Values.GeoGPS : Values.GeoNet;
+        state = exact ? ValuesBase.GeoGPS : ValuesBase.GeoNet;
         }
     public GPSPoint  copy(){
         GPSPoint out = new GPSPoint(geoy,geox,true);
@@ -68,12 +68,12 @@ public class GPSPoint extends EntityBack {
         return ss.substring(0, k);
         }
     public String toStrX(){
-        if (state == Values.GeoNone)
+        if (state == ValuesBase.GeoNone)
             return "";
         return toStr(geox);
         }
     public String toStrY(){
-        if (state == Values.GeoNone)
+        if (state == ValuesBase.GeoNone)
             return "";
         return toStr(geoy);
         }
@@ -94,19 +94,19 @@ public class GPSPoint extends EntityBack {
         state = src.state;
         }
     public int diff(GPSPoint T){        // В метрах
-        if (state== Values.GeoNone || T.state== Values.GeoNone)
+        if (state== ValuesBase.GeoNone || T.state== ValuesBase.GeoNone)
             return -1;
         double dx=(geox-T.geox)*gradus*1000*Math.cos(Math.PI*geoy/180);
         double dy=(geoy-T.geoy)*gradus*1000;
         return (int)Math.sqrt(dy*dy+dx*dx);
         }
     public String toString(){
-        if (state== Values.GeoNone)
+        if (state== ValuesBase.GeoNone)
             return "";
         return toStr(geoy)+","+toStr(geox)+"["+gpsTime+"]";
         }
     public String toShortString(){
-        if (state== Values.GeoNone)
+        if (state== ValuesBase.GeoNone)
             return "";
         return toStr(geoy)+","+toStr(geox);
         }
@@ -114,7 +114,7 @@ public class GPSPoint extends EntityBack {
         return super.toFullString()+toShortString();
         }
     public String getTitle(){
-        if (state== Values.GeoNone)
+        if (state== ValuesBase.GeoNone)
             return "";
         return toStr(geoy)+","+toStr(geox);
     }
@@ -125,7 +125,7 @@ public class GPSPoint extends EntityBack {
         geox+=dd/1000/gradus/Math.cos(Math.PI*geoy/180);
     }
     public void setCoord(String crd,boolean exact){
-        state = Values.GeoNone;
+        state = ValuesBase.GeoNone;
         int k=crd.indexOf(",");
         if (k==-1) return;
         double v1=0,v2=0;
@@ -133,7 +133,7 @@ public class GPSPoint extends EntityBack {
             v1=Double.parseDouble(crd.substring(0,k).trim());
             v2=Double.parseDouble(crd.substring(k+1).trim());
             setCoord(v1, v2,exact);
-            } catch(Throwable ee){ state= Values.GeoNone; }
+            } catch(Throwable ee){ state= ValuesBase.GeoNone; }
         }
     //------------------------------------------------------------------------------------------------------------------
     /*

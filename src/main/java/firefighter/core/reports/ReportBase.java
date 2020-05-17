@@ -1,6 +1,6 @@
 package firefighter.core.reports;
 
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.base.StringList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public abstract class ReportBase {
     protected long invertColumnMask=0;              // Инверсная маска столбцов
     public Artifact reportFile = new Artifact();
-    public int reportType= Values.RepOther;
+    public int reportType= ValuesBase.RepOther;
     abstract public void createReportFile(TableData table, String fspec) throws Exception;
     abstract public String getTitle();
     public ReportBase(int type){

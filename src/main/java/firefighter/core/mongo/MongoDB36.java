@@ -9,7 +9,7 @@ import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
-import firefighter.core.constants.Values;
+import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
@@ -51,7 +51,7 @@ public class MongoDB36 extends I_MongoDB {
 
     private void connect() throws UniException {
         try {
-            mongo = new MongoClient(Values.mongoServerIP, Values.mongoServerPort);
+            mongo = new MongoClient(ValuesBase.mongoServerIP, ValuesBase.mongoServerPort);
         } catch (Exception e) {
             throw UniException.sql(e);
         }
@@ -282,14 +282,14 @@ public class MongoDB36 extends I_MongoDB {
             xx.setName((String) obj.get("name"));
             out.add(xx);
         }
-        if (out.size()> Values.PopupListMaxSize)
+        if (out.size()> ValuesBase.PopupListMaxSize)
             out.clear();
         return out;
         }
     @Override
     public String clearDB(){
         clearCash();
-        Object olist[] = Values.EntityFactory.classList().toArray();
+        Object olist[] = ValuesBase.EntityFactory.classList().toArray();
         String out="";
         TableItem item=null;
         for(int i=0;i<olist.length;i++){
@@ -307,13 +307,13 @@ public class MongoDB36 extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
             } catch (Exception ee){
-                String ss = "Не могу создать "+ Values.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString();
+                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString();
                 System.out.println(ss);
                 out+=ss;
             }
         }
     //    try {
-    //        add(Values.superUser,0,false);
+    //        add(ValuesBase.superUser,0,false);
     //        } catch (UniException e) {
     //            String ss = "Не могу создать суперадмина \n"+e.toString()+"\n";
     //            System.out.print(ss);
@@ -324,7 +324,7 @@ public class MongoDB36 extends I_MongoDB {
     @Override
     public String clearTable(String table) throws UniException {
         try {
-            TableItem item = Values.EntityFactory.getItemForSimpleName(table);
+            TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(table);
             if (item==null)
                 return "Entity не найден: "+table;
             if (!item.isTable)
@@ -340,7 +340,7 @@ public class MongoDB36 extends I_MongoDB {
             for(String ss : item.indexes)
                 createIndex(ent,ss);
         } catch (Exception ee){
-            String ss = "Не могу создать "+ Values.EntityFactory.get(table+"\n"+ee.toString());
+            String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(table+"\n"+ee.toString());
             System.out.println(ss);
             return ss;
             }
@@ -367,9 +367,9 @@ public class MongoDB36 extends I_MongoDB {
             db.dropTable(tc);
             db.dropTable(new Shift());
             db.dropTable(new Artifact());
-            long id1 = db.add(new User(Values.UserBossType,"Турков","Александр","Иванович","boss","1234",""));
+            long id1 = db.add(new User(ValuesBase.UserBossType,"Турков","Александр","Иванович","boss","1234",""));
             long id2 = db.add(new User(0,"Иванов","Иван","Иванович","","1234","9139999999"));
-            long id3 = db.add(new User(Values.UserBookKeeperType,"Юдина","Наталья","Семеновна","","1234","89131234567"));
+            long id3 = db.add(new User(ValuesBase.UserBookKeeperType,"Юдина","Наталья","Семеновна","","1234","89131234567"));
             System.out.println(db.getAll(us));
             db.deleteById(new User(),id2,false);
             System.out.println(db.getAll(us));
