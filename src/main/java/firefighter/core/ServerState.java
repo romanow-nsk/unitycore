@@ -3,7 +3,6 @@ package firefighter.core;
 import firefighter.core.entity.Entity;
 
 public class ServerState extends Entity {
-    transient private I_LongEvent release=null;
     private boolean serverRun=false;
     private int lastMailNumber=0;                   // Номер последнего письма
     private boolean asteriskMailOn=false;           // Вклчюение asterisk-почты
@@ -51,7 +50,7 @@ public class ServerState extends Entity {
     public long getPID() {
         return pid;
         }
-    public void setPid() {
+    public void setPid(I_LongEvent release) {
         pid = Utils.getPID();
         releaseNumber = release==null ? 0 : (int)release.onEvent(0);
         }
@@ -64,9 +63,6 @@ public class ServerState extends Entity {
     public long getTimeMiddle() {
         return timeCount==0 ? 0 : timeSum/timeCount; }
     public ServerState(){}
-    public ServerState(I_LongEvent back){
-        release = back;
-        }
     public void init(){
         timeCount=0;
         timeSum=0;
