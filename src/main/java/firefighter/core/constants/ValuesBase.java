@@ -175,9 +175,18 @@ public class ValuesBase {
     //------------------- Вид уведомления  -------------------------------------------------------------------------
     @CONST(group = "NotificationType", title = "Не определено")
     public final static int NTUndefined = 0;
-    @CONST(group = "NotificationType", title = "Действие за клиента")
+    @CONST(group = "NotificationType", title = "Управление клиентом")       // Внешнее управление клиентом - param
     public final static int NTUserAction = 1;
-    public final static String NTypes[] = {"Не определено","Действие за клиента"};
+    @CONST(group = "NotificationType", title = "Действие")                  // Действие над объектом (class,id)
+    public final static int NTObjectAction = 2;
+    @CONST(group = "NotificationType", title = "Изменение состояния")       // Изменение сорстояния клиента - источника
+    public final static int NTUserStateChanged = 3;
+    @CONST(group = "NotificationType", title = "Сообщение")                 // Сообщение от клиента - источника
+    public final static int NTUserMessage = 4;
+    @CONST(group = "NotificationType", title = "Событие")                   // Событие на объекте (class,id)
+    public final static int NTObjectEvent = 5;
+    public final static String NTypes[] = {"Не определено", "Управление клиентом", "Действие", "Изменение соcтояния", "Сообщение", "Событие"};
+
     //------------------- Состояние уведомлнния  -------------------------------------------------------------------------
     @CONST(group = "NotificationState", title = "Не определено")
     public final static int NSUndefined = 0;

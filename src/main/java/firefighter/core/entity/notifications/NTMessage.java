@@ -15,6 +15,7 @@ public class NTMessage extends Entity {
     private int userSenderType= ValuesBase.UndefinedType;       // Тип (роль) отправителя
     private int userReceiverType= ValuesBase.UndefinedType;     // Тип (роль) приемника
     private long param=0;                                       // id сущности или индекс формы для МК
+    private String entityName="";                               // 656 - имя класса прикрепленного объекта
     private OwnDateTime sndTime=new OwnDateTime();              // Дата/время отправки
     private OwnDateTime recTime=new OwnDateTime();              // Дата/время получения
     private int executeMode= ValuesBase.NMUserAck;              // Важное (не сбрасывается при просмотре, выполняется сразу)
@@ -63,7 +64,15 @@ public class NTMessage extends Entity {
         user.setOid(uu.getOid());
         header = head;
         message=mes;
-    }
+        }
+    public void setEntity(String name, long id){
+        entityName=name;
+        param=id;
+        }
+    public String getEntityName() {
+        return entityName; }
+    public void setEntityName(String entityName) {
+        this.entityName = entityName; }
     public String getHeader() {
         return header; }
     public void setHeader(String header) {
