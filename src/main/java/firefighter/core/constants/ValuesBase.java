@@ -40,6 +40,8 @@ public class ValuesBase {
         return ServerName; }
     public static User getSuperUser() {
         return superUser; }
+    public static Class getValuesClass() {
+        return ValuesBase.class; }
     //------------------------------------------------------------------------------------------------------
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
