@@ -24,15 +24,12 @@ import java.util.regex.Pattern;
 public class MongoDB36 extends I_MongoDB {
     private MongoClient mongo = null;
     private MongoDatabase mongoDB=null;
-    private I_AppParams app;
-    public MongoDB36(I_AppParams app0){
-        app = app0;
-        }
+    public MongoDB36(){ }
     private boolean testDB(){
         try {
             List<String> ss = mongo.getDatabaseNames();
             for (String zz : ss)
-                if (zz.equals(app.mongoDBName()))
+                if (zz.equals(ValuesBase.env().mongoDBName()))
                     return true;
             return false;
         } catch (Exception ee){ System.out.println(ee); return false; }
@@ -44,7 +41,7 @@ public class MongoDB36 extends I_MongoDB {
         try {
             boolean auth=false;
             connect();
-            mongoDB = mongo.getDatabase(app.mongoDBName()+port);
+            mongoDB = mongo.getDatabase(ValuesBase.env().mongoDBName()+port);
         } catch (Exception ee){ System.out.println(ee); return false; }
         return isOpen();
     }
@@ -348,7 +345,7 @@ public class MongoDB36 extends I_MongoDB {
         }
     //------------------------------------------------------------------------------------------------------------------
     public static void main(String ss[]){
-        I_MongoDB db = new MongoDB36(MongoDB.appParams);
+        I_MongoDB db = new MongoDB36();
         try {
             db.openDB(4567);
             BugMessage bb = new BugMessage();

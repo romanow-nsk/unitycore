@@ -18,9 +18,7 @@ import java.util.regex.Pattern;
 import static firefighter.core.constants.ValuesBase.EntityFactory;
 
 public class MongoDB extends I_MongoDB {
-    private I_AppParams app;
-    public MongoDB(I_AppParams app0){
-        app = app0;
+    public MongoDB(){
         }
     private MongoClient mongo = null;
     //private MongoDatabase mongoDB=null;
@@ -30,7 +28,7 @@ public class MongoDB extends I_MongoDB {
         try {
             List<String> ss = mongo.getDatabaseNames();
             for (String zz : ss)
-                if (zz.equals(app.mongoDBName()))
+                if (zz.equals(ValuesBase.env().mongoDBName()))
                     return true;
             return false;
             } catch (Exception ee){ System.out.println(ee); return false; }
@@ -44,8 +42,8 @@ public class MongoDB extends I_MongoDB {
             connect();
             if (testDB()){
                 //MongoDatabase mongoDB = mongo.getDatabase(ValuesBase.mongoDBName+port);
-                mongoDB = mongo.getDB(app.mongoDBName()+port);
-                mongoDB.addUser(app.mongoDBUser(), app.mongoDBPassword().toCharArray());
+                mongoDB = mongo.getDB(ValuesBase.env().mongoDBName()+port);
+                mongoDB.addUser(ValuesBase.env().mongoDBUser(), ValuesBase.env().mongoDBPassword().toCharArray());
                 }
             else{
                 return false;
@@ -59,12 +57,12 @@ public class MongoDB extends I_MongoDB {
             boolean auth=false;
             connect();
             if (testDB()){
-                mongoDB = mongo.getDB(app.mongoDBName+port);
-                mongoDB.addUser(app.mongoDBUser,app.mongoDBPassword.toCharArray());
+                mongoDB = mongo.getDB(ValuesBase.env().mongoDBName+port);
+                mongoDB.addUser(ValuesBase.env().mongoDBUser,ValuesBase.env().mongoDBPassword.toCharArray());
                 }
             else{
-                mongoDB = mongo.getDB(app.mongoDBName+port);
-                auth = mongoDB.authenticate(app.mongoDBUser,app.mongoDBPassword.toCharArray());
+                mongoDB = mongo.getDB(ValuesBase.env().mongoDBName+port);
+                auth = mongoDB.authenticate(ValuesBase.env().mongoDBUser,ValuesBase.env().mongoDBPassword.toCharArray());
                 }
             } catch (Exception ee){ System.out.println(ee); return false; }
         return isOpen();
@@ -347,29 +345,8 @@ public class MongoDB extends I_MongoDB {
         return "";
         }
     //--------------------------------------------------------------------------------------------------------------
-    public static I_AppParams appParams = new I_AppParams() {
-        @Override
-        public String mongoDBName() {
-            return ValuesBase.getMongoDBName(); }
-        @Override
-        public String mongoDBUser() {
-            return ValuesBase.getMongoDBUser(); }
-        @Override
-        public String mongoDBPassword() {
-            return ValuesBase.getMongoDBPassword(); }
-        @Override
-        public String ServerName() {
-            return ValuesBase.getServerName(); }
-        @Override
-        public String apkName() {
-            return ValuesBase.getApkName();}
-        @Override
-        public User superUser() {
-            return ValuesBase.getSuperUser(); }
-        };
-
     public static void main(String ss[]){
-        MongoDB db = new MongoDB(appParams);
+        MongoDB db = new MongoDB();
         try {
             db.openDB(4567);
             db.showTables();

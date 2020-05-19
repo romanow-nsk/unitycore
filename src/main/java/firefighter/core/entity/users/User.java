@@ -126,7 +126,7 @@ public class User extends Person implements I_Name {
     public EntityLink<Account> getAccountData() {
         return accountData; }
     public static void main(String ss[]) throws UniException {
-        MongoDB db = new MongoDB(MongoDB.appParams);
+        MongoDB db = new MongoDB();
         db.openDB(ValuesBase.dataServerPort);
         User uu = new User(ValuesBase.UserSuperAdminType,"Романов","Евгений","Леонидович","root","1234","89139449081");
         db.add(uu,0);

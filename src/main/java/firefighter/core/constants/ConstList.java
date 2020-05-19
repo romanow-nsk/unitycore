@@ -62,8 +62,14 @@ public class ConstList extends ArrayList<ConstValue> {
         map.put(cc.name(),cc);
         }
     public void createConstList(){
-        Object oo = new ValuesBase();
-        Class cl = Values.getValuesClass();
+        Class cl = ValuesBase.env().valuesClass();
+        Object oo = null;
+        try {
+            oo = cl.newInstance();
+            } catch (Exception e) {
+                System.out.println("Не создан список констант");
+                return;
+                }
         Field[] fields = cl.getFields();
         for(Field fd: fields){
             if ((fd.getModifiers() & Modifier.STATIC)==0) continue;

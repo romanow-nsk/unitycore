@@ -21,27 +21,10 @@ import firefighter.core.utils.*;
 import java.util.HashMap;
 
 public class ValuesBase {
-    public final static int ReleaseNumberBase=1;                // номер сборки сервера
-    private final static String ApkName = "Unity.apk";           // Имя файла
-    private final static String mongoDBName = "unity";
-    private final static String mongoDBUser = "unity";
-    private final static String ServerName="UnityDataserver.jar";
-    private final static String mongoDBPassword = "unity";
-    private final static User superUser=new User(ValuesBase.UserSuperAdminType, "Система", "", "", "UnityDataserver", "pi31415926","9130000000");
-    public static String getMongoDBName() {
-        return mongoDBName; }
-    public static String getMongoDBUser() {
-        return mongoDBUser; }
-    public static String getMongoDBPassword() {
-        return mongoDBPassword; }
-    public static String getApkName() {
-        return ApkName; }
-    public static String getServerName() {
-        return ServerName; }
-    public static User getSuperUser() {
-        return superUser; }
-    public static Class getValuesClass() {
-        return ValuesBase.class; }
+    protected static I_Environment env=null;        // Окружение приложения
+    public static I_Environment env(){
+        return env;
+        }
     //------------------------------------------------------------------------------------------------------
     public final static String week[] = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
     public final static String mnt[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
