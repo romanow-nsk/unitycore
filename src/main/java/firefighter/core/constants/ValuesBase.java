@@ -57,6 +57,26 @@ public class ValuesBase {
 
     public final static EntityIndexedFactory EntityFactory = new EntityIndexedFactory();
     static {
+        env = new I_Environment() {
+            @Override
+            public String mongoDBName() { return ""; }
+            @Override
+            public String mongoDBUser() { return ""; }
+            @Override
+            public String mongoDBPassword() { return ""; }
+            @Override
+            public String apkName() { return ""; }
+            @Override
+            public String serverName() { return ""; }
+            @Override
+            public User superUser() { return new User(); }
+            @Override
+            public Class valuesClass() { return Object.class; }
+            @Override
+            public int releaseNumber() { return 0; }
+            @Override
+            public String[] userTypes() { return new String[0]; }
+            };
         EntityFactory.put(new TableItem("Настройки_0", WorkSettingsBase.class));
         EntityFactory.put(new TableItem("Метка GPS", GPSPoint.class));
         EntityFactory.put(new TableItem("Адрес", Address.class));

@@ -4,13 +4,9 @@ import firefighter.core.UniException;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityLink;
 import firefighter.core.entity.I_Name;
-import firefighter.core.entity.Option;
 import firefighter.core.entity.artifacts.Artifact;
 import firefighter.core.entity.contacts.Phone;
 import firefighter.core.mongo.MongoDB;
-import retrofit2.Response;
-
-import java.io.IOException;
 
 public class User extends Person implements I_Name {
     private int typeId= ValuesBase.UndefinedType;
@@ -58,7 +54,10 @@ public class User extends Person implements I_Name {
     public User(){
         this(ValuesBase.UndefinedType,"","","","","","");
     }
-    public String typeName() { return ValuesBase.env().userTypes()[typeId]; }
+    public String typeName() {
+        // 656 return "????";
+        return ValuesBase.env().userTypes()[typeId];
+    }
     public User(String log, String loginPh, String pass){
         this(ValuesBase.UndefinedType,"","","",log,pass,loginPh);
         }
@@ -86,6 +85,7 @@ public class User extends Person implements I_Name {
         }
     public String getHeader() {
         return shortUserName()+" ["+ ValuesBase.env().userTypes()[typeId]+"]";
+        //return shortUserName();  // 656 БАГ
         }
     public EntityLink<Artifact >getPhoto() {
         return photo; }
