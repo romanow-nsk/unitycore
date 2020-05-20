@@ -11,4 +11,5 @@ public interface I_Environment {
     public User superUser();
     public Class valuesClass();
     public int releaseNumber();
+    public String[] userTypes();
     }

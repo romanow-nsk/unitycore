@@ -36,14 +36,14 @@ public class NTMessage extends Entity {
         artifact.setOid(two.getArtifact().getOid());
         }
     public String getTitle(){
-        String ss = ValuesBase.UserTypeList[userSenderType]+" "+user.getTitle()+" "+ ValuesBase.NTypes[type]+": "+sndTime.timeToString()+" "+header;
+        String ss = ValuesBase.env().userTypes()[userSenderType]+" "+user.getTitle()+" "+ ValuesBase.NTypes[type]+": "+sndTime.timeToString()+" "+header;
         return ss;
         }
     public String toShortString(){
         return getOid()+" "+ ValuesBase.NState[state]+" "+ ValuesBase.NTypes[type];
         }
     public String toString(){
-        String ss = toShortString()+ " "+ ValuesBase.UserTypeList[userSenderType]+"-->"+ ValuesBase.UserTypeList[userReceiverType];
+        String ss = toShortString()+ " "+ ValuesBase.env().userTypes()[userSenderType]+"-->"+ ValuesBase.env().userTypes()[userReceiverType];
         if (user.getOid()!=0) ss+=" "+user.getTitle();
         ss+="\n"+sndTime.timeToString()+" "+header+": "+message;
         return ss;

@@ -58,7 +58,7 @@ public class User extends Person implements I_Name {
     public User(){
         this(ValuesBase.UndefinedType,"","","","","","");
     }
-    public String typeName() { return ValuesBase.UserTypeList[typeId]; }
+    public String typeName() { return ValuesBase.env().userTypes()[typeId]; }
     public User(String log, String loginPh, String pass){
         this(ValuesBase.UndefinedType,"","","",log,pass,loginPh);
         }
@@ -85,7 +85,7 @@ public class User extends Person implements I_Name {
         return shortUserName();
         }
     public String getHeader() {
-        return shortUserName()+" ["+ ValuesBase.UserTypeList[typeId]+"]";
+        return shortUserName()+" ["+ ValuesBase.env().userTypes()[typeId]+"]";
         }
     public EntityLink<Artifact >getPhoto() {
         return photo; }
