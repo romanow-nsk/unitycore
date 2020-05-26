@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class TablePDF extends TableData{
     public static final String fontFile="arial.ttf";
-    protected String fontPath="c:/windows/fonts/"+fontFile;
+    //protected String fontPath="c:/windows/fonts/"+fontFile;
+    protected String fontPath=fontFile;     // 657-2 - в каталоге запуска сервера
     protected Font titleFont;
     protected Font cellHeaderFont;
     protected Font cellRegularFont;

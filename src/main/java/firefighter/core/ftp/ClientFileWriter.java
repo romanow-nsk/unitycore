@@ -94,6 +94,7 @@ public class ClientFileWriter extends Thread{
              }
              */
              os.flush();
+             sk.getInputStream().read();            // Один байт обратно
              closeLoading();
              back.runInGUI(new Runnable() {
                  @Override
