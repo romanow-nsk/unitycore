@@ -1,14 +1,8 @@
 package firefighter.core.utils;
 
-import firefighter.core.UniException;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.EntityBack;
 import firefighter.core.entity.EntityLink;
-import firefighter.core.export.ExCellCounter;
-import firefighter.core.mongo.I_MongoDB;
-import org.apache.poi.ss.usermodel.Row;
-
-import java.util.ArrayList;
 //-------------------TODO --- тип компонент: ул., пр., пер. (пока это в самом названии home="д.13")
 public class Address extends EntityBack {
     private EntityLink<Street> street=new EntityLink<>(Street.class);
@@ -78,6 +72,7 @@ public class Address extends EntityBack {
         return ValuesBase.TypesCity[cityType()]+street.getRef().getCity().getRef().getName()+","+ ValuesBase.TypesStreet[streetType()]+street.getRef().getName()+","+ " "+ ValuesBase.TypesHome[homeType()]+home;
     }
     //------------------------------------------------------------------------------------------------------------------
+    /*
     @Override
     public void putData(String prefix, org.bson.Document document, int level, I_MongoDB mongo) throws UniException {
         putDBValues(prefix,document,level,mongo);
@@ -104,6 +99,7 @@ public class Address extends EntityBack {
         putXMLHeader(prefix,list);
         //location.putHeader(prefix,list);
         }
+     */
     //-------------------------------------------------------------------------------------------------------------------
     public EntityLink<Street> getStreet() {
         return street; }

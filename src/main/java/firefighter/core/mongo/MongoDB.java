@@ -7,7 +7,6 @@ import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
-import firefighter.core.entity.users.User;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -108,7 +107,7 @@ public class MongoDB extends I_MongoDB {
         return cursor.count();
         }
     @Override
-    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level) throws UniException{
+    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList) throws UniException{
         //System.out.println(query.toString());
         DBCollection table = table(ent);
         DBCursor cursor = table.find(query);
@@ -122,7 +121,7 @@ public class MongoDB extends I_MongoDB {
                     throw UniException.bug("Illegal class " + ent.getClass().getSimpleName());
                     }
             //xx.setOid(((Long)obj.get("oid")).longValue());  // Читается в getData
-            xx.getData("", new DocumentWrap(obj), level, this);
+            xx.getData("", new DocumentWrap(obj), level, this,pathsList.length()!=0 ? parsePaths(pathsList) : null);
             out.add(xx);
             }
         return out;
@@ -130,7 +129,7 @@ public class MongoDB extends I_MongoDB {
     //----------------------------------------------------------------------------------------
     @Override
     public boolean delete(Entity entity, long id, boolean mode) throws UniException{
-        if (!getById(entity,id,0,mode))
+        if (!getById(entity,id,0,mode,""))
             return false;
         entity.setValid(mode);
         update(entity,0);
@@ -146,7 +145,7 @@ public class MongoDB extends I_MongoDB {
         return true;
         }
     @Override
-    public boolean getById(Entity ent, long id, int level, boolean mode) throws UniException{
+    public boolean getById(Entity ent, long id, int level, boolean mode, String paths) throws UniException{
         if (isCashOn()){
             Entity src = getCashedEntity(ent,id);
             if (src!=null) {
@@ -163,7 +162,7 @@ public class MongoDB extends I_MongoDB {
         DBObject result = table.findOne(query);
         if (result==null)
             return false;
-        ent.getData("", new DocumentWrap(result),level,this);
+        ent.getData("", new DocumentWrap(result),level,this, paths.length()==0 ? null : parsePaths(paths));
         updateCashedEntity(ent);
         return ent.isValid()!=mode;
         }
@@ -240,7 +239,7 @@ public class MongoDB extends I_MongoDB {
         table.update(query,result);
         return true;
         }
-    public EntityList<Entity> getAllRecords(Entity ent, int level) throws UniException{
+    public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList) throws UniException{
         DBCollection table = table(ent);
         DBCursor cursor = table.find();
         EntityList<Entity> out = new EntityList<>();
@@ -252,7 +251,7 @@ public class MongoDB extends I_MongoDB {
                 } catch (Exception e) {
                     throw UniException.bug("Illegal class " + ent.getClass().getSimpleName());
                     }
-            xx.getData("", new DocumentWrap(obj), level, this);
+            xx.getData("", new DocumentWrap(obj), level, this, pathsList.length()==0 ? null : parsePaths(pathsList));
             out.add(xx);
             }
         return out;

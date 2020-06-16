@@ -1,13 +1,14 @@
 package firefighter.core.reports;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
+import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import firefighter.core.UniException;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TablePDF extends TableData{
@@ -158,10 +159,24 @@ public class TablePDF extends TableData{
         generator.savePage();
         generator.saveReport();
         }
-    public static void main(String sss[]) throws UniException {
-        generate(new TablePDF(),"pdf");
-        generate(new TableExcel(),"xls");
-        generate(new TableHTML(),"html");
+    public  String getPdfContent(String pdfFile) throws IOException{
+        PdfReader reader = new PdfReader(pdfFile);
+        StringBuffer sb = new StringBuffer();
+        PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+        TextExtractionStrategy strategy;
+        for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+            strategy = parser.processContent(i, new SimpleTextExtractionStrategy());
+            sb.append(strategy.getResultantText());
+            }
+        reader.close();
+        return sb.toString();
+        }
+    public static void main(String sss[]) throws Exception {
+        //generate(new TablePDF(),"pdf");
+        //generate(new TableExcel(),"xls");
+        //generate(new TableHTML(),"html");
+        String ss = new TablePDF().getPdfContent("акт.pdf");
+        System.out.println(ss);
     }
 
 }

@@ -12,6 +12,7 @@ import firefighter.core.mongo.I_MongoRW;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_ExcelRW {
     private long oid=0;
@@ -41,8 +42,11 @@ public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_Excel
         putDBValues(prefix,document,level,mongo);
         }
     @Override
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths);
+        }
     public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo) throws UniException {
-        getDBValues(prefix,res,level,mongo);
+        getDBValues(prefix,res,level,mongo,null);
         }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
     @Override

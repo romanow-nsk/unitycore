@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DAO implements I_ExcelRW, I_MongoRW {
     private transient ArrayList<EntityField> fld=null;
@@ -37,7 +38,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         fld = item.getFields();
         }
     final public void getDBValues(String prefix, org.bson.Document out) throws UniException{
-        getDBValues(prefix, out,0,null);
+        getDBValues(prefix, out,0,null,null);
         }
     private void error(String prefix,EntityField ff){
         System.out.println(getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует"));
@@ -141,7 +142,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         String out = ValuesBase.PrefixMap.get(key);
         return out;
         }
-    final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo) throws UniException{
+    final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo, HashMap<String,String> path) throws UniException{
         EntityField ff=new EntityField();
         try {
             getFields();
@@ -179,7 +180,10 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     try {
                                         link.setOid(((Long)out.get(prefix+ff.name)).longValue());
                                         } catch (Exception ee){ error(prefix,ff); link.setOid(0); }
-                                    if (level!=0 && link.getTypeT()!=null && link.getOid()!=0){
+                                    Class cc = link.getTypeT();         //660
+                                    boolean bb = level!=0 && cc!=null && link.getOid()!=0
+                                            && !(path!=null && path.get(cc.getSimpleName())==null);
+                                    if (bb){
                                         Entity two = (Entity)link.getTypeT().newInstance();
                                         if (!mongo.getById(two,link.getOid(),level-1)) {
                                             System.out.println("Не найден " + link.getTypeT().getSimpleName() + " id=" + link.getOid());
@@ -196,7 +200,9 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     try {
                                         list.parseIdList((String)out.get(prefix+ff.name));
                                         } catch (Exception ee){ error(prefix,ff); list = new EntityLinkList(); }
-                                    if (level!=0 && list.getTypeT()!=null){
+                                    cc= list.getTypeT();         //660
+                                    bb = level!=0 && cc!=null && !(path!=null && path.get(cc.getSimpleName())==null);
+                                    if (bb){
                                         for(int ii=0;ii<list.size();ii++){
                                             EntityLink link2 = (EntityLink) list.get(ii);
                                             if (link2.getOid()==0)
@@ -452,12 +458,15 @@ public class DAO implements I_ExcelRW, I_MongoRW {
     @Override
     public void putData(String prefix, org.bson.Document document, int level, I_MongoDB mongo) throws UniException {
         putDBValues(prefix,document,level,mongo);
-    }
+        }
     @Override
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo) throws UniException {
-        getDBValues(prefix,res,level,mongo);
-    }
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths);
+        }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo) throws UniException {
+        getDBValues(prefix,res,level,mongo,null);
+        }
     @Override
     public void getData(Row row, ExCellCounter cnt) throws UniException{
         getXMLValues(row, cnt);
