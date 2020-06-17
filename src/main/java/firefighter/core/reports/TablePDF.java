@@ -46,8 +46,6 @@ public class TablePDF extends TableData{
                 document = new Document(PageSize.A4.rotate());
             else
                 document = new Document();
-            int nLines = paramList.getnLines();
-            cellHeight = nLines==1 ? 13 : nLines*10;
             document.setMargins(50, 20, 20, 20);
             PdfWriter.getInstance(document, new FileOutputStream(fname));
             document.open();
@@ -77,7 +75,8 @@ public class TablePDF extends TableData{
                 }
             for (int i = 0; i < nrow; i++) {
                 for (int j = 0; j < ncol; j++) {
-                    addRegularCell(table, data.get(i).get(j));
+                    TableRowItem item = rowData.get(i);
+                    addRegularCell(table, item, data.get(i).get(j));
                 }
             }
             document.add(table);
@@ -109,10 +108,10 @@ public class TablePDF extends TableData{
                 }
         }
 
-    protected void addRegularCell(PdfPTable table, TableCell tcell) {
+    protected void addRegularCell(PdfPTable table, TableRowItem item, TableCell tcell) {
         PdfPCell cell = new PdfPCell(new Phrase(tcell.value, cellRegularFont));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-        cell.setFixedHeight(cellHeight);
+        cell.setFixedHeight(item.nLines*10+3);
         //cell.setPaddingBottom(3);
         if (tcell.selected)
             cell.setBackgroundColor(new BaseColor(0xe0e0e0));

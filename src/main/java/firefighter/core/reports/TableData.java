@@ -13,6 +13,7 @@ public class TableData implements I_Report{
     ArrayList<String> bottoms = new ArrayList<>();
     protected ArrayList<TableCol> cols=new ArrayList<>();
     protected ArrayList<ArrayList<TableCell>> data =new ArrayList();
+    protected ArrayList<TableRowItem> rowData = new ArrayList<>();
     //----------------------------------------------------------------------------
     public ArrayList<ArrayList<TableCell>> data(){ return  data; }
     public ArrayList<String> bottoms(){ return bottoms; }
@@ -30,6 +31,9 @@ public class TableData implements I_Report{
         for(int i=0;i<cols.size();i++)
             ros.add(new TableCell());
         data.add(ros);
+        TableRowItem item = new TableRowItem();
+        item.nLines = paramList.getnLines();
+        rowData.add(item);
         return data.size();
         }
     @Override
