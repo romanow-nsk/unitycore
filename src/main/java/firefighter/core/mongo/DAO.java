@@ -197,10 +197,18 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     break;
                     case dbLinkList:
                                     EntityLinkList list = (EntityLinkList)ff.field.get(this);
-                                    try {
-                                        list.parseIdList((String)out.get(prefix+ff.name));
-                                        } catch (Exception ee){ error(prefix,ff); list = new EntityLinkList(); }
-                                    cc= list.getTypeT();         //660
+                                    //-------------- 661 ---- двоичная скериализация
+                                    //try {       // 661
+                                    //    list.parseIdListBinary((String)out.get(prefix+"_"+ff.name));
+                                    //    } catch (Exception ex){
+                                            try{
+                                                String mm = (String)out.get(prefix+ff.name);
+                                                //if (mm.length()!=0)
+                                                //    System.out.println("Original list "+mm);
+                                                list.parseIdList(mm);
+                                                } catch (Exception ee){ error(prefix,ff); list = new EntityLinkList(); }
+                                            //        }         // 661
+                                    cc= list.getTypeT();        // 660
                                     bb = level!=0 && cc!=null && !(path!=null && path.get(cc.getSimpleName())==null);
                                     if (bb){
                                         for(int ii=0;ii<list.size();ii++){
@@ -309,6 +317,8 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         }
                     }
                 out.put(prefix+ff.name,list.getIdListString());
+                //------------- 661 двоичная сериализация
+                //out.put(prefix+"_"+ff.name,list.getIdListBinary());
                 break;
             case dbDAOLink:
                 DAO dd = (DAO)ff.field.get(this);

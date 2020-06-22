@@ -79,13 +79,25 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
                 fun.exec(get(i));
             }
         }
-     public ArrayList<Long> getIdList(){        // Пропускает id=0
-         ArrayList<Long> out = new ArrayList<>();
+     public String getIdListBinary(){        // Пропускает id=0
+         int sz = 0;
          for (EntityLink vv : this)
-             if (vv.getOid()!=0)
-                out.add(vv.getOid());
-         return out;
-        }
+             if (vv.getOid() != 0)
+                 sz++;
+         char out[] = new char[sz*4];
+         int k = 0;
+         for (EntityLink vv : this){
+             long ll = vv.getOid();
+             if (ll == 0)
+                 continue;
+             for(int j=0;j<4;j++){
+                out[k+3-j] = (char) ll;
+                ll>>=16;
+                }
+             k+=4;
+             }
+         return new String(out);
+         }
     public String getIdListString(){        // Пропускает id=0
         int count=0;
         String out = "";
@@ -105,6 +117,17 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
         typeT = type; }
     public EntityLinkList(String ss){
         parseIdList(ss);
+        }
+    public void parseIdListBinary(String ss){
+        clear();
+        char cc[] = ss.toCharArray();
+        for(int i=0;i<cc.length;){
+            long vv=0;
+            for(int j=0;j<4;j++,i++){
+                vv = (vv<<16) | cc[i] & 0x0FFFF;
+                }
+            add(new EntityLink<T>(vv));
+            }
         }
     public void parseIdList(String ss){
         clear();
