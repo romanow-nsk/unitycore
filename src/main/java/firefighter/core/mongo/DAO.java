@@ -2,6 +2,7 @@ package firefighter.core.mongo;
 
 import firefighter.core.I_ExcelRW;
 import firefighter.core.UniException;
+import firefighter.core.Utils;
 import firefighter.core.constants.TableItem;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
@@ -38,7 +39,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         fld = item.getFields();
         }
     final public void getDBValues(String prefix, org.bson.Document out) throws UniException{
-        getDBValues(prefix, out,0,null,null);
+        getDBValues(prefix, out,0,null,null,null,null);
         }
     private void error(String prefix,EntityField ff){
         System.out.println(getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует"));
@@ -142,7 +143,12 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         String out = ValuesBase.PrefixMap.get(key);
         return out;
         }
-    final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo, HashMap<String,String> path) throws UniException{
+    final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo,
+        HashMap<String,String> path,HashMap<String,String> cpath,RequestStatistic statistic) throws UniException{
+        String cname="";
+        boolean bb=false,bb1=false;
+        if (cpath==null)
+            cpath=new HashMap<>();      //662
         EntityField ff=new EntityField();
         try {
             getFields();
@@ -181,19 +187,29 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                         link.setOid(((Long)out.get(prefix+ff.name)).longValue());
                                         } catch (Exception ee){ error(prefix,ff); link.setOid(0); }
                                     Class cc = link.getTypeT();         //660
-                                    boolean bb = level!=0 && cc!=null && link.getOid()!=0
-                                            && !(path!=null && path.get(cc.getSimpleName())==null);
-                                    if (bb){
-                                        Entity two = (Entity)link.getTypeT().newInstance();
-                                        if (!mongo.getById(two,link.getOid(),level-1)) {
-                                            System.out.println("Не найден " + link.getTypeT().getSimpleName() + " id=" + link.getOid());
-                                            link.setOid(0);
-                                            link.setRef(null);
-                                            //throw UniException.bug("Не найден " + link.getTypeT().getSimpleName() + " id=" + link.getOid());
-                                            }
-                                        else
-                                            link.setRef(two);
+                                    if (cc==null)
+                                        break;
+                                    cname = cc.getSimpleName();
+                                    bb1 = cpath.get(cname)==null;
+                                    if (!bb1){
+                                        if (statistic!=null)
+                                            statistic.recurseCount++;
+                                        break;
                                         }
+                                    bb = level!=0 && link.getOid()!=0 && !(path!=null && path.get(cname)==null);
+                                    if (!bb)
+                                        break;
+                                    cpath.put(cname,cname);
+                                    Entity two = (Entity)link.getTypeT().newInstance();
+                                    if (!mongo.getById(two,link.getOid(),level-1, ValuesBase.DeleteMode,path,cpath,statistic)) {
+                                        //System.out.println("Не найден " + cname + " id=" + link.getOid());
+                                        link.setOid(0);
+                                        link.setRef(null);
+                                        }
+                                    else{
+                                        link.setRef(two);
+                                        }
+                                    cpath.remove(cname);
                                     break;
                     case dbLinkList:
                                     EntityLinkList list = (EntityLinkList)ff.field.get(this);
@@ -209,29 +225,40 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                                 } catch (Exception ee){ error(prefix,ff); list = new EntityLinkList(); }
                                             //        }         // 661
                                     cc= list.getTypeT();        // 660
-                                    bb = level!=0 && cc!=null && !(path!=null && path.get(cc.getSimpleName())==null);
-                                    if (bb){
-                                        for(int ii=0;ii<list.size();ii++){
-                                            EntityLink link2 = (EntityLink) list.get(ii);
-                                            if (link2.getOid()==0)
-                                                continue;
-                                            Entity two = (Entity)list.getTypeT().newInstance();
-                                            if (!mongo.getById(two,link2.getOid(),level-1)) {
-                                                System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
-                                                link2.setOid(0);
-                                                link2.setRef(null);
-                                                //throw UniException.bug("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
-                                                }
-                                            else
-                                                link2.setRef(two);
+                                    if (cc==null)
+                                        break;
+                                    cname = cc.getSimpleName();
+                                    bb1 = cpath.get(cname)==null;
+                                    if (!bb1){
+                                        if (statistic!=null)
+                                            statistic.recurseCount++;
+                                        break;
+                                        }
+                                    bb = level!=0 && cc!=null && !(path!=null && path.get(cname)==null);
+                                    if (!bb)
+                                        break;
+                                    cpath.put(cname,cname);
+                                    for(int ii=0;ii<list.size();ii++){
+                                        EntityLink link2 = (EntityLink) list.get(ii);
+                                        if (link2.getOid()==0)
+                                            continue;
+                                        two = (Entity)list.getTypeT().newInstance();
+                                        if (!mongo.getById(two,link2.getOid(),level-1,ValuesBase.DeleteMode,path,cpath,statistic)) {
+                                            System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
+                                            link2.setOid(0);
+                                            link2.setRef(null);
                                             }
+                                        else{
+                                            link2.setRef(two);
+                                            }
+                                        cpath.remove(cname);
                                         }
                                     break;
                     case dbDAOLink:
                                     DAO dd = (DAO)ff.field.get(this);
                                     String pref = getFieldPrefix(ff);
                                     if (pref!=null)
-                                        dd.getData(pref+"_",out,0,null);
+                                        dd.getData(pref+"_",out,0,null,statistic);
                                     else
                                         noField(1,ff);
                                     break;
@@ -240,6 +267,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         afterLoad();
         }
         catch(Exception ee){
+            Utils.printFatalMessage(ee);
             throw UniException.bug(getClass().getSimpleName()+"["+out.get("oid")+"]."+ff.name+"\n"+ee.toString());  }
         }
     final public void putDBValues(String prefix, org.bson.Document out) throws UniException{
@@ -470,12 +498,13 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         putDBValues(prefix,document,level,mongo);
         }
     @Override
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths) throws UniException {
-        getDBValues(prefix,res,level,mongo,paths);
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,
+        HashMap<String,String> paths,HashMap<String,String> cpath,RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths,cpath,statistic);
         }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo) throws UniException {
-        getDBValues(prefix,res,level,mongo,null);
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,null,null,statistic);
         }
     @Override
     public void getData(Row row, ExCellCounter cnt) throws UniException{
@@ -607,7 +636,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         link.setOid(link2.getOid());
                         if (level!=0 && link.getTypeT()!=null && link.getOid()!=0){
                             Entity two = (Entity)link.getTypeT().newInstance();
-                            if (!mongo.getById(two,link.getOid(),level-1)) {
+                            if (!mongo.getById(two,link.getOid(),level-1,null)) {
                                 System.out.println("Не найден " + link.getTypeT().getSimpleName() + " id=" + link.getOid());
                                 link.setOid(0);
                                 link.setRef(null);
@@ -630,7 +659,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                 if (link3.getOid()==0)
                                     continue;
                                 Entity two = (Entity)list.getTypeT().newInstance();
-                                if (!mongo.getById(two,link3.getOid(),level-1)) {
+                                if (!mongo.getById(two,link3.getOid(),level-1,null)) {
                                     System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link3.getOid());
                                     link3.setOid(0);
                                     link3.setRef(null);

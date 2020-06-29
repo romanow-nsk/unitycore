@@ -18,6 +18,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -109,16 +110,19 @@ public class MongoDB36 extends I_MongoDB {
         return i;
     }
     @Override
-    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList) throws UniException{
+    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList,RequestStatistic  statistic) throws UniException{
+        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
         MongoCollection table = table(ent);
         MongoCursor<Document> cursor = table.find(query).iterator();
         final EntityList<Entity> out = new EntityList<>();
         while (cursor.hasNext()){
+            if (statistic!=null)
+                statistic.entityCount++;
             Document obj = cursor.next();
             Entity xx = null;
             try {
                 xx = (Entity) ent.getClass().newInstance();
-                xx.getData("", obj, level, MongoDB36.this,pathsList.length()==0 ? null : parsePaths(pathsList));
+                xx.getData("", obj, level, this,path,null,statistic);
                 out.add(xx);
             } catch (Exception e) {}
         }
@@ -127,7 +131,7 @@ public class MongoDB36 extends I_MongoDB {
     //----------------------------------------------------------------------------------------
     @Override
     public boolean delete(Entity entity, long id, boolean mode) throws UniException{
-        if (!getById(entity,id,0,mode,null))
+        if (!getById(entity,id,0,mode,null,null,null))
             return false;
         entity.setValid(mode);
         update(entity,0);
@@ -135,7 +139,7 @@ public class MongoDB36 extends I_MongoDB {
         }
     @Override
     synchronized public boolean getByIdAndUpdate(Entity ent, long id, I_ChangeRecord todo) throws UniException{
-        boolean bb = getById(ent,id,0);
+        boolean bb = getById(ent,id,0,null);
         if (!bb) return false;
         bb = todo.changeRecord(ent);
         if (!bb) return false;
@@ -143,7 +147,7 @@ public class MongoDB36 extends I_MongoDB {
         return true;
         }
     @Override
-    public boolean getById(Entity ent, long id, int level, boolean mode, String pathsList) throws UniException{
+    public boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path, HashMap<String,String> cpath,RequestStatistic statistic) throws UniException{
         if (isCashOn()){
             Entity src = getCashedEntity(ent,id);
             if (src!=null) {
@@ -160,8 +164,10 @@ public class MongoDB36 extends I_MongoDB {
         if (result==null)
             return false;
         // ent.setOid(((Long)result.get("oid")).longValue()); // Читается в getData
-        ent.getData("", result,level,this,pathsList.length()==0 ? null : parsePaths(pathsList));
+        ent.getData("", result,level,this,path,cpath,statistic);
         updateCashedEntity(ent);
+        if (statistic!=null)
+            statistic.entityCount++;
         return ent.isValid()!=mode;
         }
     @Override
@@ -239,11 +245,14 @@ public class MongoDB36 extends I_MongoDB {
         updateCashedEntity(ent);
     }
 
-    public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList) throws UniException{
+    public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList,RequestStatistic statistic) throws UniException{
+        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
         MongoCollection table = table(ent);
         MongoCursor<Document> cursor = table.find().iterator();
         EntityList<Entity> out = new EntityList<>();
         while(cursor.hasNext()) {
+            if (statistic!=null)
+                statistic.entityCount++;
             Document obj = cursor.next();
             Entity xx = null;
             try {
@@ -251,7 +260,7 @@ public class MongoDB36 extends I_MongoDB {
             } catch (Exception e) {
                 throw UniException.bug("Illegal class " + ent.getClass().getSimpleName());
             }
-            xx.getData("", obj, level, this,pathsList.length()==0 ? null : parsePaths(pathsList));
+            xx.getData("", obj, level, this,path,null,statistic);
             out.add(xx);
         }
         return out;

@@ -132,7 +132,7 @@ public class User extends Person implements I_Name {
         db.add(uu,0);
         System.out.println(uu.getOid());
         User xx = new User();
-        db.getById(xx,uu.getOid());
+        db.getById(xx,uu.getOid(),null);
         System.out.println(xx);
     }
 }

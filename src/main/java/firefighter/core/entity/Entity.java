@@ -9,6 +9,7 @@ import firefighter.core.export.ExCellCounter;
 import firefighter.core.mongo.DAO;
 import firefighter.core.mongo.I_MongoDB;
 import firefighter.core.mongo.I_MongoRW;
+import firefighter.core.mongo.RequestStatistic;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.util.ArrayList;
@@ -42,11 +43,11 @@ public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_Excel
         putDBValues(prefix,document,level,mongo);
         }
     @Override
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths) throws UniException {
-        getDBValues(prefix,res,level,mongo,paths);
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths, HashMap<String,String> cpath, RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths,cpath,statistic);
         }
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo) throws UniException {
-        getDBValues(prefix,res,level,mongo,null);
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,null,null,statistic);
         }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
     @Override

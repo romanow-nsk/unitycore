@@ -18,14 +18,14 @@ public abstract class I_MongoDB {
     public abstract String clearTable(String table) throws UniException;
     public abstract void createIndex(Entity entity, String name) throws UniException;
     public abstract int getCountByQuery(Entity ent, BasicDBObject query) throws UniException;
-    public abstract EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level,String pathList) throws UniException;
+    public abstract EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level,String pathList,RequestStatistic statistic) throws UniException;
     public abstract boolean delete(Entity entity, long id, boolean mode) throws UniException;
     public abstract boolean getByIdAndUpdate(Entity ent, long id, I_ChangeRecord todo) throws UniException;
-    public abstract boolean getById(Entity ent, long id, int level, boolean mode,  String pathList) throws UniException;
+    public abstract boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path,HashMap<String,String> cpath, RequestStatistic statistic) throws UniException;
     public abstract void dropTable(Entity ent) throws UniException;
     public abstract long add(Entity ent, int level,boolean ownOid) throws UniException;
     public abstract void update(Entity ent, int level) throws UniException;
-    public abstract EntityList<Entity> getAllRecords(Entity ent, int level, String pathList) throws UniException;
+    public abstract EntityList<Entity> getAllRecords(Entity ent, int level, String pathList,RequestStatistic statistic) throws UniException;
     public abstract EntityList<EntityNamed> getListForPattern(Entity ent, String pattern) throws UniException;
     public abstract long nextOid(Entity ent,boolean fromEntity) throws UniException;
     public abstract void remove(Entity entity, long id) throws UniException;
@@ -38,6 +38,9 @@ public abstract class I_MongoDB {
         return updateField(src,src.getOid(),fname,"");
     }
     //------------------------ Умолчания ----------------------------------
+    //public boolean getById(Entity ent, long id, int level, boolean mode,  String pathList) throws UniException{
+    //    return getById(ent,id,level,mode,pathList,null);
+    //    }
     public void remove(Entity entity) throws UniException{
         remove(entity,entity.getOid());
         }
@@ -45,16 +48,16 @@ public abstract class I_MongoDB {
         return nextOid(ent,false);
         }
     public EntityList<Entity> getAll(Entity ent, int mode, int level) throws UniException{
-        return getAll(ent,mode,level,"");
+        return getAll(ent,mode,level,"",null);
         }
-    public EntityList<Entity> getAll(Entity ent, int mode, int level,String pathList) throws UniException{
+    public EntityList<Entity> getAll(Entity ent, int mode, int level,String pathList,RequestStatistic statistic) throws UniException{
         switch (mode){
             case ValuesBase.GetAllModeTotal:
-                return getAllRecords(ent,level,pathList);
+                return getAllRecords(ent,level,pathList,statistic);
             case ValuesBase.GetAllModeActual:
-                return getAllByQuery(ent,new BasicDBObject("valid", true),level,pathList);
+                return getAllByQuery(ent,new BasicDBObject("valid", true),level,pathList,statistic);
             case ValuesBase.GetAllModeDeleted:
-                return getAllByQuery(ent,new BasicDBObject("valid", false),level,pathList);
+                return getAllByQuery(ent,new BasicDBObject("valid", false),level,pathList,statistic);
             default:
                 throw UniException.bug("MongoDB:Illegal get mode="+mode);
             }
@@ -69,10 +72,10 @@ public abstract class I_MongoDB {
         update(ent,0);
         }
     public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query) throws UniException{
-        return getAllByQuery(ent,query,0,"");
+        return getAllByQuery(ent,query,0,"",null);
         }
     public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level) throws UniException{
-        return getAllByQuery(ent,query,level,"");
+        return getAllByQuery(ent,query,level,"",null);
         }
     public boolean delete(Entity entity) throws UniException{
         return delete(entity,entity.getOid(),false);
@@ -81,20 +84,20 @@ public abstract class I_MongoDB {
         return delete(entity,id,false);
         }
     public EntityList<Entity> getAll(Entity ent) throws UniException{
-        return getAll(ent, ValuesBase.GetAllModeActual,0,"");
+        return getAll(ent, ValuesBase.GetAllModeActual,0,"",null);
         }
     public boolean getById(Entity ent, long id) throws UniException{
-        return getById(ent,id,0);
+        return getById(ent,id,0,null);
         }
     public boolean getById(Entity ent, long id, int level) throws UniException{
-        return  getById(ent, id, level, ValuesBase.DeleteMode,"");
+        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null,null);
         }
     //------------------------------------------------------- 660 ----------- пути БО ------------
     public boolean getById(Entity ent, long id,String pathList) throws UniException{
-        return getById(ent,id,0,ValuesBase.DeleteMode,pathList);
+        return getById(ent,id,0,ValuesBase.DeleteMode,null,null,null);
         }
     public boolean getById(Entity ent, long id, int level,String pathList) throws UniException{
-        return  getById(ent, id, level, ValuesBase.DeleteMode,pathList);
+        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null,null);
         }
     //-------------------------------------- КЭШ объектов ------------------------------------------
     private int totalGetCount=0;            // Общее количество чтений
