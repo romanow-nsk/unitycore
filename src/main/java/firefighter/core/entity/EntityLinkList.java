@@ -4,9 +4,22 @@ import firefighter.core.I_ExecLink;
 import firefighter.core.entity.artifacts.Artifact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
     private transient Class typeT = null;
+    private transient HashMap<String, T> map = new HashMap<>();
+    public void createMap(){
+        map.clear();
+        for(EntityLink pp : this){
+            Entity ent = pp.getRef();
+            if (ent==null) continue;
+            map.put(ent.getKey(),(T)ent);
+            }
+        }
+    public T get(String key){
+        return map.get(key);
+        }
     public EntityLinkList(EntityLinkList<T> src){
         clear();
         for(EntityLink<T> ff : src){
