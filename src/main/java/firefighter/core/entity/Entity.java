@@ -22,7 +22,7 @@ public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_Excel
     public String toString(){ return ""+oid+","; }
     public String toShortString(){ return ""; }
     public String getTitle(){ return toString(); }
-    public String getKey(){ return ""; }
+    public int getKey(){ return -1; }
     public long getOid() {
         return oid;
         }
