@@ -8,18 +8,24 @@ import java.util.HashMap;
 
 public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
     private transient Class typeT = null;
-    private transient HashMap<Integer, T> map = null;
+    private transient HashMap<Integer, T> numMap = null;
+    private transient HashMap<String, T> nameMap = null;
     public void createMap(){
-        map = new HashMap<>();
+        nameMap = new HashMap<>();
+        numMap = new HashMap<>();
         for(EntityLink pp : this){
             Entity ent = pp.getRef();
             if (ent==null) continue;
-            map.put(ent.getKey(),(T)ent);
+            nameMap.put(ent.getKeyName(),(T)ent);
+            numMap.put(ent.getKeyNum(),(T)ent);
             }
         }
     public T getByNumber(int key){
-        return map==null ? null : map.get(key);
+        return numMap==null ? null : numMap.get(key);
         }
+    public T getByName(String key){
+        return nameMap==null ? null : nameMap.get(key);
+    }
     public EntityLinkList(EntityLinkList<T> src){
         clear();
         for(EntityLink<T> ff : src){
