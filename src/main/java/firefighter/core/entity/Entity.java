@@ -74,5 +74,4 @@ public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_Excel
         return ""; }
     //------------------------------------------------------------------------------------------------- Для мапов ------
     public int getKeyNum(){ return -1; }
-    public String getKeyName(){ return ""; }
 }

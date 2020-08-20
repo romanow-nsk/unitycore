@@ -16,14 +16,14 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
         for(EntityLink pp : this){
             Entity ent = pp.getRef();
             if (ent==null) continue;
-            nameMap.put(ent.getKeyName(),(T)ent);
+            nameMap.put(ent.getTitle(),(T)ent);
             numMap.put(ent.getKeyNum(),(T)ent);
             }
         }
     public T getByNumber(int key){
         return numMap==null ? null : numMap.get(key);
         }
-    public T getByName(String key){
+    public T getByTitle(String key){
         return nameMap==null ? null : nameMap.get(key);
     }
     public EntityLinkList(EntityLinkList<T> src){
