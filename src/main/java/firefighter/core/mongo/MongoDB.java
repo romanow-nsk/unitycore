@@ -24,11 +24,11 @@ public class MongoDB extends I_MongoDB {
     //private MongoDatabase mongoDB=null;
     private DB mongoDB=null;
     public DB dbase(){ return mongoDB; }
-    private boolean testDB(){
+    private boolean testDB(int port){
         try {
             List<String> ss = mongo.getDatabaseNames();
             for (String zz : ss)
-                if (zz.equals(ValuesBase.env().mongoDBName()))
+                if (zz.equals(ValuesBase.env().mongoDBName()+port))
                     return true;
             return false;
             } catch (Exception ee){ System.out.println(ee); return false; }
@@ -40,7 +40,7 @@ public class MongoDB extends I_MongoDB {
         try {
             boolean auth=false;
             connect();
-            if (testDB()){
+            if (testDB(port)){
                 //MongoDatabase mongoDB = mongo.getDatabase(ValuesBase.mongoDBName+port);
                 mongoDB = mongo.getDB(ValuesBase.env().mongoDBName()+port);
                 mongoDB.addUser(ValuesBase.env().mongoDBUser(), ValuesBase.env().mongoDBPassword().toCharArray());
