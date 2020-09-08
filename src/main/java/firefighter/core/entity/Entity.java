@@ -43,11 +43,11 @@ public class Entity extends DAO implements I_XStream, I_Name, I_MongoRW, I_Excel
         putDBValues(prefix,document,level,mongo);
         }
     @Override
-    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths, HashMap<String,String> cpath, RequestStatistic statistic) throws UniException {
-        getDBValues(prefix,res,level,mongo,paths,cpath,statistic);
+    public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo, HashMap<String,String> paths, RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths,statistic);
         }
     public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,RequestStatistic statistic) throws UniException {
-        getDBValues(prefix,res,level,mongo,null,null,statistic);
+        getDBValues(prefix,res,level,mongo,null,statistic);
         }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
     @Override

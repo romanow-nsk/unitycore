@@ -39,7 +39,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         fld = item.getFields();
         }
     final public void getDBValues(String prefix, org.bson.Document out) throws UniException{
-        getDBValues(prefix, out,0,null,null,null,null);
+        getDBValues(prefix, out,0,null,null,null);
         }
     private void error(String prefix,EntityField ff){
         System.out.println(getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует"));
@@ -144,11 +144,11 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         return out;
         }
     final public void getDBValues(String prefix, org.bson.Document out, int level, I_MongoDB mongo,
-        HashMap<String,String> path,HashMap<String,String> cpath,RequestStatistic statistic) throws UniException{
+        HashMap<String,String> path,RequestStatistic statistic) throws UniException{
         String cname="";
-        boolean bb=false,bb1=false;
-        if (cpath==null)
-            cpath=new HashMap<>();      //662
+        boolean bb=false;
+        if (statistic!=null)
+            statistic.entityCount++;
         EntityField ff=new EntityField();
         try {
             getFields();
@@ -190,18 +190,11 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     if (cc==null)
                                         break;
                                     cname = cc.getSimpleName();
-                                    bb1 = cpath.get(cname)==null;
-                                    if (!bb1){
-                                        if (statistic!=null)
-                                            statistic.recurseCount++;
-                                        break;
-                                        }
                                     bb = level!=0 && link.getOid()!=0 && !(path!=null && path.get(cname)==null);
                                     if (!bb)
                                         break;
-                                    cpath.put(cname,cname);
                                     Entity two = (Entity)link.getTypeT().newInstance();
-                                    if (!mongo.getById(two,link.getOid(),level-1, ValuesBase.DeleteMode,path,cpath,statistic)) {
+                                    if (!mongo.getById(two,link.getOid(),level-1, ValuesBase.DeleteMode,path,statistic)) {
                                         //System.out.println("Не найден " + cname + " id=" + link.getOid());
                                         link.setOid(0);
                                         link.setRef(null);
@@ -209,7 +202,6 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     else{
                                         link.setRef(two);
                                         }
-                                    cpath.remove(cname);
                                     break;
                     case dbLinkList:
                                     EntityLinkList list = (EntityLinkList)ff.field.get(this);
@@ -228,22 +220,15 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     if (cc==null)
                                         break;
                                     cname = cc.getSimpleName();
-                                    bb1 = cpath.get(cname)==null;
-                                    if (!bb1){
-                                        if (statistic!=null)
-                                            statistic.recurseCount++;
-                                        break;
-                                        }
                                     bb = level!=0 && cc!=null && !(path!=null && path.get(cname)==null);
                                     if (!bb)
                                         break;
-                                    cpath.put(cname,cname);
                                     for(int ii=0;ii<list.size();ii++){
                                         EntityLink link2 = (EntityLink) list.get(ii);
                                         if (link2.getOid()==0)
                                             continue;
                                         two = (Entity)list.getTypeT().newInstance();
-                                        if (!mongo.getById(two,link2.getOid(),level-1,ValuesBase.DeleteMode,path,cpath,statistic)) {
+                                        if (!mongo.getById(two,link2.getOid(),level-1,ValuesBase.DeleteMode,path,statistic)) {
                                             System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
                                             link2.setOid(0);
                                             link2.setRef(null);
@@ -251,7 +236,6 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                         else{
                                             link2.setRef(two);
                                             }
-                                        cpath.remove(cname);
                                         }
                                     break;
                     case dbDAOLink:
@@ -499,12 +483,12 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         }
     @Override
     public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,
-        HashMap<String,String> paths,HashMap<String,String> cpath,RequestStatistic statistic) throws UniException {
-        getDBValues(prefix,res,level,mongo,paths,cpath,statistic);
+        HashMap<String,String> paths,RequestStatistic statistic) throws UniException {
+        getDBValues(prefix,res,level,mongo,paths,statistic);
         }
     //----------------- Импорт/экспорт Excel ------------------------------------------------------------
     public void getData(String prefix, org.bson.Document res, int level, I_MongoDB mongo,RequestStatistic statistic) throws UniException {
-        getDBValues(prefix,res,level,mongo,null,null,statistic);
+        getDBValues(prefix,res,level,mongo,null,statistic);
         }
     @Override
     public void getData(Row row, ExCellCounter cnt) throws UniException{

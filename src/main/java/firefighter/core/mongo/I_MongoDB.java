@@ -21,7 +21,7 @@ public abstract class I_MongoDB {
     public abstract EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level,String pathList,RequestStatistic statistic) throws UniException;
     public abstract boolean delete(Entity entity, long id, boolean mode) throws UniException;
     public abstract boolean getByIdAndUpdate(Entity ent, long id, I_ChangeRecord todo) throws UniException;
-    public abstract boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path,HashMap<String,String> cpath, RequestStatistic statistic) throws UniException;
+    public abstract boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path, RequestStatistic statistic) throws UniException;
     public abstract void dropTable(Entity ent) throws UniException;
     public abstract long add(Entity ent, int level,boolean ownOid) throws UniException;
     public abstract void update(Entity ent, int level) throws UniException;
@@ -90,14 +90,14 @@ public abstract class I_MongoDB {
         return getById(ent,id,0,null);
         }
     public boolean getById(Entity ent, long id, int level) throws UniException{
-        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null,null);
+        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null);
         }
     //------------------------------------------------------- 660 ----------- пути БО ------------
     public boolean getById(Entity ent, long id,String pathList) throws UniException{
-        return getById(ent,id,0,ValuesBase.DeleteMode,null,null,null);
+        return getById(ent,id,0,ValuesBase.DeleteMode,null,null);
         }
     public boolean getById(Entity ent, long id, int level,String pathList) throws UniException{
-        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null,null);
+        return  getById(ent, id, level, ValuesBase.DeleteMode,null,null);
         }
     //-------------------------------------- КЭШ объектов ------------------------------------------
     private int totalGetCount=0;            // Общее количество чтений

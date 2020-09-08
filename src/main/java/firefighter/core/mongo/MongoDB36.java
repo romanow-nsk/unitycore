@@ -125,7 +125,7 @@ public class MongoDB36 extends I_MongoDB {
             Entity xx = null;
             try {
                 xx = (Entity) ent.getClass().newInstance();
-                xx.getData("", obj, level, this,path,null,statistic);
+                xx.getData("", obj, level, this,path,statistic);
                 out.add(xx);
             } catch (Exception e) {}
         }
@@ -134,7 +134,7 @@ public class MongoDB36 extends I_MongoDB {
     //----------------------------------------------------------------------------------------
     @Override
     public boolean delete(Entity entity, long id, boolean mode) throws UniException{
-        if (!getById(entity,id,0,mode,null,null,null))
+        if (!getById(entity,id,0,mode,null,null))
             return false;
         entity.setValid(mode);
         update(entity,0);
@@ -150,7 +150,7 @@ public class MongoDB36 extends I_MongoDB {
         return true;
         }
     @Override
-    public boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path, HashMap<String,String> cpath,RequestStatistic statistic) throws UniException{
+    public boolean getById(Entity ent, long id, int level, boolean mode, HashMap<String,String> path,RequestStatistic statistic) throws UniException{
         if (isCashOn()){
             Entity src = getCashedEntity(ent,id);
             if (src!=null) {
@@ -167,7 +167,7 @@ public class MongoDB36 extends I_MongoDB {
         if (result==null)
             return false;
         // ent.setOid(((Long)result.get("oid")).longValue()); // Читается в getData
-        ent.getData("", result,level,this,path,cpath,statistic);
+        ent.getData("", result,level,this,path,statistic);
         updateCashedEntity(ent);
         if (statistic!=null)
             statistic.entityCount++;
@@ -263,7 +263,7 @@ public class MongoDB36 extends I_MongoDB {
             } catch (Exception e) {
                 throw UniException.bug("Illegal class " + ent.getClass().getSimpleName());
             }
-            xx.getData("", obj, level, this,path,null,statistic);
+            xx.getData("", obj, level, this,path,statistic);
             out.add(xx);
         }
         return out;

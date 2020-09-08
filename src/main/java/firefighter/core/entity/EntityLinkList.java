@@ -4,6 +4,7 @@ import firefighter.core.I_ExecLink;
 import firefighter.core.entity.artifacts.Artifact;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
@@ -190,5 +191,23 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
         }
     public String getTitle(){
         return  size()==0 ? "" : (get(0).getTitle()+(size()==1 ? "" : "["+size()+"] "));
+    }
+    public void sortByTitle(){
+        sort(new Comparator<EntityLink<T>>() {
+            @Override
+            public int compare(EntityLink<T> o1, EntityLink<T> o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        });
+    }
+    public void sortByOid(){
+        sort(new Comparator<EntityLink<T>>() {
+            @Override
+            public int compare(EntityLink<T> o1, EntityLink<T> o2) {
+                long vv =  o1.getOid()-o2.getOid();
+                if (vv==0) return 0;
+                return vv <0 ? -1 : 1;
+            }
+        });
     }
 }
