@@ -190,7 +190,9 @@ public class ValuesBase {
     public final static int NTUserMessage = 4;
     @CONST(group = "NotificationType", title = "Событие")                   // Событие на объекте (class,id)
     public final static int NTObjectEvent = 5;
-    public final static String NTypes[] = {"Не определено", "Управление клиентом", "Действие", "Изменение соcтояния", "Сообщение", "Событие"};
+    @CONST(group = "NotificationType", title = "Система")                   //
+    public final static int NTSystemEvent = 6;
+    public final static String NTypes[] = {"Не определено", "Управление клиентом", "Действие", "Изменение соcтояния", "Сообщение", "Событие","Система"};
 
     //------------------- Состояние уведомлнния  -------------------------------------------------------------------------
     @CONST(group = "NotificationState", title = "Не определено")
