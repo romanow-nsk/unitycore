@@ -313,7 +313,7 @@ public class MongoDB extends I_MongoDB {
                 for(String ss : item.indexes)
                     createIndex(ent,ss);
                 } catch (Exception ee){
-                    String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString()+"\n";
+                    String ss = "Не могу создать "+ item.clazz.getSimpleName()+"\n"+ee.toString()+"\n";
                     System.out.print(ss);
                     out+=ss;
                 }
