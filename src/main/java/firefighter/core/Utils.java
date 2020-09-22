@@ -112,9 +112,12 @@ public class Utils {
         return ss;
         }
     public static String createFatalMessage(Throwable ee) {
+        return createFatalMessage(ee,ValuesBase.FatalExceptionStackSize);
+        }
+    public static String createFatalMessage(Throwable ee, int stackSize) {
         String ss = ee.toString() + "\n";
         StackTraceElement dd[] = ee.getStackTrace();
-        for (int i = 0; i < dd.length && i < ValuesBase.FatalExceptionStackSize; i++) {
+        for (int i = 0; i < dd.length && i < stackSize; i++) {
             ss += dd[i].getClassName() + "." + dd[i].getMethodName() + ":" + dd[i].getLineNumber() + "\n";
         }
         String out = "Необработанное исключение:\n" + ss;
