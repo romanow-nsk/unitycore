@@ -28,6 +28,7 @@ public abstract class I_MongoDB {
     public abstract EntityList<Entity> getAllRecords(Entity ent, int level, String pathList,RequestStatistic statistic) throws UniException;
     public abstract EntityList<EntityNamed> getListForPattern(Entity ent, String pattern) throws UniException;
     public abstract long nextOid(Entity ent,boolean fromEntity) throws UniException;
+    public abstract long lastOid(Entity ent) throws UniException;
     public abstract void remove(Entity entity, long id) throws UniException;
     //------------------------ Синхронизированное обновление поля ПО ВСЕЙ БД 628
     public abstract boolean updateField(Entity src, long id, String fname, String prefix) throws UniException;

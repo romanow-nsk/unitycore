@@ -189,6 +189,16 @@ public class MongoDB extends I_MongoDB {
         }
 
     @Override
+    public synchronized long lastOid(Entity ent) throws UniException {
+        DBCollection table = table(ent);
+        DBObject result = table.findOne();
+        if (result==null){
+            throw UniException.bug("Ошибка генерации ключа в "+ent.getClass().getSimpleName());
+            }
+        long oid = ((Long) result.get("oid")).longValue();
+        return oid;
+        }
+    @Override
     public void remove(Entity entity, long id) throws UniException {
         DBCollection table = table(entity);
         BasicDBObject query = new BasicDBObject();
