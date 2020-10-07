@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="UnityCore:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\FireFighterGit\UnityCore\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1atYT7EvaWaGcFdKGrhdUyhHaDO" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="firefighter.core.entity.base" />
+      <recent name="firefighter.core.entity" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="" />
+      <created>1587556361828</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587556361828</updated>
+    </task>
+    <task id="LOCAL-00001" summary="fix0 - 635">
+      <created>1587561655208</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587561655208</updated>
+    </task>
+    <task id="LOCAL-00002" summary="fix0 - 635">
+      <created>1587577931175</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1587577931175</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fix0 - 644">
+      <created>1587622346781</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1587622346781</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix0 - 644">
+      <created>1587637607245</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1587637607245</updated>
+    </task>
+    <task id="LOCAL-00005" summary="648">
+      <created>1588655600059</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1588655600059</updated>
+    </task>
+    <task id="LOCAL-00006" summary="649">
+      <created>1588680939656</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1588680939656</updated>
+    </task>
+    <task id="LOCAL-00007" summary="649">
+      <created>1588738397517</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1588738397517</updated>
+    </task>
+    <task id="LOCAL-00008" summary="649">
+      <created>1588846925496</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1588846925496</updated>
+    </task>
+    <task id="LOCAL-00009" summary="650">
+      <created>1588873231650</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1588873231650</updated>
+    </task>
+    <task id="LOCAL-00010" summary="651 - Уведомления в базе">
+      <created>1589009855977</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1589009855977</updated>
+    </task>
+    <task id="LOCAL-00011" summary="651 - Уведомления в базе">
+      <created>1589020643202</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1589020643202</updated>
+    </task>
+    <task id="LOCAL-00012" summary="651 - Уведомления в базе">
+      <created>1589098544268</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1589098544268</updated>
+    </task>
+    <task id="LOCAL-00013" summary="651 - Уведомления в базе">
+      <created>1589458959864</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1589458959864</updated>
+    </task>
+    <task id="LOCAL-00014" summary="653 Приказ">
+      <created>1589485330898</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1589485330898</updated>
+    </task>
+    <task id="LOCAL-00015" summary="653 Приказ">
+      <created>1589562119418</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1589562119418</updated>
+    </task>
+    <task id="LOCAL-00016" summary="653 Приказ">
+      <created>1589633916060</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1589633916060</updated>
+    </task>
+    <task id="LOCAL-00017" summary="653 Приказ">
+      <created>1589743029507</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1589743029507</updated>
+    </task>
+    <task id="LOCAL-00018" summary="656 - типы сообщений">
+      <created>1589875521181</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1589875521181</updated>
+    </task>
+    <task id="LOCAL-00019" summary="656 - Чтение констант">
+      <created>1589893823501</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1589893823501</updated>
+    </task>
+    <task id="LOCAL-00020" summary="656 - Уведомление - почта">
+      <created>1589902731814</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1589902731814</updated>
+    </task>
+    <task id="LOCAL-00021" summary="656 - Окружение">
+      <created>1589944060331</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1589944060331</updated>
+    </task>
+    <task id="LOCAL-00022" summary="656 - Окружение">
+      <created>1589946418754</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1589946418754</updated>
+    </task>
+    <task id="LOCAL-00023" summary="657-2 - Шрифт в каталоге запуска (pdf)">
+      <created>1590469625207</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1590469625207</updated>
+    </task>
+    <task id="LOCAL-00024" summary="657-2 - Шрифт в каталоге запуска (pdf)">
+      <created>1592328842375</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1592328842375</updated>
+    </task>
+    <task id="LOCAL-00025" summary="660 - отчеты (список-сумма)">
+      <created>1592387710253</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1592387710253</updated>
+    </task>
+    <task id="LOCAL-00026" summary="660 -">
+      <created>1592389955969</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1592389955969</updated>
+    </task>
+    <task id="LOCAL-00027" summary="661 - парсинг id из двоичной строки">
+      <created>1592842354866</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1592842354866</updated>
+    </task>
+    <task id="LOCAL-00028" summary="661">
+      <created>1592889328930</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1592889328930</updated>
+    </task>
+    <task id="LOCAL-00029" summary="662 - счетчики объектов">
+      <created>1593458108067</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1593458108067</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix0 - 635" />
+    <MESSAGE value="fix0 - 644" />
+    <MESSAGE value="648" />
+    <MESSAGE value="649" />
+    <MESSAGE value="650" />
+    <MESSAGE value="651 - Уведомления в базе" />
+    <MESSAGE value="653 Приказ" />
+    <MESSAGE value="656 - типы сообщений" />
+    <MESSAGE value="656 - Чтение констант" />
+    <MESSAGE value="656 - Уведомление - почта" />
+    <MESSAGE value="656 - Окружение" />
+    <MESSAGE value="657-2 - Шрифт в каталоге запуска (pdf)" />
+    <MESSAGE value="660 - отчеты (список-сумма)" />
+    <MESSAGE value="660 -" />
+    <MESSAGE value="661 - парсинг id из двоичной строки" />
+    <MESSAGE value="661" />
+    <MESSAGE value="662 - счетчики объектов" />
+    <option name="LAST_COMMIT_MESSAGE" value="662 - счетчики объектов" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="466" y="37" key="CommitChangelistDialog2" timestamp="1602080355636">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="466" y="37" key="CommitChangelistDialog2/0.0.1600.870@0.0.1600.870" timestamp="1602080355636" />
+    <state x="303" y="23" key="SettingsEditor" timestamp="1602080373446">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="303" y="23" key="SettingsEditor/0.0.1600.870@0.0.1600.870" timestamp="1602080373446" />
+    <state x="392" y="170" key="Vcs.Push.Dialog.v2" timestamp="1593458112433">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="392" y="170" key="Vcs.Push.Dialog.v2/0.0.1600.870@0.0.1600.870" timestamp="1593458112433" />
+  </component>
+</project>
