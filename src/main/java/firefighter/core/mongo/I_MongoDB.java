@@ -90,6 +90,10 @@ public abstract class I_MongoDB {
     public boolean getById(Entity ent, long id) throws UniException{
         return getById(ent,id,0,null);
         }
+    //----------------------------------------- 667 -----------------------------------------
+    public boolean getById(Entity ent, long id, boolean valid, int level) throws UniException{
+        return  getById(ent, id, level, !valid,null,null);
+        }
     public boolean getById(Entity ent, long id, int level) throws UniException{
         return  getById(ent, id, level, ValuesBase.DeleteMode,null,null);
         }
