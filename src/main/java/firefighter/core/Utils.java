@@ -120,7 +120,7 @@ public class Utils {
         for (int i = 0; i < dd.length && i < stackSize; i++) {
             ss += dd[i].getClassName() + "." + dd[i].getMethodName() + ":" + dd[i].getLineNumber() + "\n";
         }
-        String out = "Необработанное исключение:\n" + ss;
+        String out = "Программная ошибка:\n" + ss;
         return out;
         }
     public static void printFatalMessage(Throwable ee) {
