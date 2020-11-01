@@ -18,6 +18,8 @@ import java.util.HashMap;
 
 public class DAO implements I_ExcelRW, I_MongoRW {
     private transient ArrayList<EntityField> fld=null;
+    private static String lastField="";
+    private static int fieldCount=0;
     //-------------------------------------- РЕФЛЕКСИЯ -----------------------------------------------------------------
     public final static String dbTypes[]={"int","String","double","boolean","short","long","java.lang.String",
             "firefighter.core.entity.EntityLink","firefighter.core.entity.EntityLinkList"};
@@ -42,7 +44,14 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         getDBValues(prefix, out,0,null,null,null);
         }
     private void error(String prefix,EntityField ff){
-        System.out.println(getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует"));
+        String ss = getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует");
+        if (!ss.equals(lastField)){
+            System.out.println("["+fieldCount+"]"+lastField+"\n"+ss);
+            lastField=ss;
+            fieldCount=1;
+            }
+        else
+            fieldCount++;
         }
     //----------------------- Парсинг из строки -------------------------------------------------
     public String toStringValue(){ return  "???"; }
