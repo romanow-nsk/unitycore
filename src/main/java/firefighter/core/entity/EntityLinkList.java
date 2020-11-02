@@ -118,7 +118,7 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
              }
          return new String(out);
          }
-    public String getIdListString(){        // Пропускает id=0
+    public String getIdListStringOld(){        // Пропускает id=0
         int count=0;
         String out = "";
         if (size()==0) return out;
@@ -131,6 +131,20 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
             count++;
             }
         return out;
+        }
+    public String getIdListString(){        // Пропускает id=0
+        int count=0;
+        StringBuffer out = new StringBuffer();
+        if (size()==0) return out.toString();
+        for (int i=0;i<size();i++){
+            if (get(i).getOid()==0)
+                continue;
+            if(count!=0)
+                out.append(',');
+            out.append(get(i).getOid());
+            count++;
+            }
+        return out.toString();
         }
     public EntityLinkList(){}
     public EntityLinkList(Class type){
