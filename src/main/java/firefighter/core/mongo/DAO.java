@@ -163,98 +163,128 @@ public class DAO implements I_ExcelRW, I_MongoRW {
             getFields();
             for(int i=0;i<fld.size();i++){
                 ff=fld.get(i);
-                switch(ff.type){
-                    case dbInt:	    try {
-                                        ff.field.setInt(this, ((Integer) out.get(prefix + ff.name)).intValue());
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.setInt(this,0); }
-                                    break;
-                    case dbShort:	try {
-                                        ff.field.setShort(this, ((Short) out.get(prefix+ff.name)).shortValue());
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.setShort(this,(short) 0); }
-                                    break;
-                    case dbLong:	try {
-                                        ff.field.setLong(this, ((Long)out.get(prefix+ff.name)).longValue());
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.setLong(this, 0); }
-                                    break;
-                    case dbDouble:	try {
-                                        ff.field.setDouble(this, ((Double)out.get(prefix+ff.name)).doubleValue());
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.setDouble(this,0); }
-                                    break;
-                    case dbBoolean: try {
-                                        ff.field.setBoolean(this, ((Boolean)out.get(prefix+ff.name)).booleanValue());
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.setBoolean(this,false); }
-                                    break;
+                switch(ff.type) {
+                    case dbInt:
+                        try {
+
+                            ff.field.setInt(this, ((Integer) out.get(prefix + ff.name)).intValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.setInt(this, 0);
+                        }
+                        break;
+                    case dbShort:
+                        try {
+                            ff.field.setShort(this, ((Short) out.get(prefix + ff.name)).shortValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.setShort(this, (short) 0);
+                        }
+                        break;
+                    case dbLong:
+                        try {
+                            ff.field.setLong(this, ((Long) out.get(prefix + ff.name)).longValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.setLong(this, 0);
+                        }
+                        break;
+                    case dbDouble:
+                        try {
+                            ff.field.setDouble(this, ((Double) out.get(prefix + ff.name)).doubleValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.setDouble(this, 0);
+                        }
+                        break;
+                    case dbBoolean:
+                        try {
+                            ff.field.setBoolean(this, ((Boolean) out.get(prefix + ff.name)).booleanValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.setBoolean(this, false);
+                        }
+                        break;
                     case dbString2:
-                    case dbString:	try {
-                                        ff.field.set(this, (String)out.get(prefix+ff.name));
-                                        } catch (Exception ee){ error(prefix,ff); ff.field.set(this,""); }
-                                        break;
+                    case dbString:
+                        try {
+                            ff.field.set(this, (String) out.get(prefix + ff.name));
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            ff.field.set(this, "");
+                        }
+                        break;
                     // При чтении  объекта EntityLink с oid!=0, level!=0 и наличием класса-прототипа - создается объект
                     // рекурсивно читается и ссылка на него помещается в EntityLink
-                    case dbLink:    EntityLink link = (EntityLink)ff.field.get(this);
-                                    try {
-                                        link.setOid(((Long)out.get(prefix+ff.name)).longValue());
-                                        } catch (Exception ee){ error(prefix,ff); link.setOid(0); }
-                                    Class cc = link.getTypeT();         //660
-                                    if (cc==null)
-                                        break;
-                                    cname = cc.getSimpleName();
-                                    bb = level!=0 && link.getOid()!=0 && !(path!=null && path.get(cname)==null);
-                                    if (!bb)
-                                        break;
-                                    Entity two = (Entity)link.getTypeT().newInstance();
-                                    if (!mongo.getById(two,link.getOid(),level-1, ValuesBase.DeleteMode,path,statistic)) {
-                                        //System.out.println("Не найден " + cname + " id=" + link.getOid());
-                                        link.setOid(0);
-                                        link.setRef(null);
-                                        }
-                                    else{
-                                        link.setRef(two);
-                                        }
-                                    break;
+                    case dbLink:
+                        EntityLink link = (EntityLink) ff.field.get(this);
+                        try {
+                            link.setOid(((Long) out.get(prefix + ff.name)).longValue());
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            link.setOid(0);
+                        }
+                        Class cc = link.getTypeT();         //660
+                        if (cc == null)
+                            break;
+                        cname = cc.getSimpleName();
+                        bb = level != 0 && link.getOid() != 0 && !(path != null && path.get(cname) == null);
+                        if (!bb)
+                            break;
+                        Entity two = (Entity) link.getTypeT().newInstance();
+                        if (!mongo.getById(two, link.getOid(), level - 1, ValuesBase.DeleteMode, path, statistic)) {
+                            //System.out.println("Не найден " + cname + " id=" + link.getOid());
+                            link.setOid(0);
+                            link.setRef(null);
+                        } else {
+                            link.setRef(two);
+                        }
+                        break;
                     case dbLinkList:
-                                    EntityLinkList list = (EntityLinkList)ff.field.get(this);
-                                    //-------------- 661 ---- двоичная скериализация
-                                    //try {       // 661
-                                    //    list.parseIdListBinary((String)out.get(prefix+"_"+ff.name));
-                                    //    } catch (Exception ex){
-                                            try{
-                                                String mm = (String)out.get(prefix+ff.name);
-                                                //if (mm.length()!=0)
-                                                //    System.out.println("Original list "+mm);
-                                                list.parseIdList(mm);
-                                                } catch (Exception ee){ error(prefix,ff); list = new EntityLinkList(); }
-                                            //        }         // 661
-                                    cc= list.getTypeT();        // 660
-                                    if (cc==null)
-                                        break;
-                                    cname = cc.getSimpleName();
-                                    bb = level!=0 && cc!=null && !(path!=null && path.get(cname)==null);
-                                    if (!bb)
-                                        break;
-                                    for(int ii=0;ii<list.size();ii++){
-                                        EntityLink link2 = (EntityLink) list.get(ii);
-                                        if (link2.getOid()==0)
-                                            continue;
-                                        two = (Entity)list.getTypeT().newInstance();
-                                        if (!mongo.getById(two,link2.getOid(),level-1,ValuesBase.DeleteMode,path,statistic)) {
-                                            System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
-                                            link2.setOid(0);
-                                            link2.setRef(null);
-                                            }
-                                        else{
-                                            link2.setRef(two);
-                                            }
-                                        }
-                                    break;
+                        EntityLinkList list = (EntityLinkList) ff.field.get(this);
+                        //-------------- 661 ---- двоичная скериализация
+                        //try {       // 661
+                        //    list.parseIdListBinary((String)out.get(prefix+"_"+ff.name));
+                        //    } catch (Exception ex){
+                        try {
+                            String mm = (String) out.get(prefix + ff.name);
+                            //if (mm.length()!=0)
+                            //    System.out.println("Original list "+mm);
+                            list.parseIdList(mm);
+                        } catch (Exception ee) {
+                            error(prefix, ff);
+                            list = new EntityLinkList();
+                        }
+                        //        }         // 661
+                        cc = list.getTypeT();        // 660
+                        if (cc == null)
+                            break;
+                        cname = cc.getSimpleName();
+                        bb = level != 0 && cc != null && !(path != null && path.get(cname) == null);
+                        if (!bb)
+                            break;
+                        for (int ii = 0; ii < list.size(); ii++) {
+                            EntityLink link2 = (EntityLink) list.get(ii);
+                            if (link2.getOid() == 0)
+                                continue;
+                            two = (Entity) list.getTypeT().newInstance();
+                            if (!mongo.getById(two, link2.getOid(), level - 1, ValuesBase.DeleteMode, path, statistic)) {
+                                System.out.println("Не найден " + list.getTypeT().getSimpleName() + " id=" + link2.getOid());
+                                link2.setOid(0);
+                                link2.setRef(null);
+                            } else {
+                                link2.setRef(two);
+                            }
+                        }
+                        break;
                     case dbDAOLink:
-                                    DAO dd = (DAO)ff.field.get(this);
-                                    String pref = getFieldPrefix(ff);
-                                    if (pref!=null)
-                                        dd.getData(pref+"_",out,0,null,statistic);
-                                    else
-                                        noField(1,ff);
-                                    break;
+                        DAO dd = (DAO) ff.field.get(this);
+                        String pref = getFieldPrefix(ff);
+                        if (pref != null)
+                            dd.getData(pref + "_", out, 0, null, statistic);
+                        else
+                            noField(1, ff);
+                        break;
                     }
                 }
         afterLoad();
@@ -297,8 +327,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
             case dbDouble:	out.put(prefix+ff.name,ff.field.getDouble(this)); break;
             case dbBoolean: out.put(prefix+ff.name,ff.field.getBoolean(this));break;
             case dbString2:
-            case dbString:	out.put(prefix+ff.name,ff.field.get(this));
-                break;
+            case dbString:	out.put(prefix+ff.name,ff.field.get(this)); break;
             // Для объекта EntityLink с oid==0, ref!=null level!=0 и наличием класса-прототипа -
             // вызывается  рекурсивно метод добавления, полученный oid его помещается в EntityLink
             // Для объекта EntityLink с oid<0, ref!=null level!=0 и наличием класса-прототипа -
@@ -679,5 +708,4 @@ public class DAO implements I_ExcelRW, I_MongoRW {
             throw UniException.bug(getClass().getSimpleName()+"."+ff.name+"\n"+ee.toString());
             }
     }
-
 }
