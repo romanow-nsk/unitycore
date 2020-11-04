@@ -18,6 +18,8 @@ public class TablePDF extends TableData{
     protected Font titleFont;
     protected Font cellHeaderFont;
     protected Font cellRegularFont;
+    protected Font cellBottomFont;
+    protected Font cellLinkFont;
     protected int cellHeight=26;
     protected int cellWidth=20;
     protected int cellWidthFirst=120;
@@ -42,6 +44,8 @@ public class TablePDF extends TableData{
             titleFont = new Font(russianFont, 12, Font.BOLD);
             cellHeaderFont = new Font(russianFont, 10, Font.NORMAL);
             cellRegularFont = new Font(russianFont, 8, Font.NORMAL);
+            cellBottomFont = new Font(russianFont, 6, Font.NORMAL);
+            cellLinkFont = new Font(russianFont, 6, Font.NORMAL);
             if (paramList.isLandscape())
                 document = new Document(PageSize.A4.rotate());
             else
@@ -76,7 +80,7 @@ public class TablePDF extends TableData{
             for (int i = 0; i < nrow; i++) {
                 for (int j = 0; j < ncol; j++) {
                     TableRowItem item = rowData.get(i);
-                    addRegularCell(table, item, data.get(i).get(j));
+                    addRegularCell(table, cols.get(j),item, data.get(i).get(j));
                 }
             }
             document.add(table);
@@ -89,7 +93,10 @@ public class TablePDF extends TableData{
         }
 
     private void addHeaderCell(PdfPTable table, TableCol col) {
-        PdfPCell cell = new PdfPCell(new Phrase(col.name, cellHeaderFont));
+        Phrase phrase = new Phrase(col.name, cellHeaderFont);
+        if (col.linkIndex!=0)
+            phrase.add(new Chunk(""+col.linkIndex,cellLinkFont).setTextRise(5f));
+        PdfPCell cell = new PdfPCell(phrase);
         if (verticalHeader) cell.setRotation(90);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -108,11 +115,18 @@ public class TablePDF extends TableData{
                 }
         }
 
-    protected void addRegularCell(PdfPTable table, TableRowItem item, TableCell tcell) {
+    protected void addRegularCell(PdfPTable table, TableCol col, TableRowItem item, TableCell tcell) {
         PdfPCell cell = new PdfPCell(new Phrase(tcell.value, cellRegularFont));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setFixedHeight(item.nLines*10+3);
         //cell.setPaddingBottom(3);
+        int align=TableCol.AlignLeft;
+        switch (col.align){
+            case TableCol.AlignCenter: align = Element.ALIGN_CENTER; break;
+            case TableCol.AlignLeft: align = Element.ALIGN_LEFT; break;
+            case TableCol.AlignRight: align = Element.ALIGN_RIGHT; break;
+            }
+        cell.setHorizontalAlignment(align);
+
         if (tcell.selected)
             cell.setBackgroundColor(new BaseColor(0xe0e0e0));
         else
