@@ -98,7 +98,7 @@ public class TablePDF extends TableData{
             phrase.add(new Chunk(""+col.linkIndex,cellLinkFont).setTextRise(5f));
         PdfPCell cell = new PdfPCell(phrase);
         if (verticalHeader) cell.setRotation(90);
-        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         if (col.hexBackColor!=0)
             cell.setBackgroundColor(new BaseColor(col.hexBackColor));
@@ -138,8 +138,8 @@ public class TablePDF extends TableData{
     private void addMetaData(Document document) {
         document.addTitle(title);
         document.addSubject("Огнезащитная корпорация");
-        document.addAuthor("Евгений Романов");
-        document.addCreator("Евгений Романов");
+        document.addAuthor("Певзнер С.Э.");
+        document.addCreator("Певзнер С.Э.");
         }
     private void addEmptyLine(Document document) throws DocumentException {
         document.add(new Paragraph(" "));
