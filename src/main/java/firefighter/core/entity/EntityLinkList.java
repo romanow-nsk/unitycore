@@ -183,6 +183,31 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
             ss = ss.substring(idx+1);
             }
         }
+    public void parseIdListNew(String ss){
+        clear();
+        if (ss.length()==0) return;
+        char cc[] = ss.toCharArray();
+        int i=0;
+        int k=cc.length-1;      // Последний
+        if (cc[i]=='[')
+            i++;
+        if (cc[k]==']')
+            k--;
+        int m=0;
+        for(int j=i;  j<=k; j++)
+            if (cc[j]!=' ')
+                cc[m++] = cc[j];
+        if (m==0)
+            return;
+        i=0;
+        while(i<m){
+            long out = 0;
+            while(i<m && cc[i]!=',')
+                out = out*10+(int)(cc[i++]-'0');
+            add(new EntityLink<T>(out));
+            if (i<m) i++;
+            }
+        }
     public EntityLinkList(ArrayList<Long> idList){
         for(Long ll : idList)
             add(new EntityLink<T>(ll.longValue()));

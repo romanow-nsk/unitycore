@@ -287,15 +287,13 @@ public class ValuesBase {
     public final static int DBOCollectGarbage = 4;
     @CONST(group = "DBOperation", title = "Наличие артефактов")
     public final static int DBOTestArtifacts = 5;
-    @CONST(group = "DBOperation", title = "Пересчет задолженностей")
-    public final static int DBORecalcDepts = 6;
+    @CONST(group = "DBOperation", title = "MaintenanceJob.main")
+    public final static int DBOMaintenanceJob = 6;
     @CONST(group = "DBOperation", title = "Тест - задержка 60 сек")
     public final static int DBOTestDelay = 7;
-    @CONST(group = "DBOperation", title = "637:Аккаунт")
-    public final static int DBOCopyAccount = 8;
     public final static String DBOperationList[] = {"Очистка контента (заявки)","Обратные ссылки",
             "Сжать таблицы","Обновить поля","Сбор мусора","Наличие артефактов",
-            "Тест - задержка 60 сек","Пересчет задолженностей","637:Аккаунт"};
+            "MaintenanceJob.main","Тест - задержка 60 сек"};
     //------------------------ Источники артефактов ------------------------------------------------------
     public final static String ArtifactParentList[] = {"ReportFile", "User"};
 }
