@@ -457,7 +457,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     else
                                         noField(3,ff);
                                     break;
-                    case dbRefList: break;
+                    case dbRefList: row.getCell(cnt.getIdx()).getNumericCellValue(); break;
                 }
             }
         afterLoad();
@@ -493,7 +493,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                             noField(4,ff);
                         break;
                     case dbRefList:
-                        break;
+                        row.createCell(cnt.getIdx()).setCellValue(0); break;
                 }
             }
         }

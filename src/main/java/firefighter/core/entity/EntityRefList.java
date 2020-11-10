@@ -87,7 +87,7 @@ public class EntityRefList<T extends Entity> extends ArrayList<T> {
             }
         return false;
         }
-    public Entity getById(long id){
+    public T getById(long id){
         for (int i=0;i<size();i++){
             if (get(i).getOid()==id){
                 return get(i);
@@ -107,12 +107,6 @@ public class EntityRefList<T extends Entity> extends ArrayList<T> {
     public EntityRefList(){}
     public EntityRefList(Class type){
         typeT = type; }
-    public T getRefById(long id){
-        for (Entity xx : this)
-            if (id == xx.getOid())
-                return (T)xx;
-        return null;
-        }
     public void addRef(Entity ent){
         add((T)ent);
         }
