@@ -1,6 +1,7 @@
 package firefighter.core.export;
 
 import firefighter.core.UniException;
+import firefighter.core.Utils;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.mongo.I_MongoDB;
@@ -59,7 +60,10 @@ public class Excel {
         int cc =0;
         String xx ="";
         for(int i=0;i<list.size();i++){
-            String s1 = hd.getCell(i).getStringCellValue();
+            String s1 = "";
+            try {
+                s1 = hd.getCell(i).getStringCellValue();
+                } catch (Exception ee){}
             String s2 = list.get(i);
             if (!s1.equals(s2)){
                 pp = "Столбец:"+i+" "+s1+" "+s2;
@@ -89,8 +93,9 @@ public class Excel {
                 }
             return "Импортирован класс:"+sh.getSheetName() +" "+(sz-1)+" записей\n";
             } catch (Exception ee){
-                System.out.println(ee.toString());
-                return ee.toString()+"\n";
+                String ss = Utils.createFatalMessage(ee);
+                System.out.println(ss);
+                return ss+"\n";
                 }
             }
     public void save(FileNameExt fspec) throws UniException{

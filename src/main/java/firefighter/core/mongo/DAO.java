@@ -1,14 +1,12 @@
 package firefighter.core.mongo;
 
+import firefighter.core.DBRequest;
 import firefighter.core.I_ExcelRW;
 import firefighter.core.UniException;
 import firefighter.core.Utils;
 import firefighter.core.constants.TableItem;
 import firefighter.core.constants.ValuesBase;
-import firefighter.core.entity.Entity;
-import firefighter.core.entity.EntityField;
-import firefighter.core.entity.EntityLink;
-import firefighter.core.entity.EntityLinkList;
+import firefighter.core.entity.*;
 import firefighter.core.export.ExCellCounter;
 import org.apache.poi.ss.usermodel.Row;
 
@@ -22,10 +20,10 @@ public class DAO implements I_ExcelRW, I_MongoRW {
     private static int fieldCount=0;
     //-------------------------------------- РЕФЛЕКСИЯ -----------------------------------------------------------------
     public final static String dbTypes[]={"int","String","double","boolean","short","long","java.lang.String",
-            "firefighter.core.entity.EntityLink","firefighter.core.entity.EntityLinkList"};
+            "firefighter.core.entity.EntityLink","firefighter.core.entity.EntityLinkList","firefighter.core.entity.EntityRefList"};
     public final static String dbTitle[] ={"int","String","double","boolean","short","long","String",
-            "EntityLink","EntityLinkList","DAOLink"};
-    public final static byte dbInt=0,dbString=1,dbDouble=2,dbBoolean=3,dbShort=4,dbLong=5,dbString2=6,dbLink=7,dbLinkList=8,dbDAOLink=9;  //  ID-ы сериализуемых типов
+            "EntityLink","EntityLinkList","EntityRefList","DAOLink"};
+    public final static byte dbInt=0,dbString=1,dbDouble=2,dbBoolean=3,dbShort=4,dbLong=5,dbString2=6,dbLink=7,dbLinkList=8,dbRefList=9,dbDAOLink=10;  //  ID-ы сериализуемых типов
     public Field getField(String name,int type) throws UniException {
         getFields();
         for(EntityField ff : fld)
@@ -242,21 +240,14 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         break;
                     case dbLinkList:
                         EntityLinkList list = (EntityLinkList) ff.field.get(this);
-                        //-------------- 661 ---- двоичная скериализация
-                        //try {       // 661
-                        //    list.parseIdListBinary((String)out.get(prefix+"_"+ff.name));
-                        //    } catch (Exception ex){
                         try {
                             String mm = (String) out.get(prefix + ff.name);
-                            //if (mm.length()!=0)
-                            //    System.out.println("Original list "+mm);
                             list.parseIdList(mm);
                         } catch (Exception ee) {
                             error(prefix, ff);
                             list = new EntityLinkList();
-                        }
-                        //        }         // 661
-                        cc = list.getTypeT();        // 660
+                            }
+                        cc = list.getTypeT();
                         if (cc == null)
                             break;
                         cname = cc.getSimpleName();
@@ -287,6 +278,25 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         break;
                     }
                 }
+            for(int i=0;i<fld.size();i++){          // После ВСЕХ
+                ff=fld.get(i);
+                switch(ff.type) {
+                    case dbRefList:           // Загрузка по
+                        EntityRefList list2 = (EntityRefList) ff.field.get(this);
+                        Class cc = list2.getTypeT();
+                        if (cc == null)
+                            break;
+                        bb = level != 0 && cc != null && !(path != null && path.get(cname) == null);
+                        if (!bb)
+                            break;      // Имя поля = EntityLink совпадает с именем класса, на который ссылается
+                        Entity par1 = (Entity) cc.newInstance();
+                        long par2 = ((Entity)this).getOid();
+                        DBQuery query = new DBQuery().add("valid",true).add(this.getClass().getSimpleName(),par2);
+                        EntityList res = mongo.getAllByQuery(par1,query.getQuery(),level-1);
+                        list2.set(res);
+                        break;
+                }
+            }
         afterLoad();
         }
         catch(Exception ee){
@@ -378,6 +388,8 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                 else
                     noField(2,ff);
                 break;
+            case dbRefList:         // НЕ ПИШЕТСЯ
+                 break;
                 }
             }
             catch(Exception ee){
@@ -445,6 +457,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                                     else
                                         noField(3,ff);
                                     break;
+                    case dbRefList: break;
                 }
             }
         afterLoad();
@@ -479,7 +492,8 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         else
                             noField(4,ff);
                         break;
-
+                    case dbRefList:
+                        break;
                 }
             }
         }

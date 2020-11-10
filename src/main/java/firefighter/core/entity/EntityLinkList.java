@@ -111,7 +111,7 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
              if (ll == 0)
                  continue;
              for(int j=0;j<4;j++){
-                out[k+3-j] = (char) ll;
+                out[k+3-j] = (char) ll;     // Старршими байтами вперед
                 ll>>=16;
                 }
              k+=4;
@@ -158,7 +158,7 @@ public class EntityLinkList<T extends Entity> extends ArrayList<EntityLink<T>> {
         for(int i=0;i<cc.length;){
             long vv=0;
             for(int j=0;j<4;j++,i++){
-                vv = (vv<<16) | cc[i] & 0x0FFFF;
+                vv = (vv<<16) | cc[i] & 0x0FFFF;        // Старшими байтами вперед
                 }
             add(new EntityLink<T>(vv));
             }
