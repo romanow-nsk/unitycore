@@ -55,6 +55,7 @@ public class ValuesBase {
 
     public final static String SQLDBUser="UnityDataServer";
     public final static String SQLDBPass="Fireplace311";
+    public final static String SQLDBIP="localhost";
     public final static String SQLDBPort="3306";
 
     public static void init(){}

@@ -16,10 +16,7 @@ import firefighter.core.entity.EntityField;
 import firefighter.core.entity.EntityList;
 import firefighter.core.entity.EntityNamed;
 import firefighter.core.entity.base.BugMessage;
-import firefighter.core.mongo.DAO;
-import firefighter.core.mongo.I_ChangeRecord;
-import firefighter.core.mongo.I_MongoDB;
-import firefighter.core.mongo.RequestStatistic;
+import firefighter.core.mongo.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -43,10 +40,13 @@ public class SQLDBDriver extends I_MongoDB {
         clearCash();
         try {
             ParamList paramList = new ParamList().add("DBUser",ValuesBase.SQLDBUser).add("DBPass",ValuesBase.SQLDBPass)
-                    .add("DBProxyOn",false).add("DBIP","localhost").add("DBPort",""+port)
+                    .add("DBProxyOn",false).add("DBIP",ValuesBase.SQLDBIP).add("DBPort",ValuesBase.SQLDBPort)
                     .add("DBName",ValuesBase.env().mongoDBName()+port);
             jdbc.connect(paramList);
-            } catch (Exception ee){ System.out.println(ee); return false; }
+            } catch (Exception ee){
+                System.out.println(ee);
+                return false;
+                }
         return isOpen();
         }
 
@@ -72,6 +72,16 @@ public class SQLDBDriver extends I_MongoDB {
         jdbc.execSQL(sql);
         }
 
+    @Override
+    public int getCountByQuery(Entity ent, BasicDBObject query) throws UniException {
+        throw UniException.sql("BasicDBObject не поддерживается");
+        }
+
+    @Override
+    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathList, RequestStatistic statistic) throws UniException {
+        throw UniException.sql("BasicDBObject не поддерживается");
+        }
+
     private Document findOne(MongoCollection table, BasicDBObject query){
         MongoCursor<Document> cursor = table.find(query).iterator();
         return cursor.hasNext() ? cursor.next() : null;
@@ -79,7 +89,7 @@ public class SQLDBDriver extends I_MongoDB {
 
 
     @Override
-    public int getCountByQuery(Entity ent, BasicDBObject query) throws UniException{
+    public int getCountByQuery(Entity ent, I_DBQuery query) throws UniException{
         SQLFieldList flist = new SQLFieldList();
         String ss = flist.createFields(ent);
         String sql = "SELECT COUNT(*) FROM "+table(ent)+" WHERE "+flist.createWhere(query)+";";
@@ -91,7 +101,7 @@ public class SQLDBDriver extends I_MongoDB {
                 }
         }
     @Override
-    public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList, RequestStatistic statistic) throws UniException{
+    public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level, String pathsList, RequestStatistic statistic) throws UniException{
         HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
         SQLFieldList flist = new SQLFieldList();
         String ss = flist.createFields(ent);
@@ -99,7 +109,7 @@ public class SQLDBDriver extends I_MongoDB {
         if (ss!=null)
             throw UniException.sql(ss);
         final EntityList<Entity> out = new EntityList<>();
-        String sql = "SELECT * FROM "+table(ent)+(query==null ? "" : "WHERE "+flist.createWhere(query))+" ORDER BY oid;";
+        String sql = "SELECT * FROM "+table(ent)+(query==null ? "" : " WHERE "+flist.createWhere(query))+" ORDER BY oid;";
         jdbc.selectMany(sql, new I_OnRecord(){
             @Override
             public void onRecord(ResultSet rs) {
@@ -255,7 +265,7 @@ public class SQLDBDriver extends I_MongoDB {
         }
 
     public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList,RequestStatistic statistic) throws UniException{
-        return getAllByQuery(ent,null,level,pathsList,statistic);
+        return getAllByQuery(ent,(I_DBQuery) null,level,pathsList,statistic);
         }
     @Override
     public EntityList<EntityNamed> getListForPattern(Entity ent, String pattern) throws UniException {

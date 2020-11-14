@@ -291,7 +291,7 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                             break;      // Имя поля = EntityLink совпадает с именем класса, на который ссылается
                         Entity par1 = (Entity) cc.newInstance();
                         long par2 = ((Entity)this).getOid();
-                        DBQuery query = new DBQuery().add("valid",true).add(this.getClass().getSimpleName(),par2);
+                        I_DBQuery query = new DBQueryList().add("valid",true).add(this.getClass().getSimpleName(),par2);
                         EntityList res = mongo.getAllByQuery(par1,query.getQuery(),level-1);
                         list2.set(res);
                         break;

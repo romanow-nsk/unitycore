@@ -30,6 +30,15 @@ public abstract class I_MongoDB {
     public abstract long nextOid(Entity ent,boolean fromEntity) throws UniException;
     public abstract long lastOid(Entity ent) throws UniException;
     public abstract void remove(Entity entity, long id) throws UniException;
+    //----------------------- Альтернативное query ---------------------------------------------------------
+    public abstract EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level,String pathList,RequestStatistic statistic) throws UniException;
+    public abstract int getCountByQuery(Entity ent, I_DBQuery query) throws UniException;
+    public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query) throws UniException{
+        return getAllByQuery(ent,query,0,"",null);
+        }
+    public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level) throws UniException{
+        return getAllByQuery(ent,query,level,"",null);
+        }
     //------------------------ Синхронизированное обновление поля ПО ВСЕЙ БД 628
     public abstract boolean updateField(Entity src, long id, String fname, String prefix) throws UniException;
     public boolean updateField(Entity src, String fname, String prefix) throws UniException{
@@ -56,9 +65,9 @@ public abstract class I_MongoDB {
             case ValuesBase.GetAllModeTotal:
                 return getAllRecords(ent,level,pathList,statistic);
             case ValuesBase.GetAllModeActual:
-                return getAllByQuery(ent,new BasicDBObject("valid", true),level,pathList,statistic);
+                return getAllByQuery(ent,new DBQueryBoolean("valid", true),level,pathList,statistic);
             case ValuesBase.GetAllModeDeleted:
-                return getAllByQuery(ent,new BasicDBObject("valid", false),level,pathList,statistic);
+                return getAllByQuery(ent,new DBQueryBoolean("valid", false),level,pathList,statistic);
             default:
                 throw UniException.bug("MongoDB:Illegal get mode="+mode);
             }

@@ -208,6 +208,15 @@ public class MongoDB extends I_MongoDB {
         }
 
     @Override
+    public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level, String pathList, RequestStatistic statistic) throws UniException {
+        return getAllByQuery(ent,query.getQuery(),level,pathList,statistic);
+        }
+    @Override
+    public int getCountByQuery(Entity ent, I_DBQuery query) throws UniException {
+        return getCountByQuery(ent,query.getQuery());
+        }
+
+    @Override
     public void dropTable(Entity ent) throws UniException {
         clearCash(ent);
         table(ent).drop();

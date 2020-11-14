@@ -398,7 +398,14 @@ public class MongoDB36 extends I_MongoDB {
             db.showTables();
             */
             db.closeDB();
-        } catch (UniException e) { System.out.println(e.toString()); }
-    }
-
+           } catch (UniException e) { System.out.println(e.toString()); }
+        }
+    @Override
+    public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level, String pathList, RequestStatistic statistic) throws UniException {
+        return getAllByQuery(ent,query.getQuery(),level,pathList,statistic);
+        }
+    @Override
+    public int getCountByQuery(Entity ent, I_DBQuery query) throws UniException {
+        return getCountByQuery(ent,query.getQuery());
+        }
 }

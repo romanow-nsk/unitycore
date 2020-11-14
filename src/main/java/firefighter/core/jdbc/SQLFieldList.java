@@ -1,12 +1,12 @@
 package firefighter.core.jdbc;
 
-import com.mongodb.BasicDBObject;
 import firefighter.core.UniException;
 import firefighter.core.constants.TableItem;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityField;
 import firefighter.core.mongo.DAO;
+import firefighter.core.mongo.I_DBQuery;
 import org.bson.Document;
 
 import java.sql.ResultSet;
@@ -214,9 +214,8 @@ public class SQLFieldList  extends ArrayList<SQLField> {
             }
         return out.toString();
         }
-    public String createWhere(BasicDBObject query){
+    public String createWhere(I_DBQuery query){
         StringBuffer out = new StringBuffer();
-
         return out.toString();
     }
 }

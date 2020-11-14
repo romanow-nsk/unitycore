@@ -122,10 +122,11 @@ public class MySQLJDBC implements I_JDBCConnector {
         dbConn=null;
         state=0;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //Class.forName("com.mysql.jdbc.Driver");
             } catch(ClassNotFoundException ee){ throw UniException.sql("Нет драйвера БД com.mysql.jdbc.Driver"); }
         try {
-            String connectionUrl = "jdbc:mysql://"+paramList.getParam("DBIP"+":"+paramList.getParam("DBPort")+"/"+paramList.getParam("DBName"));
+            String connectionUrl = "jdbc:mysql://"+paramList.getParam("DBIP")+":"+paramList.getParam("DBPort")+"/"+paramList.getParam("DBName");
             DriverManager.setLoginTimeout(loginTimeOut);
             System.out.println(connectionUrl);
             dbConn = DriverManager.getConnection(connectionUrl,setProp(paramList));
@@ -209,11 +210,11 @@ public class MySQLJDBC implements I_JDBCConnector {
         if (rs != null){
             try {
                 rs.close();
-            } catch (SQLException e2){
-                throw UniException.sql(ee.toString()+"\n"+e2.toString());
+                } catch (SQLException e2){
+                    throw UniException.sql(ee.toString()+"\n"+e2.toString());
+                    }
                 }
             throw UniException.sql(ee);
-            }
         }
     public synchronized void selectOne(String sql, I_OnRecord back) throws UniException{
         testConnect();
