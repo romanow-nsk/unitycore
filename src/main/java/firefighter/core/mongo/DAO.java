@@ -32,11 +32,12 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                 }
         return null;
         }
-    public void getFields() throws UniException {
+    public ArrayList<EntityField> getFields() throws UniException {
         if (fld!=null)
-            return;
+            return fld;
         TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(getClass().getSimpleName());
         fld = item.getFields();
+        return fld;
         }
     final public void getDBValues(String prefix, org.bson.Document out) throws UniException{
         getDBValues(prefix, out,0,null,null,null);
@@ -164,53 +165,52 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                 switch(ff.type) {
                     case dbInt:
                         try {
-
                             ff.field.setInt(this, ((Integer) out.get(prefix + ff.name)).intValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.setInt(this, 0);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.setInt(this, 0);
+                                }
                         break;
                     case dbShort:
                         try {
                             ff.field.setShort(this, ((Short) out.get(prefix + ff.name)).shortValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.setShort(this, (short) 0);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.setShort(this, (short) 0);
+                                }
                         break;
                     case dbLong:
                         try {
                             ff.field.setLong(this, ((Long) out.get(prefix + ff.name)).longValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.setLong(this, 0);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.setLong(this, 0);
+                                }
                         break;
                     case dbDouble:
                         try {
                             ff.field.setDouble(this, ((Double) out.get(prefix + ff.name)).doubleValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.setDouble(this, 0);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.setDouble(this, 0);
+                                }
                         break;
                     case dbBoolean:
                         try {
                             ff.field.setBoolean(this, ((Boolean) out.get(prefix + ff.name)).booleanValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.setBoolean(this, false);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.setBoolean(this, false);
+                                }
                         break;
                     case dbString2:
                     case dbString:
                         try {
                             ff.field.set(this, (String) out.get(prefix + ff.name));
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            ff.field.set(this, "");
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                ff.field.set(this, "");
+                                }
                         break;
                     // При чтении  объекта EntityLink с oid!=0, level!=0 и наличием класса-прототипа - создается объект
                     // рекурсивно читается и ссылка на него помещается в EntityLink
@@ -218,10 +218,10 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         EntityLink link = (EntityLink) ff.field.get(this);
                         try {
                             link.setOid(((Long) out.get(prefix + ff.name)).longValue());
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            link.setOid(0);
-                        }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                link.setOid(0);
+                            }
                         Class cc = link.getTypeT();         //660
                         if (cc == null)
                             break;
@@ -243,10 +243,10 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         try {
                             String mm = (String) out.get(prefix + ff.name);
                             list.parseIdList(mm);
-                        } catch (Exception ee) {
-                            error(prefix, ff);
-                            list = new EntityLinkList();
-                            }
+                            } catch (Exception ee) {
+                                error(prefix, ff);
+                                list = new EntityLinkList();
+                                }
                         cc = list.getTypeT();
                         if (cc == null)
                             break;

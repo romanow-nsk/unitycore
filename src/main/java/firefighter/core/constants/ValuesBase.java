@@ -53,6 +53,10 @@ public class ValuesBase {
     public final static int MongoDBType36=1;
     public final static int FatalExceptionStackSize=20;         // Стек вызовов при исключении
 
+    public final static String SQLDBUser="UnityDataServer";
+    public final static String SQLDBPass="Fireplace311";
+    public final static String SQLDBPort="3306";
+
     public static void init(){}
 
     public final static EntityIndexedFactory EntityFactory = new EntityIndexedFactory();
