@@ -110,6 +110,7 @@ public class SQLDBDriver extends I_MongoDB {
             throw UniException.sql(ss);
         final EntityList<Entity> out = new EntityList<>();
         String sql = "SELECT * FROM "+table(ent)+(query==null ? "" : " WHERE "+query.getWhere())+" ORDER BY oid;";
+        //String sql = "SELECT * FROM "+table(ent)+" ORDER BY oid;";
         jdbc.selectMany(sql, new I_OnRecord(){
             @Override
             public void onRecord(ResultSet rs) {
@@ -164,13 +165,10 @@ public class SQLDBDriver extends I_MongoDB {
         String ss = flist.createFields(ent);
         if (ss!=null)
             throw UniException.sql(ss);
-        String sql="SELECT ";
-        for (int i=0;i<flist.size();i++) {
-            if (i!=0) sql+=",";
-            sql+=flist.get(i).name;
-            }
-        sql+=" FROM "+table(ent)+" WHERE oid="+id+";";
+        String sql="SELECT * FROM "+table(ent)+" WHERE oid="+id+";";
         ResultSet set = jdbc.selectOne(sql);
+        if (set==null)
+            return false;
         Document result = flist.createDocument(set);
         ent.getData("", result,level,this,path,statistic);
         updateCashedEntity(ent);
@@ -227,31 +225,24 @@ public class SQLDBDriver extends I_MongoDB {
         String sql="DROP TABLE `"+table(ent)+"`;";
         try {
             jdbc.execSQL(sql);
-            } catch (UniException ee){
-                System.out.println(ee.toString());
-                }
+            } catch (UniException ee){}
         }
 
     @Override
     public long add(Entity ent, int level, boolean ownOid) throws UniException {
-        long id;
-        if (!ownOid){
-            id = nextOid(ent);
-            ent.setOid(id);
-            update(ent,level);
-            }
-        else{
-            id = ent.getOid();
-            SQLFieldList flist = new SQLFieldList();
-            String ss = flist.createFields(ent);
-            if (ss!=null)
-                throw UniException.sql(ss);
-            Document document = new Document();
-            ent.putData("", document,level,this);
-            String sql="INSERT INTO "+table(ent)+" "+flist.createInsertString(document)+";";
-            jdbc.execSQL(sql);
-            }
-        return id;
+        SQLFieldList flist = new SQLFieldList();
+        String ss = flist.createFields(ent);
+        if (ss!=null)
+            throw UniException.sql(ss);
+        Document document = new Document();
+        ent.putData("", document,level,this);
+        String sql="INSERT INTO "+table(ent)+" "+flist.createInsertString(document, ownOid)+";";
+        long id2 = jdbc.insert(sql,ownOid);
+        if (!ownOid)
+            ent.setOid(id2);
+        if (MySQLJDBC.TestMode)
+            System.out.println(ent.getOid()+" "+sql);
+        return ent.getOid();
         }
 
     @Override
@@ -321,11 +312,11 @@ public class SQLDBDriver extends I_MongoDB {
                 return ss;
             String sql="CREATE TABLE "+table(ent)+" (";
             for (SQLField ff : flist){
-                if (ff.name.equals("oid")){
+                if (ff.name().equals("oid")){
                     sql+="oid INT NOT NULL AUTO_INCREMENT ,";
                     continue;
                     }
-                sql += " "+ff.name+" "+ff.type+",";
+                sql += " "+ff.name()+" "+ff.type+",";
                 }
             sql+="PRIMARY KEY (oid));";
             jdbc.execSQL(sql);

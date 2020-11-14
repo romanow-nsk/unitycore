@@ -16,7 +16,7 @@ public interface I_JDBCConnector {
     public void open() throws UniException;
     public void close() throws UniException;
     public void execSQL(String sql) throws UniException;
-    public int insert(String sql) throws UniException;
+    public long insert(String sql, boolean ownId) throws UniException;
     public ResultSet selectOne(String sql) throws UniException;
     public void selectOne(String sql,I_OnRecord back) throws UniException;
     public void selectMany(String sql,I_OnRecord back)throws UniException;

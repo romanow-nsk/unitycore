@@ -292,7 +292,8 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                         Entity par1 = (Entity) cc.newInstance();
                         long par2 = ((Entity)this).getOid();
                         I_DBQuery query = new DBQueryList().add("valid",true).add(this.getClass().getSimpleName(),par2);
-                        EntityList res = mongo.getAllByQuery(par1,query.getQuery(),level-1);
+                        //System.out.println("LinkRefList: "+cc.getSimpleName()+"."+this.getClass().getSimpleName()+"["+par2+"]");
+                        EntityList res = mongo.getAllByQuery(par1,query,level-1);
                         list2.set(res);
                         break;
                 }

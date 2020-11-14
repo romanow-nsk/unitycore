@@ -5,7 +5,6 @@ import firefighter.core.UniException;
 
 import java.sql.*;
 import java.util.Properties;
-import java.util.Vector;
 //--------------- Параметры соединения
 //  DBUser - пользователь БД для коннекта
 //  DBPass - пароль БД для коннекта
@@ -16,6 +15,7 @@ import java.util.Vector;
 //  DBPort
 //  DBName
 public class MySQLJDBC implements I_JDBCConnector {
+    public final static boolean TestMode=false;
     @Override
     public void connect(String file) throws  UniException{
         throw UniException.noFunc();
@@ -122,13 +122,14 @@ public class MySQLJDBC implements I_JDBCConnector {
         dbConn=null;
         state=0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            //Class.forName("com.mysql.jdbc.Driver");
+            //Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             } catch(ClassNotFoundException ee){ throw UniException.sql("Нет драйвера БД com.mysql.jdbc.Driver"); }
         try {
             String connectionUrl = "jdbc:mysql://"+paramList.getParam("DBIP")+":"+paramList.getParam("DBPort")+"/"+paramList.getParam("DBName");
             DriverManager.setLoginTimeout(loginTimeOut);
-            System.out.println(connectionUrl);
+            if (TestMode)
+                System.out.println(connectionUrl);
             dbConn = DriverManager.getConnection(connectionUrl,setProp(paramList));
             if (dbConn == null) throw UniException.sql("Нет соединения с БД");
             stm=dbConn.createStatement();
@@ -177,31 +178,32 @@ public class MySQLJDBC implements I_JDBCConnector {
     public synchronized void execSQL(String sql) throws UniException{
         try{
             testConnect();
-            System.out.println(sql);
+            if(TestMode)
+                System.out.println(sql);
             stm.execute(sql);
             } catch (SQLException ee){ throw UniException.sql(ee); }
         }
-    public synchronized int insert(String sql) throws UniException{
+    public synchronized long insert(String sql, boolean ownId) throws UniException{
         try {
-        testConnect();
-            stm.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+            testConnect();
+            stm.executeUpdate(sql,!ownId ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
+            if (ownId)
+                return 0;
             ResultSet rs = stm.getGeneratedKeys();
             if (rs.next())
-                return rs.getInt(1);
+                return rs.getLong("oid");
             else
-                throw new SQLException("Не получен id записи");
+                throw UniException.sql("Не получен id записи");
                 } catch (SQLException ee){ throw UniException.sql(ee); }
             }
     public synchronized ResultSet selectOne(String sql) throws UniException{
         testConnect();
-        System.out.println(sql);
-        Vector<String> data = new Vector();
+        if (TestMode)
+            System.out.println(sql);
         ResultSet rs = null;
-        ResultSetMetaData rs2;
         try {
             rs = stm.executeQuery(sql);
             if (!rs.next()) { rs.close(); return null; }
-            rs.close();
             return rs;
             } catch (SQLException e){
                 procException(rs, e);
@@ -220,7 +222,8 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
     public synchronized void selectOne(String sql, I_OnRecord back) throws UniException{
         testConnect();
-        System.out.println(sql);
+        if (TestMode)
+            System.out.println(sql);
         ResultSet rs = null;
         try {
             rs = stm.executeQuery(sql);
@@ -233,13 +236,14 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
     public synchronized void selectMany(String sql, I_OnRecord back)throws UniException{
         testConnect();
-        System.out.println(sql);
+        if (TestMode)
+            System.out.println(sql);
         ResultSet rs = null;
         try {
             rs = stm.executeQuery(sql);
             while (rs.next()) {
                 back.onRecord(rs);
-            }
+                }
             rs.close();
         }
         catch (SQLException e){

@@ -1,23 +1,20 @@
 package firefighter.core.jdbc;
 
 import firefighter.core.UniException;
+import firefighter.core.Utils;
 import firefighter.core.constants.TableItem;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
 import firefighter.core.entity.EntityField;
 import firefighter.core.mongo.DAO;
-import firefighter.core.mongo.I_DBQuery;
 import org.bson.Document;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SQLFieldList  extends ArrayList<SQLField> {
-    private int oidIdx=0;
-    public int getOidIdx() {
-        return oidIdx;
-        }
     public SQLFieldList(){}
 
     public String getFieldPrefix(String parent,EntityField ff){
@@ -32,6 +29,9 @@ public class SQLFieldList  extends ArrayList<SQLField> {
         return createFields(table,false);
         }
     public String createFields(String table, boolean second) {
+        return createFields(null,table,second);
+        }
+    public String createFields(String prefix, String table, boolean second) {
         TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(table);
         if (item == null)
             return "Entity не найден: " + table;
@@ -43,40 +43,39 @@ public class SQLFieldList  extends ArrayList<SQLField> {
             ArrayList<EntityField> fields = item.getFields();
             for (int i = 0; i < fields.size(); i++) {
                 EntityField ff = fields.get(i);
-                if (ff.name.equals("oid"))
-                    oidIdx = size();                // Текущий новый индекс
                 switch (ff.type) {
                     case DAO.dbInt:
-                        add(new SQLField(ff.name, ff.type, "int"));
+                        add(new SQLField(prefix,ff.name, ff.type, "int"));
                         break;
                     case DAO.dbDouble:
-                        add(new SQLField(ff.name, ff.type, "real"));
+                        add(new SQLField(prefix,ff.name, ff.type, "real"));
                         break;
                     case DAO.dbBoolean:
-                        add(new SQLField(ff.name, ff.type, "tinyint(1)"));
+                        add(new SQLField(prefix,ff.name, ff.type, "tinyint(1)"));
                         break;
                     case DAO.dbShort:
-                        add(new SQLField(ff.name, ff.type, "tinyint(2)"));
+                        add(new SQLField(prefix,ff.name, ff.type, "tinyint(2)"));
                         break;
                     case DAO.dbLong:
                     case DAO.dbLink:
-                        add(new SQLField(ff.name, ff.type, "long"));
+                        add(new SQLField(prefix,ff.name, ff.type, "long"));
                         break;
                     case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                     case DAO.dbString2:
                     case DAO.dbString:
-                        add(new SQLField(ff.name, ff.type, "mediumtext"));
+                        add(new SQLField(prefix,ff.name, ff.type, "mediumtext"));
                         break;
                     case DAO.dbDAOLink:
-                        SQLFieldList two = new SQLFieldList();
-                        String ss = two.createFields(ff.field.getType().getSimpleName(),true);
-                        if (ss!=null)
-                            return ss;
                         String pref = getFieldPrefix(table,ff);
                         if (pref == null)
                             return "Не найден префикс для "+table+"."+ff.name;
-                        for(SQLField field : two)
-                            add(new SQLField(pref,field));                 // Добавить вторичные с префиксом
+                        SQLFieldList two = new SQLFieldList();
+                        String ss = two.createFields(pref,ff.field.getType().getSimpleName(),true);
+                        if (ss!=null)
+                            return ss;
+                        for(SQLField field : two){
+                            add(field);                 // Добавить вторичные со своими префиксами
+                            }
                         break;
                     }
                 }
@@ -86,35 +85,54 @@ public class SQLFieldList  extends ArrayList<SQLField> {
         return null;
         }
     Document createDocument(ResultSet set) throws UniException {
-        Document out = new Document();
+        /*
         try {
+            ResultSetMetaData meta=set.getMetaData();
+            int n=meta.getColumnCount();
+            for (int i=1;i<=n;i++){
+                String gg=meta.getColumnName(i);
+                String vv=meta.getColumnLabel(i);
+                String dd=set.getString(i);
+                System.out.println(gg+" "+vv+" "+dd);
+                }
+            } catch (SQLException ee){}
+         */
+        Document out = new Document();
+        int i=0;
         for(SQLField ff : this){
-            switch (ff.DAOType){
+            i++;
+            String ss = "";
+            try {
+                ss = set.getString(ff.name());
+                //System.out.println(ff.name()+":"+ss);
+                switch (ff.DAOType){
                 case DAO.dbInt:
-                    out.append(ff.name, set.getInt(ff.name));
+                    out.append(ff.name(), set.getInt(ff.name()));
                     break;
                 case DAO.dbDouble:
-                    out.append(ff.name, set.getDouble(ff.name));
+                    out.append(ff.name(), set.getDouble(ff.name()));
                     break;
                 case DAO.dbBoolean:
-                    out.append(ff.name, set.getBoolean(ff.name));
+                    out.append(ff.name(), set.getBoolean(ff.name()));
                     break;
                 case DAO.dbShort:
-                    out.append(ff.name, set.getShort(ff.name));
+                    out.append(ff.name(), set.getShort(ff.name()));
                     break;
                 case DAO.dbLong:
                 case DAO.dbLink:
-                    out.append(ff.name, set.getLong(ff.name));
+                    out.append(ff.name(), set.getLong(ff.name()));
                     break;
                 case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                 case DAO.dbString2:
                 case DAO.dbString:
-                    out.append(ff.name, set.getString(ff.name));
+                    out.append(ff.name(), set.getString(ff.name()));
                     break;
                     }
-                }
-            }catch (SQLException ee){
-                throw UniException.sql(ee);
+                }catch (Exception ee){
+                    System.out.println("Ошибка SQL-RecordSet "+ff.name()+"="+ss);
+                    System.out.print(toString());
+                    //throw UniException.sql(ee);
+                    }
                 }
         return out;
         }
@@ -127,7 +145,7 @@ public class SQLFieldList  extends ArrayList<SQLField> {
         boolean first=true;
         try {
             for(SQLField ff : this){
-                if (only!=null && !ff.name.equals(only))
+                if (only!=null && !ff.name().equals(only))
                     continue;
                 if (ff.name.equals("oid"))
                     continue;
@@ -136,25 +154,25 @@ public class SQLFieldList  extends ArrayList<SQLField> {
                     first=false;
                 switch (ff.DAOType){
                     case DAO.dbInt:
-                        out.append(ff.name+"="+((Integer)set.get(ff.name)).intValue());
+                        out.append(ff.name()+"="+((Integer)set.get(ff.name())).intValue());
                         break;
                     case DAO.dbDouble:
-                        out.append(ff.name+"="+((Double)set.get(ff.name)).doubleValue());
+                        out.append(ff.name()+"="+((Double)set.get(ff.name())).doubleValue());
                         break;
                     case DAO.dbBoolean:
-                        out.append(ff.name+"="+((Boolean)set.get(ff.name)).booleanValue());
+                        out.append(ff.name()+"="+((Boolean)set.get(ff.name())).booleanValue());
                         break;
                     case DAO.dbShort:
-                        out.append(ff.name+"="+((Short)set.get(ff.name)).shortValue());
+                        out.append(ff.name()+"="+((Short)set.get(ff.name())).shortValue());
                         break;
                     case DAO.dbLong:
                     case DAO.dbLink:
-                        out.append(ff.name+"="+((Long)set.get(ff.name)).longValue());
+                        out.append(ff.name()+"="+((Long)set.get(ff.name())).longValue());
                         break;
                     case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                     case DAO.dbString2:
                     case DAO.dbString:
-                        out.append(ff.name+"=\'"+(String) set.get(ff.name)+"\'");
+                        out.append(ff.name()+"=\'"+(String) set.get(ff.name())+"\'");
                         break;
                     }
                 }
@@ -163,55 +181,79 @@ public class SQLFieldList  extends ArrayList<SQLField> {
                 }
         return out.toString();
         }
-    public String createInsertString(org.bson.Document set) throws UniException{
+    public String createInsertString(org.bson.Document set, boolean ownId) throws UniException{
         StringBuffer out = new StringBuffer();
         boolean first=true;
+        SQLField ff2=null;
         try {
             out.append('(');
             for(SQLField ff : this) {
-                if (ff.name.equals("oid"))
+                if (!ownId && ff.name().equals("oid"))
                     continue;
                 if (!first) out.append(',');
                 else
                     first = false;
-                out.append(ff.name);
+                out.append(ff.name());
                 }
             out.append(") VALUES (");
             first = true;
             for(SQLField ff : this){
-                if (ff.name.equals("oid"))
+                ff2 =ff;
+                if (!ownId && ff.name().equals("oid"))
                     continue;
                 if (!first) out.append(',');
                 else
                     first=false;
                 switch (ff.DAOType){
                     case DAO.dbInt:
-                        out.append(ff.name+"="+((Integer)set.get(ff.name)).intValue());
+                        out.append(((Integer)set.get(ff.name())).intValue());
                         break;
                     case DAO.dbDouble:
-                        out.append(ff.name+"="+((Double)set.get(ff.name)).doubleValue());
+                        out.append(((Double)set.get(ff.name())).doubleValue());
                         break;
                     case DAO.dbBoolean:
-                        out.append(ff.name+"="+((Boolean)set.get(ff.name)).booleanValue());
+                        out.append(((Boolean)set.get(ff.name())).booleanValue());
                         break;
                     case DAO.dbShort:
-                        out.append(ff.name+"="+((Short)set.get(ff.name)).shortValue());
+                        out.append(((Short)set.get(ff.name())).shortValue());
                         break;
                     case DAO.dbLong:
                     case DAO.dbLink:
-                        out.append(ff.name+"="+((Long)set.get(ff.name)).longValue());
+                        out.append(((Long)set.get(ff.name())).longValue());
                         break;
                     case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                     case DAO.dbString2:
                     case DAO.dbString:
-                        out.append(ff.name+"=\'"+(String) set.get(ff.name)+"\'");
+                        out.append("\'"+(String) set.get(ff.name())+"\'");
                         break;
                 }
             }
         out.append(')');
         }catch (Exception ee){
+            System.out.println(ff2.name);
+            Utils.printFatalMessage(ee);
             throw UniException.sql(ee);
             }
         return out.toString();
         }
+
+    public String createSelectString() throws UniException{
+        StringBuffer out = new StringBuffer();
+        boolean first=true;
+        SQLField ff2=null;
+            first = true;
+            for(SQLField ff : this){
+                if (!first) out.append(',');
+                else
+                    first=false;
+                out.append(ff.name());
+            }
+        return out.toString();
+        }
+    public String toString(){
+        String out = "";
+        for(SQLField ff : this)
+            out += ff.toString()+"\n";
+        return out;
+    }
 }
