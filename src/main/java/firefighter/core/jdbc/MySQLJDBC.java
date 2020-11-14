@@ -177,6 +177,7 @@ public class MySQLJDBC implements I_JDBCConnector {
     public synchronized void execSQL(String sql) throws UniException{
         try{
             testConnect();
+            System.out.println(sql);
             stm.execute(sql);
             } catch (SQLException ee){ throw UniException.sql(ee); }
         }
@@ -193,6 +194,7 @@ public class MySQLJDBC implements I_JDBCConnector {
             }
     public synchronized ResultSet selectOne(String sql) throws UniException{
         testConnect();
+        System.out.println(sql);
         Vector<String> data = new Vector();
         ResultSet rs = null;
         ResultSetMetaData rs2;
@@ -218,6 +220,7 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
     public synchronized void selectOne(String sql, I_OnRecord back) throws UniException{
         testConnect();
+        System.out.println(sql);
         ResultSet rs = null;
         try {
             rs = stm.executeQuery(sql);
@@ -230,6 +233,7 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
     public synchronized void selectMany(String sql, I_OnRecord back)throws UniException{
         testConnect();
+        System.out.println(sql);
         ResultSet rs = null;
         try {
             rs = stm.executeQuery(sql);

@@ -15,4 +15,8 @@ public class DBQueryBoolean implements I_DBQuery{
     public BasicDBObject getQuery() {
         return new BasicDBObject(field,value);
         }
+    @Override
+    public String getWhere() {
+        return field+I_DBQuery.sqlCmpList[cmpMode]+value;
+        }
 }

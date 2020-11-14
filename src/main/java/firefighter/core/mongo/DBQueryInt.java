@@ -22,4 +22,9 @@ public class DBQueryInt implements I_DBQuery{
         else
             return new BasicDBObject(field, new BasicDBObject(cmpList[cmpMode], value));
         }
+
+    @Override
+    public String getWhere() {
+        return field+I_DBQuery.sqlCmpList[cmpMode]+value;
+        }
 }

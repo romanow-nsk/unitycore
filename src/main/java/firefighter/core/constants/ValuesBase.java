@@ -88,8 +88,8 @@ public class ValuesBase {
         EntityFactory.put(new TableItem("Артефакт", Artifact.class));
         EntityFactory.put(new TableItem("Пользователь", User.class));
         EntityFactory.put(new TableItem("Уведомление", NTMessage.class)
-                .add("type").add("state").add("param").add("r_timeInMS").add("s_timeInMS")
-                .add("recType").add("sndType"));   // 651 - в БД
+                .add("type").add("state").add("r_timeInMS").add("s_timeInMS")
+                .add("recType").add("sndType").add("param"));   // 651 - в БД
         EntityFactory.put(new TableItem("Улица", Street.class));
         EntityFactory.put(new TableItem("Нас.пункт", City.class));
         EntityFactory.put(new TableItem("Ошибка", BugMessage.class));

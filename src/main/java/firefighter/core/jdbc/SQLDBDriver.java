@@ -68,7 +68,7 @@ public class SQLDBDriver extends I_MongoDB {
     @Override
     public void createIndex(Entity entity, String name) throws UniException {
         String tbl = table(entity);
-        String sql = "CREATE  INDEX "+name+" ON "+tbl+"("+name+");";
+        String sql = "CREATE  INDEX _"+name+" ON "+tbl+"("+name+");";
         jdbc.execSQL(sql);
         }
 
@@ -92,7 +92,7 @@ public class SQLDBDriver extends I_MongoDB {
     public int getCountByQuery(Entity ent, I_DBQuery query) throws UniException{
         SQLFieldList flist = new SQLFieldList();
         String ss = flist.createFields(ent);
-        String sql = "SELECT COUNT(*) FROM "+table(ent)+" WHERE "+flist.createWhere(query)+";";
+        String sql = "SELECT COUNT(*) FROM "+table(ent)+" WHERE "+query.getWhere()+";";
         ResultSet res = jdbc.selectOne(sql);
         try {
             return res.getInt(0);
@@ -109,7 +109,7 @@ public class SQLDBDriver extends I_MongoDB {
         if (ss!=null)
             throw UniException.sql(ss);
         final EntityList<Entity> out = new EntityList<>();
-        String sql = "SELECT * FROM "+table(ent)+(query==null ? "" : " WHERE "+flist.createWhere(query))+" ORDER BY oid;";
+        String sql = "SELECT * FROM "+table(ent)+(query==null ? "" : " WHERE "+query.getWhere())+" ORDER BY oid;";
         jdbc.selectMany(sql, new I_OnRecord(){
             @Override
             public void onRecord(ResultSet rs) {
@@ -218,14 +218,18 @@ public class SQLDBDriver extends I_MongoDB {
         }
 
     private String table(Entity ent){
-        return ent.getClass().getSimpleName();
+        return ent.getClass().getSimpleName().toLowerCase();
         }
 
     @Override
     public void dropTable(Entity ent) throws UniException {
         clearCash(ent);
         String sql="DROP TABLE `"+table(ent)+"`;";
-        jdbc.execSQL(sql);
+        try {
+            jdbc.execSQL(sql);
+            } catch (UniException ee){
+                System.out.println(ee.toString());
+                }
         }
 
     @Override
@@ -283,16 +287,10 @@ public class SQLDBDriver extends I_MongoDB {
                 if (!item.isTable)
                     continue;
                 Entity ent = (Entity)(item.clazz.newInstance());
-                dropTable(ent);
-                ent.setOid(1);
-                ent.setValid(false);
-                add(ent,0,true);
-                createIndex(ent,"oid");
-                createIndex(ent,"valid");
-                for(String ss : item.indexes)
-                    createIndex(ent,ss);
+                String name = item.clazz.getSimpleName();
+                clearTable(name);
             } catch (Exception ee){
-                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(item.clazz.getSimpleName())+"\n"+ee.toString();
+                String ss = "Не могу создать "+ item.clazz.getSimpleName()+"\n"+ee.toString();
                 System.out.println(ss);
                 out+=ss;
                 }

@@ -58,4 +58,19 @@ public class DBQueryList implements I_DBQuery{
         query.put(modeList[mode], list);
         return query;
         }
+    @Override
+    public String getWhere() {
+        boolean first=true;
+        StringBuffer out = new StringBuffer();
+        out.append("(");
+        for(I_DBQuery vv : obj){
+            if (first)
+                first=false;
+            else
+                out.append(" " +sqlModeList[mode]+" ");
+            out.append(vv.getWhere());
+            }
+        out.append(")");
+        return out.toString();
+    }
 }

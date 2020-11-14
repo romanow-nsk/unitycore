@@ -20,8 +20,8 @@ public class SQLFieldList  extends ArrayList<SQLField> {
         }
     public SQLFieldList(){}
 
-    public String getFieldPrefix(EntityField ff){
-        String key = getClass().getSimpleName()+"."+ff.name;
+    public String getFieldPrefix(String parent,EntityField ff){
+        String key = parent+"."+ff.name;
         String out = ValuesBase.PrefixMap.get(key);
         return out;
         }
@@ -38,7 +38,7 @@ public class SQLFieldList  extends ArrayList<SQLField> {
         if (!second && !item.isTable)
             return "Not table: " + table;
         try {
-            Entity ent = (Entity) (item.clazz.newInstance());
+            DAO ent = (DAO) (item.clazz.newInstance());
             item.createFields();
             ArrayList<EntityField> fields = item.getFields();
             for (int i = 0; i < fields.size(); i++) {
@@ -69,10 +69,10 @@ public class SQLFieldList  extends ArrayList<SQLField> {
                         break;
                     case DAO.dbDAOLink:
                         SQLFieldList two = new SQLFieldList();
-                        String ss = two.createFields(ff.name,true);
+                        String ss = two.createFields(ff.field.getType().getSimpleName(),true);
                         if (ss!=null)
                             return ss;
-                        String pref = getFieldPrefix(ff);
+                        String pref = getFieldPrefix(table,ff);
                         if (pref == null)
                             return "Не найден префикс для "+table+"."+ff.name;
                         for(SQLField field : two)
@@ -154,7 +154,7 @@ public class SQLFieldList  extends ArrayList<SQLField> {
                     case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                     case DAO.dbString2:
                     case DAO.dbString:
-                        out.append(ff.name+"="+(String) set.get(ff.name));
+                        out.append(ff.name+"=\'"+(String) set.get(ff.name)+"\'");
                         break;
                     }
                 }
@@ -204,7 +204,7 @@ public class SQLFieldList  extends ArrayList<SQLField> {
                     case DAO.dbLinkList:                                    // LinkList  как строка id,id,...
                     case DAO.dbString2:
                     case DAO.dbString:
-                        out.append(ff.name+"="+(String) set.get(ff.name));
+                        out.append(ff.name+"=\'"+(String) set.get(ff.name)+"\'");
                         break;
                 }
             }
@@ -214,8 +214,4 @@ public class SQLFieldList  extends ArrayList<SQLField> {
             }
         return out.toString();
         }
-    public String createWhere(I_DBQuery query){
-        StringBuffer out = new StringBuffer();
-        return out.toString();
-    }
 }
