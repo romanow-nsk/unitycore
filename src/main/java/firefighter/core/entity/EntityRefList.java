@@ -21,6 +21,7 @@ public class EntityRefList<T extends Entity> extends ArrayList<T> {
             nameMap.put(ent.getTitle(),(T)ent);
             numMap.put(ent.getKeyNum(),(T)ent);
             }
+        sortByOid();
         }
     public T getByNumber(int key){
         return numMap==null ? null : numMap.get(key);
@@ -122,11 +123,15 @@ public class EntityRefList<T extends Entity> extends ArrayList<T> {
         });
     }
     public void sortByOid(){
+        sortByOid(false);
+        }
+    public void sortByOid(final boolean inc){
         sort(new Comparator<Entity>() {
             @Override
             public int compare(Entity o1, Entity o2) {
                 long vv =  o1.getOid()-o2.getOid();
                 if (vv==0) return 0;
+                if (inc) vv = -vv;
                 return vv <0 ? -1 : 1;
             }
         });
