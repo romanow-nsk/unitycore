@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class JDBCFactory {
     private I_MongoDB[] list = {
-        new MongoDB(),new MongoDB36(), new SQLDBDriver(new MySQLJDBC()), new SQLDBDriver(new SQLiteJDBC())
+        new MongoDB(),new MongoDB36(), new SQLDBDriver(new MySQLJDBC()),
+            new SQLDBDriver(new SQLiteJDBC()), new SQLDBDriver(new MariaDBJDBC())
         };
     public JDBCFactory(){}
     public ArrayList<String> getNameList(){

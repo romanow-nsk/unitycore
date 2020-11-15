@@ -47,7 +47,7 @@ public class SQLDBDriver extends I_MongoDB {
         try {
             ParamList paramList = new ParamList().add("DBUser",ValuesBase.SQLDBUser).add("DBPass",ValuesBase.SQLDBPass)
                     .add("DBProxyOn",false).add("DBIP",ValuesBase.SQLDBIP).add("DBPort",ValuesBase.SQLDBPort)
-                    .add("DBName",ValuesBase.env().mongoDBName()+port);
+                    .add("DBName",ValuesBase.env().mongoDBName()+port).add("DBPort2",ValuesBase.SQLDBPort2);
             jdbc.connect(paramList);
             } catch (Exception ee){
                 System.out.println(ee);
@@ -73,13 +73,15 @@ public class SQLDBDriver extends I_MongoDB {
 
     @Override
     public void createIndex(Entity entity, String name) throws UniException {
-        String tbl = table(entity);
-        //String sql = "ALTER TABLE "+tbl+";";
-        //jdbc.execSQL(sql);
-        //sql = "DROP INDEX  "+name+";";;
-        //jdbc.execSQL(sql);
-        String sql = "CREATE  INDEX "+tbl+"_"+name+" ON "+tbl+"("+name+");";
-        jdbc.execSQL(sql);
+        String sql ="";
+        try {
+            String tbl = table(entity);
+            sql = "CREATE  INDEX "+tbl+"_"+name+" ON "+tbl+"("+name+");";
+            jdbc.execSQL(sql);
+            } catch (Exception ex){
+                System.out.println(sql);
+                return;
+                }
         }
 
     @Override

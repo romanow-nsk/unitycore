@@ -15,7 +15,7 @@ import java.util.Properties;
 //  DBPort
 //  DBName
 public class MySQLJDBC implements I_JDBCConnector {
-    public final static boolean TestMode=true;
+    public final static boolean TestMode=false;
     @Override
     public void connect(String file) throws  UniException{
         throw UniException.noFunc();
@@ -200,7 +200,10 @@ public class MySQLJDBC implements I_JDBCConnector {
                 return rs.getLong("oid");
             else
                 throw UniException.sql("Не получен id записи");
-                } catch (SQLException ee){ throw UniException.sql(ee); }
+                } catch (Exception ee){
+                    System.out.println("Insert:"+sql);
+                    throw UniException.sql(ee);
+                    }
             }
     public synchronized ResultSet selectOne(String sql) throws UniException{
         testConnect();
