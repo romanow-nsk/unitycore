@@ -408,4 +408,9 @@ public class MongoDB36 extends I_MongoDB {
     public int getCountByQuery(Entity ent, I_DBQuery query) throws UniException {
         return getCountByQuery(ent,query.getQuery());
         }
+    @Override
+    public String getDriverName() {
+        return "MongoDB 3.6";
+    }
+
 }

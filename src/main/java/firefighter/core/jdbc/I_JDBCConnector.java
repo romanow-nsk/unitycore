@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 public interface I_JDBCConnector {
+    public String getDriverName();
     public boolean isConnected();
     public void connect(ParamList params)throws UniException;
     public void reconnect()throws UniException;
@@ -21,4 +22,7 @@ public interface I_JDBCConnector {
     public void selectOne(String sql,I_OnRecord back) throws UniException;
     public void selectMany(String sql,I_OnRecord back)throws UniException;
     public long newRecord(String tname)  throws UniException;
+    public String getText1();
+    public String getText2();
+    public boolean canGenerateKey();
 }

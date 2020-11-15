@@ -35,6 +35,12 @@ public class SQLDBDriver extends I_MongoDB {
     private boolean testDB(int port){
         return true;
         }
+
+    @Override
+    public String getDriverName() {
+        return jdbc.getDriverName();
+        }
+
     @Override
     public boolean openDB(int port) throws UniException {
         clearCash();
@@ -68,7 +74,11 @@ public class SQLDBDriver extends I_MongoDB {
     @Override
     public void createIndex(Entity entity, String name) throws UniException {
         String tbl = table(entity);
-        String sql = "CREATE  INDEX _"+name+" ON "+tbl+"("+name+");";
+        //String sql = "ALTER TABLE "+tbl+";";
+        //jdbc.execSQL(sql);
+        //sql = "DROP INDEX  "+name+";";;
+        //jdbc.execSQL(sql);
+        String sql = "CREATE  INDEX "+tbl+"_"+name+" ON "+tbl+"("+name+");";
         jdbc.execSQL(sql);
         }
 
@@ -236,6 +246,11 @@ public class SQLDBDriver extends I_MongoDB {
             throw UniException.sql(ss);
         Document document = new Document();
         ent.putData("", document,level,this);
+        if (!jdbc.canGenerateKey()){
+            ownOid=true;
+            long oid = jdbc.newRecord(table(ent));
+            ent.setOid(oid);
+            }
         String sql="INSERT INTO "+table(ent)+" "+flist.createInsertString(document, ownOid)+";";
         long id2 = jdbc.insert(sql,ownOid);
         if (!ownOid)
@@ -311,26 +326,40 @@ public class SQLDBDriver extends I_MongoDB {
             if (ss!=null)
                 return ss;
             String sql="CREATE TABLE "+table(ent)+" (";
+            boolean first = true;
             for (SQLField ff : flist){
+                if (first)
+                    first=false;
+                else
+                    sql+=",";
                 if (ff.name().equals("oid")){
-                    sql+="oid INT NOT NULL AUTO_INCREMENT ,";
+                    sql+="oid "+jdbc.getText1();
                     continue;
                     }
-                sql += " "+ff.name()+" "+ff.type+",";
+                sql += " "+ff.name()+" "+ff.type;
                 }
-            sql+="PRIMARY KEY (oid));";
+            sql+=jdbc.getText2()+");";
             jdbc.execSQL(sql);
             createIndex(ent,"oid");
             createIndex(ent,"valid");
             for(String zz : item.indexes)
                 createIndex(ent,zz);
             } catch (Exception ee){
-                String ss = "Не могу создать "+ ValuesBase.EntityFactory.get(table+"\n"+ee.toString());
+                String ss = "Не могу создать "+ table+"\n"+ee.toString();
                 System.out.println(ss);
                 return ss;
                 }
         return "";
         }
+    @Override
+    public boolean isSQLDataBase(){
+        return true;
+        }
+    @Override
+    public void execSQL(String sql) throws UniException{
+        jdbc.execSQL(sql);
+        }
+
     //------------------------------------------------------------------------------------------------------------------
     public static void main(String ss[]){
         I_MongoDB db = new SQLDBDriver(new MySQLJDBC());

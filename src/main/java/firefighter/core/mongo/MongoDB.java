@@ -35,6 +35,11 @@ public class MongoDB extends I_MongoDB {
         }
 
     @Override
+    public String getDriverName() {
+        return "MongoDB 3.0";
+        }
+
+    @Override
     public boolean openDB(int port) throws UniException {
         clearCash();
         try {

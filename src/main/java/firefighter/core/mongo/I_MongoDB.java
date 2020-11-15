@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public abstract class I_MongoDB {
+    public abstract String getDriverName();
     public abstract boolean openDB(int port) throws UniException;
     public abstract boolean isOpen();
     public abstract void closeDB();
@@ -38,6 +39,12 @@ public abstract class I_MongoDB {
         }
     public EntityList<Entity> getAllByQuery(Entity ent, I_DBQuery query, int level) throws UniException{
         return getAllByQuery(ent,query,level,"",null);
+        }
+    public boolean isSQLDataBase(){
+        return false;
+        }
+    public void execSQL(String sql) throws UniException{
+        throw UniException.noFunc("SQL-запросы не поддерживаются");
         }
     //------------------------ Синхронизированное обновление поля ПО ВСЕЙ БД 628
     public abstract boolean updateField(Entity src, long id, String fname, String prefix) throws UniException;

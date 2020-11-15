@@ -15,7 +15,7 @@ import java.util.Properties;
 //  DBPort
 //  DBName
 public class MySQLJDBC implements I_JDBCConnector {
-    public final static boolean TestMode=false;
+    public final static boolean TestMode=true;
     @Override
     public void connect(String file) throws  UniException{
         throw UniException.noFunc();
@@ -69,16 +69,16 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
     }
     //---------------------------------------------------------------------------
-    private int loginTimeOut=30;        // Тайм-аут логина (библиотечный)
-    private int queryTimeOut=30;        // Тайм-аут логина (библиотечный)
-    private int connectLiveTime=240;	// Время "жизни" соединения
-    private int state=0;                // 0 - отключено, 1-соединение, 2-тайм-аут паузы 3- спит
-    private Thread aliveThread=null;    // Поток keepAlive
+    private static int loginTimeOut=30;        // Тайм-аут логина (библиотечный)
+    private static int queryTimeOut=30;        // Тайм-аут логина (библиотечный)
+    private static int connectLiveTime=240;	// Время "жизни" соединения
+    protected int state=0;                // 0 - отключено, 1-соединение, 2-тайм-аут паузы 3- спит
+    protected Thread aliveThread=null;    // Поток keepAlive
     private String dbName="";
     public String dbName(){ return dbName; }
-    private Connection dbConn=null;
-    private Statement stm=null;
-    private ParamList paramList;
+    protected Connection dbConn=null;
+    protected Statement stm=null;
+    protected ParamList paramList;
 
     private Properties setProp(ParamList pars) throws UniException{
         Properties properties=new Properties();
@@ -101,6 +101,12 @@ public class MySQLJDBC implements I_JDBCConnector {
         }
 
     public MySQLJDBC(){ dbConn=null; state=0;}
+
+    @Override
+    public String getDriverName() {
+        return "MySQL";
+        }
+
     public synchronized boolean isConnected(){
         boolean bb =  (state!=0);
         return bb;
@@ -210,7 +216,7 @@ public class MySQLJDBC implements I_JDBCConnector {
                 return null;
                 }
             }
-    private void procException(ResultSet rs, SQLException ee) throws UniException{
+    protected void procException(ResultSet rs, SQLException ee) throws UniException{
         if (rs != null){
             try {
                 rs.close();
@@ -249,5 +255,20 @@ public class MySQLJDBC implements I_JDBCConnector {
         catch (SQLException e){
             procException(rs,e);
         }
+    }
+
+    @Override
+    public String getText1() {
+        return "INT NOT NULL AUTO_INCREMENT";
+    }
+
+    @Override
+    public String getText2() {
+        return ",PRIMARY KEY (oid)";
+    }
+
+    @Override
+    public boolean canGenerateKey() {
+        return true;
     }
 }
