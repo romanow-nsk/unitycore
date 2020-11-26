@@ -55,12 +55,12 @@ public class DefaultFont implements Font {
         return 0; }
     @Override
     public void setBoldweight(short i) { }
-    @Override
-    public void setBold(boolean b) { }
+    //@Override
+    //public void setBold(boolean b) { }
     @Override
     public short getBoldweight() {
         return 0; }
-    @Override
-    public boolean getBold() {
-        return false; }
+    //@Override
+    //public boolean getBold() {
+    //    return false; }
 }
