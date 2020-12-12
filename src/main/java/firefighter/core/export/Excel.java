@@ -2,8 +2,10 @@ package firefighter.core.export;
 
 import firefighter.core.UniException;
 import firefighter.core.Utils;
+import firefighter.core.constants.TableItem;
 import firefighter.core.constants.ValuesBase;
 import firefighter.core.entity.Entity;
+import firefighter.core.entity.EntityFactory;
 import firefighter.core.mongo.I_MongoDB;
 import firefighter.core.utils.FileNameExt;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -127,17 +129,20 @@ public class Excel implements I_Excel {
                 Sheet sh = workbook.getSheetAt(i);
                 String ss = sh.getSheetName();
                 try {
-                    Class zz = ValuesBase.EntityFactory.getClassForSimpleName(ss);
-                    if (zz==null){
+                    TableItem item = ValuesBase.EntityFactory.getItemForSimpleName(ss);
+                    //Class zz = ValuesBase.EntityFactory.getClassForSimpleName(ss);
+                    if (item==null){
                         pp = "Класс не найден "+ss;
                         xx+=pp+"\n";
                         System.out.println(pp);
                         continue;
-                    }
-                    Entity proto = (Entity)zz.newInstance();
+                        }
+                    Entity proto = (Entity)item.clazz.newInstance();
                     mongo.dropTable(proto);
-                    String vv = importSheet(proto,i,mongo);
-                    xx+=vv;
+                    if (!item.isExportXLS())
+                        xx+="Не импортируется класс "+ss+"\n";
+                    else
+                        xx += importSheet(proto,i,mongo);
                 } catch (Exception e2) {
                     System.out.println(e2.toString());
                     xx+=e2.toString()+"\n";

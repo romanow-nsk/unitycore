@@ -12,7 +12,13 @@ public class TableItem {
     public final Class clazz;
     public final ArrayList<String> indexes;
     public final boolean isTable;
+    private boolean exportXLS=true;
     private ArrayList<EntityField> fields=null;     // Список полей здесь
+    public TableItem noExportXLS(){
+        exportXLS = false; return this;
+        }
+    public boolean isExportXLS() {
+        return exportXLS; }
     public TableItem(String name, Class clazz, ArrayList<String> indexes) {
         this.name = name;
         this.clazz = clazz;
