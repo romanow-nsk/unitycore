@@ -1,6 +1,8 @@
 package firefighter.core.mongo;
 
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
+import com.thoughtworks.xstream.XStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,5 +74,19 @@ public class DBQueryList implements I_DBQuery{
             }
         out.append(")");
         return out.toString();
+        }
+    public static void main(String aaa[]){
+        DBQueryList queryList = new DBQueryList().add("a",12).add("b","??").add(I_DBQuery.ModeGT,"x",12);
+        DBQueryList queryList2 = new DBQueryList(I_DBQuery.ModeOr).add(queryList).add("valid",false);
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(queryList));
+        System.out.println(gson.toJson(queryList2));        // Десериализовать не получится
+        XStream xStream = new XStream();
+        String s1 = xStream.toXML(queryList);
+        System.out.println(s1);
+        String s2 = xStream.toXML(queryList2);
+        System.out.println(s2);
+        DBQueryList queryList3 = (DBQueryList) xStream.fromXML(s2);
+        System.out.println(queryList3);
     }
 }
