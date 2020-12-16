@@ -81,7 +81,7 @@ public class DBQueryList implements I_DBQuery{
         Gson gson = new Gson();
         System.out.println(gson.toJson(queryList));
         System.out.println(gson.toJson(queryList2));        // Десериализовать не получится
-        XStream xStream = new XStream();
+        DBXStream xStream = new DBXStream();
         String s1 = xStream.toXML(queryList);
         System.out.println(s1);
         String s2 = xStream.toXML(queryList2);
