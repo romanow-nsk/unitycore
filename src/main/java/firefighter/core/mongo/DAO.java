@@ -32,6 +32,56 @@ public class DAO implements I_ExcelRW, I_MongoRW {
                 }
         return null;
         }
+    public Field getFieldEx(String name,int type) throws UniException {
+        Field fld = getField(name,type);
+        if (fld==null)
+            throw UniException.bug("Нет поля "+getClass().getSimpleName()+"."+name);
+        return fld;
+        }
+    //---------------------- работа с отдельными полями ------------------------------------------------------
+    public int getFieldValueInt(String name) throws UniException {
+        Field fld = getFieldEx(name,dbInt);
+        try {
+            return fld.getInt(this);
+            } catch(Exception ee){
+                throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+        }
+    public String getFieldValueString(String name) throws UniException {
+        Field fld = getFieldEx(name,dbString2);
+        try {
+            return  (String) fld.get(this);
+            } catch(Exception ee){
+                throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+        }
+    public boolean getFieldValueBoolean(String name) throws UniException {
+        Field fld = getFieldEx(name,dbBoolean);
+        try {
+            return fld.getBoolean(this);
+        } catch(Exception ee){
+            throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+        }
+    public void setFieldValueInt(String name, int val) throws UniException {
+        Field fld = getFieldEx(name,dbInt);
+        try {
+            fld.setInt(this,val);
+            } catch(Exception ee){
+                throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+        }
+    public void setFieldValueString(String name, String val) throws UniException {
+        Field fld = getFieldEx(name,dbString2);
+        try {
+            fld.set(this,val);
+            } catch(Exception ee){
+                throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+        }
+    public void setFieldValueBoolean(String name, boolean val) throws UniException {
+        Field fld = getFieldEx(name,dbBoolean);
+        try {
+            fld.setBoolean(this,val);
+        } catch(Exception ee){
+            throw UniException.bug(getClass().getSimpleName()+"."+name+"\n"+ee.toString());  }
+    }
+    //--------------------------------------------------------------------------------------------------------
     public ArrayList<EntityField> getFields() throws UniException {
         if (fld!=null)
             return fld;
@@ -722,5 +772,5 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         catch(Throwable ee){
             throw UniException.bug(getClass().getSimpleName()+"."+ff.name+"\n"+ee.toString());
             }
-    }
+        }
 }
