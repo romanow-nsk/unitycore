@@ -71,6 +71,11 @@ public class OwnDateTime extends DAO implements I_XStream, I_MongoRW, I_ExcelRW 
         dd = new DateTime(yy,mm,day,hh,min);
         timeInMS = dd.getMillis();
         }
+    public OwnDateTime(int day, int mm, int yy, int hh, int min, int sec){
+        refresh=true;
+        dd = new DateTime(yy,mm,day,hh,min,sec);
+        timeInMS = dd.getMillis();
+        }
     public OwnDateTime(int day, int mm, int yy){
         refresh=true;
         dd = new DateTime(yy,mm,day,0,0);
