@@ -155,6 +155,7 @@ public class OwnDateTime extends DAO implements I_XStream, I_MongoRW, I_ExcelRW 
     public int year(){ refresh(); return !dateTimeValid() ? 0 : dd.getYear(); }
     public int month(){ refresh(); return !dateTimeValid() ? 0 : dd.getMonthOfYear(); }
     public int day(){ refresh(); return !dateTimeValid() ? 0 : dd.getDayOfMonth(); }
+    public int second(){ refresh(); return !dateTimeValid() ? 0 : dd.getSecondOfMinute(); }
     public int dayOfWeek(){ refresh(); return dd.getDayOfWeek(); }
     public void incMonth(){ refresh(); dd = dd.plusMonths(1); timeInMS = dd.getMillis(); }
     public void decMonth(){ refresh(); dd = dd.minusMonths(1); timeInMS = dd.getMillis(); }
