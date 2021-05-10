@@ -9,14 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="662 - счетчики объектов">
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/UnityCore.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/UnityCore_jar/UnityCore.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UnityCore_jar/UnityCore.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/constants/TableItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/constants/TableItem.java" afterDir="false" />
-    </list>
+    <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="Новая iDEA" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +48,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -297,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593458108067</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Новая iDEA">
+      <created>1620642260283</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1620642260283</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -329,6 +329,7 @@
     <MESSAGE value="661 - парсинг id из двоичной строки" />
     <MESSAGE value="661" />
     <MESSAGE value="662 - счетчики объектов" />
-    <option name="LAST_COMMIT_MESSAGE" value="662 - счетчики объектов" />
+    <MESSAGE value="Новая iDEA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Новая iDEA" />
   </component>
 </project>
