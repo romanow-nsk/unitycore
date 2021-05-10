@@ -5,8 +5,18 @@
       <artifact name="UnityCore:jar" />
     </artifacts-to-build>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="662 - счетчики объектов" />
+    <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="662 - счетчики объектов">
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/UnityCore.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/UnityCore_jar/UnityCore.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UnityCore_jar/UnityCore.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/constants/TableItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/constants/TableItem.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,8 +26,9 @@
     <option name="done" value="true" />
   </component>
   <component name="Git.Settings">
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -39,10 +50,10 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -68,6 +79,7 @@
       </list>
     </option>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
@@ -288,6 +300,17 @@
     <option name="localTasksCounter" value="30" />
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix0 - 635" />
     <MESSAGE value="fix0 - 644" />
@@ -307,19 +330,5 @@
     <MESSAGE value="661" />
     <MESSAGE value="662 - счетчики объектов" />
     <option name="LAST_COMMIT_MESSAGE" value="662 - счетчики объектов" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="466" y="37" key="CommitChangelistDialog2" timestamp="1602080355636">
-      <screen x="0" y="0" width="1600" height="870" />
-    </state>
-    <state x="466" y="37" key="CommitChangelistDialog2/0.0.1600.870@0.0.1600.870" timestamp="1602080355636" />
-    <state x="303" y="23" key="SettingsEditor" timestamp="1602080373446">
-      <screen x="0" y="0" width="1600" height="870" />
-    </state>
-    <state x="303" y="23" key="SettingsEditor/0.0.1600.870@0.0.1600.870" timestamp="1602080373446" />
-    <state x="392" y="170" key="Vcs.Push.Dialog.v2" timestamp="1593458112433">
-      <screen x="0" y="0" width="1600" height="870" />
-    </state>
-    <state x="392" y="170" key="Vcs.Push.Dialog.v2/0.0.1600.870@0.0.1600.870" timestamp="1593458112433" />
   </component>
 </project>

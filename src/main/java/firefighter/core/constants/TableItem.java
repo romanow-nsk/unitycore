@@ -14,11 +14,6 @@ public class TableItem {
     public final boolean isTable;
     private boolean exportXLS=true;
     private ArrayList<EntityField> fields=null;     // Список полей здесь
-    public TableItem noExportXLS(){
-        exportXLS = false; return this;
-        }
-    public boolean isExportXLS() {
-        return exportXLS; }
     public TableItem(String name, Class clazz, ArrayList<String> indexes) {
         this.name = name;
         this.clazz = clazz;
@@ -39,7 +34,7 @@ public class TableItem {
         this.indexes = new ArrayList<>();
         isTable=isTable0;
         createFields();
-    }
+        }
     public TableItem add(String ss){
         indexes.add(ss);
         return this;
@@ -47,6 +42,11 @@ public class TableItem {
     public ArrayList<EntityField> getFields() {
         return fields;
         }
+    public TableItem disableExportXLS(){
+        exportXLS = false; return this;
+        }
+    public boolean isExportXLS() {
+        return exportXLS; }
     //------------------------------------------------------------------------------------------------------------------
     public int getDbTypeId(String ss){
         int i;
@@ -84,6 +84,9 @@ public class TableItem {
                 fields.add(new EntityField(name,type,flds[i]));
             }
         }
+    }
+    public static void main(String ss[]){
+        new TableItem("",null).disableExportXLS();
     }
 }
 
