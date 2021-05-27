@@ -14,7 +14,7 @@ public class ConstList extends ArrayList<ConstValue> {
         return map.get(name) == null ? -1 : map.get(name).value();
         }
     public ConstList(){}
-    public void resreshMap(){
+    public void refreshMap(){
         map.clear();
         for(ConstValue cc : this){
             map.put(cc.name(),cc);
@@ -62,6 +62,8 @@ public class ConstList extends ArrayList<ConstValue> {
         map.put(cc.name(),cc);
         }
     public void createConstList(){
+        map.clear();
+        clear();
         Class cl = ValuesBase.env().valuesClass();
         Object oo = null;
         try {
