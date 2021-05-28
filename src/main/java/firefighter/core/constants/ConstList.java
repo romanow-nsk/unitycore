@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class ConstList extends ArrayList<ConstValue> {
     transient HashMap<String,ConstValue> map = new HashMap<>();
+    transient HashMap<Integer,ConstValue> mapVal = new HashMap<>();
     public ConstValue getConst(String name){
         return map.get(name);
         }
@@ -16,8 +17,10 @@ public class ConstList extends ArrayList<ConstValue> {
     public ConstList(){}
     public void refreshMap(){
         map.clear();
+        mapVal.clear();
         for(ConstValue cc : this){
             map.put(cc.name(),cc);
+            mapVal.put(cc.value(),cc);
             }
         }
     public ArrayList<String> getTitleList(String gName){
