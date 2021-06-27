@@ -71,8 +71,14 @@ public class TablePDF extends TableData{
             table = new PdfPTable(ncol);
             table.setWidthPercentage(100);
             int ww[] = new int[ncol];
-            for (int i = 0; i < ww.length; i++)
+            int sumWW=0;
+            for (int i = 0; i < ww.length; i++){        //681 - приведение к процентам
                 ww[i] = cols.get(i).size;
+                sumWW+=ww[i];
+                }
+            for (int i = 0; i < ww.length; i++){
+                ww[i] = ww[i]*100/sumWW;
+                }
             table.setWidths(ww);
             for (int j = 0; j < ncol; j++) {
                 addHeaderCell(table, cols.get(j));
