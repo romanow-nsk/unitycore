@@ -12,6 +12,7 @@ public abstract class ReportBase {
     public int reportType= ValuesBase.RepOther;
     abstract public void createReportFile(TableData table, String fspec) throws Exception;
     abstract public String getTitle();
+    public String getListTitle(){ return ""; }
     public ReportBase(int type){
         reportType = type;
         }

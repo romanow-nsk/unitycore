@@ -1,6 +1,5 @@
 package firefighter.core.mongo;
 
-import firefighter.core.DBRequest;
 import firefighter.core.I_ExcelRW;
 import firefighter.core.UniException;
 import firefighter.core.Utils;
@@ -16,8 +15,8 @@ import java.util.HashMap;
 
 public class DAO implements I_ExcelRW, I_MongoRW {
     private transient ArrayList<EntityField> fld=null;
-    private static String lastField="";
-    private static int fieldCount=0;
+    private static HashMap <String,Integer> errorsMap = new HashMap<>();
+    private static int noFieldErrorCount=100;
     //-------------------------------------- РЕФЛЕКСИЯ -----------------------------------------------------------------
     public final static String dbTypes[]={"int","String","double","boolean","short","long","java.lang.String",
             "firefighter.core.entity.EntityLink","firefighter.core.entity.EntityLinkList","firefighter.core.entity.EntityRefList"};
@@ -93,14 +92,18 @@ public class DAO implements I_ExcelRW, I_MongoRW {
         getDBValues(prefix, out,0,null,null,null);
         }
     private void error(String prefix,EntityField ff){
-        String ss = getClass().getSimpleName()+"."+(prefix+ff.name+" отсуствует");
-        if (!ss.equals(lastField)){
-            System.out.println("["+fieldCount+"]"+lastField+"\n"+ss);
-            lastField=ss;
-            fieldCount=1;
+        String key = getClass().getSimpleName()+"."+prefix+ff.name;
+        Integer vv = errorsMap.get(key);
+        if (vv==null){
+            System.out.println(key +" отсутствует");
+            errorsMap.put(key,1);
             }
-        else
-            fieldCount++;
+        else{
+            int vv2 = vv.intValue()+1;
+            errorsMap.put(key,vv2);
+            if (vv2 % noFieldErrorCount==0)
+                System.out.println(key +" отсутствует ="+vv2);
+            }
         }
     //----------------------- Парсинг из строки -------------------------------------------------
     public String toStringValue(){ return  "???"; }
