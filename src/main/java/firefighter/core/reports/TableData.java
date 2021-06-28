@@ -12,8 +12,10 @@ public class TableData implements I_Report{
     protected String title="";
     ArrayList<String> bottoms = new ArrayList<>();
     protected ArrayList<TableCol> cols=new ArrayList<>();
-    protected ArrayList<ArrayList<TableCell>> data =new ArrayList();
+    protected ArrayList<ArrayList<TableCell>> data = new ArrayList<ArrayList<TableCell>>();
     protected ArrayList<TableRowItem> rowData = new ArrayList<>();
+    protected int colSize[] = new int[0];
+    private final static double midOver=1.1;
     //----------------------------------------------------------------------------
     public ArrayList<ArrayList<TableCell>> data(){ return  data; }
     public ArrayList<String> bottoms(){ return bottoms; }
@@ -151,6 +153,32 @@ public class TableData implements I_Report{
                 else
                     rIdx++;
                 }
+            }
+        }
+    public void createColSizes(){
+        int ncol = cols();
+        int nrow = rows();
+        for(int i=0;i<ncol;i++){
+            TableCol cc = cols.get(i);
+            cc.maxSize = cc.midSize = cc.name.length();
+            }
+        for(int i=0;i<nrow;i++){
+            for(int j=0;j<ncol;j++){
+                int ss = data.get(i).get(j).value.length();
+                TableCol cc = cols.get(j);
+                cc.midSize+=ss;
+                if (ss > cc.maxSize)
+                    cc.maxSize=ss;
+                }
+            }
+        for(int j=0;j<ncol;j++){
+            TableCol cc = cols.get(j);
+            cc.midSize/=(nrow+1);
+            cc.finSize = (int)(cc.midSize*midOver); // По среднему
+            //if (sz > ws[i]*midOver)
+            //    sz = (int)(ws[i]*midK);           // По среднему
+            if (cc.size>cc.finSize)
+                cc.finSize = cc.size;
             }
         }
 }

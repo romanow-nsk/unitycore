@@ -26,11 +26,13 @@ public class MongoDB extends I_MongoDB {
     public DB dbase(){ return mongoDB; }
     private boolean testDB(int port){
         try {
-            List<String> ss = mongo.getDatabaseNames();
-            for (String zz : ss)
-                if (zz.equals(ValuesBase.env().mongoDBName()+port))
-                    return true;
-            return false;
+            mongo.getDatabase(ValuesBase.env().mongoDBName()+port);
+            return true;
+            //List<String> ss = mongo.getDatabaseNames();
+            //for (String zz : ss)
+            //    if (zz.equals(ValuesBase.env().mongoDBName()+port))
+            //        return true;
+            //return false;
             } catch (Exception ee){ System.out.println(ee); return false; }
         }
 
@@ -116,7 +118,7 @@ public class MongoDB extends I_MongoDB {
     public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList,RequestStatistic statistic) throws UniException{
         //System.out.println(query.toString());
         DBCollection table = table(ent);
-        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
+        HashMap<String,String> path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
         DBCursor cursor = table.find(query);
         EntityList<Entity> out = new EntityList<>();
         while(cursor.hasNext()) {
@@ -270,7 +272,7 @@ public class MongoDB extends I_MongoDB {
         return true;
         }
     public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList, RequestStatistic statistic) throws UniException{
-        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
+        HashMap<String,String> path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
         DBCollection table = table(ent);
         DBCursor cursor = table.find();
         EntityList<Entity> out = new EntityList<>();
@@ -291,7 +293,7 @@ public class MongoDB extends I_MongoDB {
         }
     @Override
     public EntityList<EntityNamed> getListForPattern(Entity ent, String pattern) throws UniException {
-        EntityList out = new EntityList();
+        EntityList<EntityNamed> out = new EntityList<EntityNamed>();
         DBCollection table = table(ent);
         Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         List<BasicDBObject> zz = new ArrayList<BasicDBObject>();

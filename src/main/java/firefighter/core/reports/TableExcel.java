@@ -1,6 +1,8 @@
 package firefighter.core.reports;
 
 import firefighter.core.UniException;
+import firefighter.core.Utils;
+import firefighter.core.utils.Pair;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -17,9 +19,8 @@ public class TableExcel extends TableData{
     private HSSFSheet curSheet=null;
     private boolean isSheetCreated=false;
     private final static short HeadRowHight=500;
-    private final static double midOver=1.5;
-    private final static double midK=1.2;
-    private final static double fontK=1.1;
+    private final static short NormalRowHight=250;
+    private final static double fontK=1.05;
     @Override
     public void openPage(String title0, ArrayList<TableCol> cols0, int nrow, boolean verticalHeader0) {
         super.openPage(title0.replace(":","-"),cols0,nrow,verticalHeader0);
@@ -35,12 +36,14 @@ public class TableExcel extends TableData{
         style1.setBorderRight (CellStyle.BORDER_THIN);
         style1.setBorderBottom(CellStyle.BORDER_THIN);
         style1.setBorderLeft  (CellStyle.BORDER_THIN);
+        style1.setWrapText(true);
         CellStyle style2 = wb.createCellStyle();        // Тонкая рамка, выравнивание по центру
         style2.setBorderTop   (CellStyle.BORDER_THIN);
         style2.setBorderRight (CellStyle.BORDER_THIN);
         style2.setBorderBottom(CellStyle.BORDER_THIN);
         style2.setBorderLeft  (CellStyle.BORDER_THIN);
         style2.setAlignment(CellStyle.ALIGN_CENTER);
+        style2.setWrapText(true);
         CellStyle style3 = wb.createCellStyle();        // Средняя рамка, выравнивание по центру
         style3.setBorderTop   (CellStyle.BORDER_MEDIUM);
         style3.setBorderRight (CellStyle.BORDER_MEDIUM);
@@ -58,29 +61,9 @@ public class TableExcel extends TableData{
         cell.setCellValue(title);
         row.setHeight(HeadRowHight);
         //------------------------- подсчет размерностей ячеек
-        int ww[]=new int[ncol];
-        int ws[]=new int[ncol];
-        for(int i=0;i<ncol;i++){
-            ww[i]=cols.get(i).name.length();
-            ws[i] = ww[i];
-            }
-        for(int i=0;i<nrow;i++){
-            for(int j=0;j<ncol;j++){
-                int ss = data.get(i).get(j).value.length();
-                ws[j]+=ss;
-                if (ss > ww[j])
-                    ww[j]=ss;
-                }
-            }
-        for(int i=0;i<ncol;i++){            // Размерность в символах
-            ws[i]/=nrow;                    // Средняя длина
-            int sz = ww[i];                 // По максимуму
-            //if (sz > ws[i]*midOver)
-            //    sz = (int)(ws[i]*midK);     // По среднему
-            if (cols.get(i).size>sz)
-                sz = cols.get(i).size;      // Заявленный размер
-            sz = (int)(sz * fontK * 256);
-            curSheet.setColumnWidth(i,sz);
+        createColSizes();
+        for(int i=0;i<ncol;i++){                // Размерность в символах
+            curSheet.setColumnWidth(i,(int)(cols.get(i).finSize * fontK * 256));
             }
         row = curSheet.createRow(1);
         for(int i=0;i<ncol;i++){
@@ -97,10 +80,21 @@ public class TableExcel extends TableData{
             }
         for(int i=0;i<nrow;i++){
             row = curSheet.createRow(i+3);
+            int rowStrSize=1;
             for(int j=0;j<ncol;j++){
                 cell = row.createCell(j);
-                cell.setCellValue(data.get(i).get(j).value);
-                CellStyle cc = cell.getCellStyle();
+                String ss = data.get(i).get(j).value;
+                Pair<Integer,String> zz;
+                try {
+                    zz = Utils.wordWrap(ss,cols.get(j).finSize);
+                    if (zz.o1 > rowStrSize)
+                        rowStrSize = zz.o1;
+                    } catch (IOException ee){
+                        System.out.println(ee.toString());
+                        zz = new Pair<>(1,ss);
+                        }
+                cell.setCellValue(zz.o2);
+                CellStyle cc = cell.getCellStyle();                                     //??????
                 cc.setFillBackgroundColor((short) data.get(i).get(j).hexBackColor);     //??????
                 cc.setFillForegroundColor((short) data.get(i).get(j).hexTextColor);     //??????
                 if (cols.get(j).align==TableCol.AlignCenter)
@@ -108,6 +102,8 @@ public class TableExcel extends TableData{
                 else
                     cell.setCellStyle(style1);
                 }
+            if (rowStrSize!=1)
+                row.setHeight((short) (rowStrSize * NormalRowHight));
             }
         CellStyle style4 = wb.createCellStyle();
         font = wb.createFont();

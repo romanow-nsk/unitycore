@@ -5,7 +5,10 @@ public class TableCol {
     public final static int AlignCenter=1;
     public final static int AlignRight=2;
     String name="";
-    int size;
+    int size=0;
+    int midSize=0;
+    int maxSize=0;
+    int finSize=0;
     int hexBackColor=0;
     int align=AlignLeft;
     int linkIndex=0;                // Индекс сноски

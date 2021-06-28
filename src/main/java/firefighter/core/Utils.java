@@ -1,6 +1,8 @@
 package firefighter.core;
 
 import firefighter.core.constants.ValuesBase;
+import firefighter.core.utils.Pair;
+import firefighter.core.utils.wordwrap.WordWrap;
 import retrofit2.Response;
 
 import javax.swing.*;
@@ -138,12 +140,31 @@ public class Utils {
             default:  return ss+'a';
             }
         }
-    public static void main(String a[]){
+    public static int lineCount(String ss){
+        int idx=0,count=1;
+        while(true){
+            idx = ss.indexOf('\n',idx);
+            if (idx==-1)
+                return count;
+            count++;
+            idx++;
+            }
+        }
+    // https://github.com/davidmoten/word-wrap
+    public static Pair<Integer,String> wordWrap(String ss, int size) throws IOException {
+        if (ss.length()<=size)
+            return new Pair(1,ss);
+        String wrapped =  WordWrap.from(ss).maxWidth(size).insertHyphens(true).wrap();
+        return new Pair(lineCount(wrapped),wrapped);
+        }
+    public static void main(String a[]) throws IOException {
         System.out.println(when("Иванов"));
         System.out.println(when("Зуева"));
         System.out.println(when("Евгений"));
         System.out.println(when("Петр"));
         System.out.println(when("Мария"));
         System.out.println(when("Семенович"));
+        Pair ss = wordWrap("фффффффффф,фф,ффффф,фффф",20);
+        System.out.println(ss.o1+" "+ss.o2);
     }
 }

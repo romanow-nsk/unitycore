@@ -28,11 +28,13 @@ public class MongoDB36 extends I_MongoDB {
     public MongoDB36(){ }
     private boolean testDB(int port){
         try {
-            List<String> ss = mongo.getDatabaseNames();
-            for (String zz : ss)
-                if (zz.equals(ValuesBase.env().mongoDBName()+port))
-                    return true;
-            return false;
+            mongo.getDatabase(ValuesBase.env().mongoDBName()+port);
+            return true;
+            //List<String> ss = mongo.getDatabaseNames();
+            //for (String zz : ss)
+            //    if (zz.equals(ValuesBase.env().mongoDBName()+port))
+            //        return true;
+            //return false;
         } catch (Exception ee){ System.out.println(ee); return false; }
     }
 
@@ -76,17 +78,17 @@ public class MongoDB36 extends I_MongoDB {
 
     @Override
     public void createIndex(Entity entity, String name) throws UniException {
-        MongoCollection coll = table(entity);
+        MongoCollection<Document> coll = table(entity);
         //TODO !!!!!!!!!!!!!!!!!!!!!!!!
         //coll.createIndex(new Bson() {
         }
 
-    private MongoCollection table(Entity ent) throws UniException {
+    private MongoCollection<Document> table(Entity ent) throws UniException {
         if (!isOpen())
             throw UniException.sql("No DB-connection");
         return mongoDB.getCollection(ent.getClass().getSimpleName());
         }
-    private Document findOne(MongoCollection table, BasicDBObject query){
+    private Document findOne(MongoCollection<Document> table, BasicDBObject query){
         MongoCursor<Document> cursor = table.find(query).iterator();
         return cursor.hasNext() ? cursor.next() : null;
         }
@@ -104,7 +106,7 @@ public class MongoDB36 extends I_MongoDB {
      */
     @Override
     public int getCountByQuery(Entity ent, BasicDBObject query) throws UniException{
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         MongoCursor<Document> cursor = table.find(query).iterator();
         int i=0;
         while (cursor.hasNext()){
@@ -114,8 +116,8 @@ public class MongoDB36 extends I_MongoDB {
     }
     @Override
     public EntityList<Entity> getAllByQuery(Entity ent, BasicDBObject query, int level, String pathsList,RequestStatistic  statistic) throws UniException{
-        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
-        MongoCollection table = table(ent);
+        HashMap<String, String> path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
+        MongoCollection<Document> table = table(ent);
         MongoCursor<Document> cursor = table.find(query).iterator();
         final EntityList<Entity> out = new EntityList<>();
         while (cursor.hasNext()){
@@ -160,7 +162,7 @@ public class MongoDB36 extends I_MongoDB {
                 }
             incCashCount(false);
             }
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         BasicDBObject query = new BasicDBObject();
         query.put("oid", id);
         Document result = findOne(table,query);
@@ -175,7 +177,7 @@ public class MongoDB36 extends I_MongoDB {
         }
     @Override
     public synchronized long nextOid(Entity ent,boolean fromEntity) throws UniException {
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         MongoCursor<Document> cursor = table.find().iterator();
         if (!cursor.hasNext()) {
             throw UniException.bug("Ошибка генерации ключа в " + ent.getClass().getSimpleName());
@@ -191,7 +193,7 @@ public class MongoDB36 extends I_MongoDB {
 
     @Override
     public synchronized long lastOid(Entity ent) throws UniException {
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         MongoCursor<Document> cursor = table.find().iterator();
         if (!cursor.hasNext()) {
             throw UniException.bug("Ошибка генерации ключа в " + ent.getClass().getSimpleName());
@@ -203,7 +205,7 @@ public class MongoDB36 extends I_MongoDB {
 
     @Override
     public void remove(Entity entity, long id) throws UniException {
-        MongoCollection table = table(entity);
+        MongoCollection<Document> table = table(entity);
         BasicDBObject query = new BasicDBObject();
         query.put("oid", id);
         table.deleteOne(query);
@@ -213,7 +215,7 @@ public class MongoDB36 extends I_MongoDB {
     @Override
     public synchronized boolean updateField(Entity ent, long id, String fname, String prefix) throws UniException {
         removeCashedEntity(ent,id);
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         BasicDBObject query = new BasicDBObject();
         query.put("oid", ent.getOid());
         Document result = findOne(table,query);
@@ -250,7 +252,7 @@ public class MongoDB36 extends I_MongoDB {
 
     @Override
     public void update(Entity ent, int level) throws UniException {
-        MongoCollection table = table(ent);
+        MongoCollection<Document> table = table(ent);
         Bson filter = Filters.eq("oid",ent.getOid());
         Document document = new Document();
         document.put("oid", ent.getOid());
@@ -261,8 +263,8 @@ public class MongoDB36 extends I_MongoDB {
     }
 
     public EntityList<Entity> getAllRecords(Entity ent, int level, String pathsList,RequestStatistic statistic) throws UniException{
-        HashMap path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
-        MongoCollection table = table(ent);
+        HashMap<String, String> path = pathsList.length()!=0 ? parsePaths(pathsList) : null;
+        MongoCollection<Document> table = table(ent);
         MongoCursor<Document> cursor = table.find().iterator();
         EntityList<Entity> out = new EntityList<>();
         while(cursor.hasNext()) {
@@ -282,8 +284,8 @@ public class MongoDB36 extends I_MongoDB {
     }
     @Override
     public EntityList<EntityNamed> getListForPattern(Entity ent, String pattern) throws UniException {
-        EntityList out = new EntityList();
-        MongoCollection table = table(ent);
+        EntityList<EntityNamed> out = new EntityList<EntityNamed>();
+        MongoCollection<Document> table = table(ent);
         Pattern regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         List<BasicDBObject> zz = new ArrayList<BasicDBObject>();
         zz.add(new BasicDBObject("valid", true));
