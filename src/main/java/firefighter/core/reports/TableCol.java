@@ -6,12 +6,13 @@ public class TableCol {
     public final static int AlignRight=2;
     String name="";
     int size=0;
-    int midSize=0;
-    int maxSize=0;
-    int finSize=0;
+    int midSize=0;              // Среднее кол-во символов в строке
+    int maxSize=0;              // Макс. кол-во символов в строке
+    int finSize=0;              // Расчетное кол-во символов
     int hexBackColor=0;
     int align=AlignLeft;
-    int linkIndex=0;                // Индекс сноски
+    int linkIndex=0;            // Индекс сноски
+    boolean multiString=false;  // строка с переносом
     public TableCol(String name, int size) {
         this.name = name;
         this.size = size;

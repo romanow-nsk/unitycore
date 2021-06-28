@@ -50,16 +50,22 @@ public class TableExcel extends TableData{
         style3.setBorderBottom(CellStyle.BORDER_MEDIUM);
         style3.setBorderLeft  (CellStyle.BORDER_MEDIUM);
         style3.setAlignment(CellStyle.ALIGN_CENTER);
+        if (verticalHeader)
+            style3.setRotation((short) 90);
         Font font = wb.createFont();
         font.setFontHeightInPoints((short)10);
         font.setFontName("Arial");
-        font.setBoldweight((short) 1000);
+        if (!verticalHeader)
+            font.setBoldweight((short) 1000);
         style3.setFont(font);
         //-----------------------------------------------------------------------------------------
         Row row = curSheet.createRow(0);
         Cell cell = row.createCell(0);
         cell.setCellValue(title);
         row.setHeight(HeadRowHight);
+        CellStyle style0 = wb.createCellStyle();        // Средняя рамка, выравнивание по центру
+        style0.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        cell.setCellStyle(style0);
         //------------------------- подсчет размерностей ячеек
         createColSizes();
         for(int i=0;i<ncol;i++){                // Размерность в символах

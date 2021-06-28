@@ -15,7 +15,7 @@ public class TableData implements I_Report{
     protected ArrayList<ArrayList<TableCell>> data = new ArrayList<ArrayList<TableCell>>();
     protected ArrayList<TableRowItem> rowData = new ArrayList<>();
     protected int colSize[] = new int[0];
-    private final static double midOver=1.1;
+    private final static double midOver=1.15;
     //----------------------------------------------------------------------------
     public ArrayList<ArrayList<TableCell>> data(){ return  data; }
     public ArrayList<String> bottoms(){ return bottoms; }
@@ -160,7 +160,10 @@ public class TableData implements I_Report{
         int nrow = rows();
         for(int i=0;i<ncol;i++){
             TableCol cc = cols.get(i);
-            cc.maxSize = cc.midSize = cc.name.length();
+            if (verticalHeader)
+                cc.maxSize = cc.midSize = 0;
+            else
+                cc.maxSize = cc.midSize = cc.name.length();
             }
         for(int i=0;i<nrow;i++){
             for(int j=0;j<ncol;j++){
@@ -173,12 +176,14 @@ public class TableData implements I_Report{
             }
         for(int j=0;j<ncol;j++){
             TableCol cc = cols.get(j);
-            cc.midSize/=(nrow+1);
-            cc.finSize = (int)(cc.midSize*midOver); // По среднему
-            //if (sz > ws[i]*midOver)
-            //    sz = (int)(ws[i]*midK);           // По среднему
-            if (cc.size>cc.finSize)
-                cc.finSize = cc.size;
+            if (cc.multiString){
+                cc.midSize/=(nrow+1);
+                cc.finSize = (int)(cc.midSize*midOver); // По среднему
+                if (!verticalHeader && cc.size>cc.finSize)
+                    cc.finSize = cc.size;
+                }
+            else
+                cc.finSize = (int)((cc.maxSize+2)*midOver);
             }
         }
 }

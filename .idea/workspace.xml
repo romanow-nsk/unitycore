@@ -10,18 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="Новая iDEA">
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/CharSequenceConcatRightTrim.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/CharSequenceReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/IORuntimeException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/LineConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/StringBuilder2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/utils/wordwrap/WordWrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/mongo/MongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/mongo/MongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/mongo/MongoDB36.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/mongo/MongoDB36.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableCol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableCol.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableExcel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableExcel.java" afterDir="false" />
