@@ -11,9 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e88ad785-4a1f-49d9-abce-f89fc6599e0b" name="Default Changelist" comment="Новая iDEA">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableCol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableCol.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableExcel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/firefighter/core/reports/TableExcel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

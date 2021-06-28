@@ -160,10 +160,7 @@ public class TableData implements I_Report{
         int nrow = rows();
         for(int i=0;i<ncol;i++){
             TableCol cc = cols.get(i);
-            if (verticalHeader)
-                cc.maxSize = cc.midSize = 0;
-            else
-                cc.maxSize = cc.midSize = cc.name.length();
+            cc.maxSize = cc.midSize = verticalHeader ? 3 : cc.name.length();
             }
         for(int i=0;i<nrow;i++){
             for(int j=0;j<ncol;j++){

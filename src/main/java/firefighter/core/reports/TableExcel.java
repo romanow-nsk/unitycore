@@ -50,6 +50,7 @@ public class TableExcel extends TableData{
         style3.setBorderBottom(CellStyle.BORDER_MEDIUM);
         style3.setBorderLeft  (CellStyle.BORDER_MEDIUM);
         style3.setAlignment(CellStyle.ALIGN_CENTER);
+        style3.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
         if (verticalHeader)
             style3.setRotation((short) 90);
         Font font = wb.createFont();
