@@ -12,6 +12,7 @@ public class TableCol {
     int hexBackColor=0;
     int align=AlignLeft;
     int linkIndex=0;            // Индекс сноски
+    String linkText="";         // Пояснение к столбцу
     boolean multiString=false;  // строка с переносом
     public TableCol(String name, int size) {
         this.name = name;
@@ -23,6 +24,10 @@ public class TableCol {
         }
     public TableCol setLinkIndex(int index0){
         linkIndex = index0;
+        return this;
+        }
+    public TableCol setLinkText(String txt){
+        linkText = txt;
         return this;
     }
     public TableCol(String name, int size, int backColor) {

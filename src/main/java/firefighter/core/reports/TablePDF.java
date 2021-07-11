@@ -81,6 +81,9 @@ public class TablePDF extends TableData{
                 }
             table.setWidths(ww);
             for (int j = 0; j < ncol; j++) {
+                addColNumCell(table, j);
+                }
+            for (int j = 0; j < ncol; j++) {
                 addHeaderCell(table, cols.get(j));
                 }
             for (int i = 0; i < nrow; i++) {
@@ -91,6 +94,9 @@ public class TablePDF extends TableData{
             }
             document.add(table);
             addEmptyLine(document);
+            for(int i=0;i<cols.size();i++)
+                if (cols.get(i).linkText.length()!=0)
+                    document.add(new Paragraph(""+i+". "+cols.get(i).linkText, cellRegularFont));
             for(String ss : bottoms)
                 document.add(new Paragraph(ss, cellRegularFont));
             } catch (Exception ee) {
@@ -98,6 +104,13 @@ public class TablePDF extends TableData{
                 }
         }
 
+    private void addColNumCell(PdfPTable table, int num) {
+        Phrase phrase = new Phrase(num==0 ? "":""+num, cellHeaderFont);
+        PdfPCell cell = new PdfPCell(phrase);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        }
     private void addHeaderCell(PdfPTable table, TableCol col) {
         Phrase phrase = new Phrase(col.name, cellHeaderFont);
         if (col.linkIndex!=0)

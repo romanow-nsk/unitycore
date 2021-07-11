@@ -118,6 +118,13 @@ public class TableExcel extends TableData{
         font.setFontName("Arial");
         style4.setFont(font);
         style4.setAlignment(CellStyle.ALIGN_LEFT);
+        for(int i=0;i<cols.size();i++)
+            if (cols.get(i).linkText.length()!=0){
+                row = curSheet.createRow(i+nrow+4);
+                cell = row.createCell(0);
+                cell.setCellValue(""+i+". "+cols.get(i).linkText);
+                cell.setCellStyle(style4);
+                }
         for(int i=0;i<bottoms.size();i++){
             row = curSheet.createRow(i+nrow+4);
             cell = row.createCell(0);
