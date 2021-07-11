@@ -29,7 +29,7 @@ public class TableCol {
     public TableCol setLinkText(String txt){
         linkText = txt;
         return this;
-    }
+        }
     public TableCol(String name, int size, int backColor) {
         this.name = name;
         this.size = size;

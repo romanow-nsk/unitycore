@@ -160,7 +160,10 @@ public class TableData implements I_Report{
         int nrow = rows();
         for(int i=0;i<ncol;i++){
             TableCol cc = cols.get(i);
-            cc.maxSize = cc.midSize = verticalHeader ? 3 : cc.name.length();
+            int sz = cc.size;
+            if (!verticalHeader && cc.name.length()>sz)
+                sz = cc.name.length();
+            cc.maxSize = cc.midSize = sz;
             }
         for(int i=0;i<nrow;i++){
             for(int j=0;j<ncol;j++){
@@ -176,7 +179,7 @@ public class TableData implements I_Report{
             if (cc.multiString){
                 cc.midSize/=(nrow+1);
                 cc.finSize = (int)(cc.midSize*midOver); // По среднему
-                if (!verticalHeader && cc.size>cc.finSize)
+                if (cc.size>cc.finSize)
                     cc.finSize = cc.size;
                 }
             else
