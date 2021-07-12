@@ -4,6 +4,7 @@ public class ConstValue{
     private String groupName="";    // Группа констант
     private String name="";         // Имя в VALUES
     private String title="...";     // Название по-русски
+    private String comment="";      // Коммент
     private int value;              // Значение
     public ConstValue() {}
     public ConstValue(String gr, String nm, String tt, int vv) {
@@ -11,6 +12,12 @@ public class ConstValue{
         name=nm;
         title=tt;
         value=vv;
+        }
+    public String getComment() {
+        return comment;
+        }
+    public void setComment(String comment) {
+        this.comment = comment;
         }
     public String groupName() {
         return groupName; }

@@ -22,6 +22,10 @@ public class TableCol {
         align = align0;
         return this;
         }
+    public TableCol center(){
+        align = TableCol.AlignCenter;
+        return this;
+    }
     public TableCol setLinkIndex(int index0){
         linkIndex = index0;
         return this;

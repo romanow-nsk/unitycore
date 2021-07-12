@@ -97,6 +97,9 @@ public class ConstList extends ArrayList<ConstValue> {
                         }
                 //System.out.println(about.group()+":"+mname + " ="+vv+" "+about.title());
                 ConstValue cc = new ConstValue(about.group(),mname,about.title(),vv);
+                String comment = about.comment();
+                if (comment.length()!=0)
+                    cc.setComment(comment);
                 add(cc);
                 map.put(mname,cc);
             }

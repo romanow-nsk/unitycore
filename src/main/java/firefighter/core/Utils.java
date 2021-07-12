@@ -150,6 +150,21 @@ public class Utils {
             idx++;
             }
         }
+    public static String toHTML(String ss){
+        String out="<html>";
+        int idx=0,count=0;
+        while(true){
+            int idx1 = ss.indexOf('\n',idx);
+            if (count!=0)
+                out+="<br>";
+            if (idx1==-1)
+                return out+ss.substring(idx)+"</html>";
+            else
+                out+=ss.substring(idx,idx1);
+            idx = idx1+1;
+            count++;
+            }
+        }
     // https://github.com/davidmoten/word-wrap
     public static Pair<Integer,String> wordWrap(String ss, int size) throws IOException {
         if (ss.length()<=size)
