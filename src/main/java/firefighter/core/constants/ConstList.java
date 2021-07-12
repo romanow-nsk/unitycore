@@ -46,6 +46,13 @@ public class ConstList extends ArrayList<ConstValue> {
             }
         return -1;
         }
+    public ConstValue getValue(String group, int constValue){
+        for(ConstValue cc : this){
+            if (cc.groupName().equals(group) && cc.value()==constValue)
+                return cc;
+        }
+        return null;
+    }
     public ArrayList<ConstList> getByGroups(){
         ArrayList<ConstList> out = new ArrayList<>();
         HashMap<String,ConstList> maps = new HashMap<>();

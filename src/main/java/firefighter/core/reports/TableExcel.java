@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TableExcel extends TableData{
     private DefaultFont defaultFont = new DefaultFont();
@@ -21,6 +22,36 @@ public class TableExcel extends TableData{
     private final static short HeadRowHight=500;
     private final static short NormalRowHight=250;
     private final static double fontK=1.05;
+    private HashMap<Integer,ColorItem> colorsMap = new HashMap<>();
+    class ColorItem {
+        final int color;
+        final short xlsIndex;
+        final CellStyle styleLeft;
+        final CellStyle styleCenter;
+        public ColorItem(int color, short xlsIndex) {
+            this.color = color;
+            this.xlsIndex = xlsIndex;
+            Workbook wb = curSheet.getWorkbook();
+            CellStyle style1 = wb.createCellStyle();        // Тонкая рамка без выравнивания
+            style1.setBorderTop   (CellStyle.BORDER_THIN);
+            style1.setBorderRight (CellStyle.BORDER_THIN);
+            style1.setBorderBottom(CellStyle.BORDER_THIN);
+            style1.setBorderLeft  (CellStyle.BORDER_THIN);
+            style1.setWrapText(true);
+            style1.setAlignment(CellStyle.ALIGN_LEFT);
+            style1.setFillBackgroundColor(xlsIndex);
+            CellStyle style2 = wb.createCellStyle();        // Тонкая рамка, выравнивание по центру
+            style2.setBorderTop   (CellStyle.BORDER_THIN);
+            style2.setBorderRight (CellStyle.BORDER_THIN);
+            style2.setBorderBottom(CellStyle.BORDER_THIN);
+            style2.setBorderLeft  (CellStyle.BORDER_THIN);
+            style2.setAlignment(CellStyle.ALIGN_CENTER);
+            style2.setWrapText(true);
+            style2.setFillBackgroundColor(xlsIndex);
+            styleLeft = style1;
+            styleCenter = style2;
+        }
+    }
     @Override
     public void openPage(String title0, ArrayList<TableCol> cols0, int nrow, boolean verticalHeader0) {
         super.openPage(title0.replace(":","-"),cols0,nrow,verticalHeader0);
@@ -28,6 +59,13 @@ public class TableExcel extends TableData{
     @Override
     public void savePage() throws UniException {
         curSheet = workbook.createSheet(title);
+        colorsMap.clear();
+        colorsMap.put(0xFFFFFFFF, new ColorItem(0xFFFFFFFF,IndexedColors.WHITE.index));
+        colorsMap.put(0xFFDDDDDD, new ColorItem(0xFFDDDDDD,IndexedColors.GREY_80_PERCENT.index));
+        colorsMap.put(0xFFCCFF00, new ColorItem(0xFFCCFF00,IndexedColors.YELLOW.index));
+        colorsMap.put(0xFF00FF00, new ColorItem(0xFF00FF00,IndexedColors.GREEN.index));
+        colorsMap.put(0xFFFF0000, new ColorItem(0xFFFF0000,IndexedColors.RED.index));
+        colorsMap.put(0xFF808080, new ColorItem(0xFF808080,IndexedColors.GREY_50_PERCENT.index));
         int ncol = cols();
         int nrow = rows();
         Workbook wb = curSheet.getWorkbook();
@@ -101,13 +139,19 @@ public class TableExcel extends TableData{
                         zz = new Pair<>(1,ss);
                         }
                 cell.setCellValue(zz.o2);
-                CellStyle cc = cell.getCellStyle();                                     //??????
-                cc.setFillBackgroundColor((short) data.get(i).get(j).hexBackColor);     //??????
-                cc.setFillForegroundColor((short) data.get(i).get(j).hexTextColor);     //??????
-                if (cols.get(j).align==TableCol.AlignCenter)
-                    cell.setCellStyle(style2);
-                else
-                    cell.setCellStyle(style1);
+                ColorItem item = colorsMap.get(data.get(i).get(j).hexBackColor);
+                if (cols.get(j).align==TableCol.AlignCenter){
+                    if (item==null)
+                        cell.setCellStyle(style2);
+                    else
+                        cell.setCellStyle(item.styleCenter);
+                    }
+                else {
+                    if (item==null)
+                        cell.setCellStyle(style1);
+                    else
+                        cell.setCellStyle(item.styleLeft);
+                    }
                 }
             if (rowStrSize!=1)
                 row.setHeight((short) (rowStrSize * NormalRowHight));
