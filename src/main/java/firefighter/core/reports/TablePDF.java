@@ -13,6 +13,16 @@ import java.util.ArrayList;
 
 public class TablePDF extends TableData{
     public static final String fontFile="arial.ttf";
+    public final static int colors[]={
+        0xFFFFFFFF, //ColorNone=0;
+        0xFFFFC0C0, //ColorRed=1;
+        0xFFC0FFC0, //ColorGreen=2;
+        0xFFC0C0FF, //ColorBlue=3;
+        0xFFFFFFC0, //ColorYellow=4;
+        0xFFDDDDDD, //ColorGrayDark=5;
+        0xFFA0A0A0, //ColorGrayLight=6;
+        0XFFFF6633  //int ColorBrown=7;
+    };
     //protected String fontPath="c:/windows/fonts/"+fontFile;
     protected String fontPath=fontFile;     // 657-2 - в каталоге запуска сервера
     protected Font titleFont;
@@ -120,7 +130,7 @@ public class TablePDF extends TableData{
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         if (col.hexBackColor!=0)
-            cell.setBackgroundColor(new BaseColor(col.hexBackColor));
+            cell.setBackgroundColor(new BaseColor(colors[col.hexBackColor]));
         //cell.setPaddingBottom(3);
         table.addCell(cell);
         }
@@ -149,8 +159,9 @@ public class TablePDF extends TableData{
         if (tcell.selected)
             cell.setBackgroundColor(new BaseColor(0xe0e0e0));
         else
-        if (tcell.hexBackColor!=0)
-            cell.setBackgroundColor(new BaseColor(tcell.hexBackColor));
+        if (tcell.hexBackColor!=0){
+            cell.setBackgroundColor(new BaseColor(colors[tcell.hexBackColor]));
+            }
         table.addCell(cell);
         }
 
