@@ -34,6 +34,8 @@ public class TablePDF extends TableData{
     protected int cellWidth=20;
     protected int cellWidthFirst=120;
     protected int cellWidthLast=30;
+    private final static int LandscapeStringSize = 150;
+    private final static int VerticalStringSize = 100;
     private PdfPTable table;
     private Document document;
     public void setFontPath(String path){
@@ -78,16 +80,19 @@ public class TablePDF extends TableData{
             int nrow = rows();
             document.add(new Paragraph(title, titleFont));
             addEmptyLine(document);
+            int symStringSize = paramList.isLandscape() ? LandscapeStringSize : VerticalStringSize;
             table = new PdfPTable(ncol);
             table.setWidthPercentage(100);
             int ww[] = new int[ncol];
+            int size[] = new int[ncol];                 // Количество символов в столбце - реальное
             int sumWW=0;
             for (int i = 0; i < ww.length; i++){        //681 - приведение к процентам
-                ww[i] = cols.get(i).size;
-                sumWW+=ww[i];
+                sumWW += cols.get(i).size;
                 }
             for (int i = 0; i < ww.length; i++){
-                ww[i] = ww[i]*100/sumWW;
+                int sz = cols.get(i).size;
+                ww[i] = sz*100/sumWW;
+                size[i] = symStringSize * ww[i] / 100;    // Реальное кол-во символов в строке
                 }
             table.setWidths(ww);
             for (int j = 0; j < ncol; j++) {
@@ -97,11 +102,16 @@ public class TablePDF extends TableData{
                 addHeaderCell(table, cols.get(j));
                 }
             for (int i = 0; i < nrow; i++) {
+                int nLines=1;
                 for (int j = 0; j < ncol; j++) {
-                    TableRowItem item = rowData.get(i);
-                    addRegularCell(table, cols.get(j),item, data.get(i).get(j));
+                    int nl = data.get(i).get(j).value.length()/size[j]+1;
+                    if (nl > nLines)
+                        nLines = nl;
+                    }
+                for (int j = 0; j < ncol; j++) {
+                    addRegularCell(table, cols.get(j),nLines, data.get(i).get(j));
+                    }
                 }
-            }
             document.add(table);
             addEmptyLine(document);
             for(int i=0;i<cols.size();i++)
@@ -144,9 +154,9 @@ public class TablePDF extends TableData{
                 }
         }
 
-    protected void addRegularCell(PdfPTable table, TableCol col, TableRowItem item, TableCell tcell) {
+    protected void addRegularCell(PdfPTable table, TableCol col, int nLines, TableCell tcell) {
         PdfPCell cell = new PdfPCell(new Phrase(tcell.value, cellRegularFont));
-        cell.setFixedHeight(item.nLines*10+3);
+        cell.setFixedHeight(nLines*10+3);
         //cell.setPaddingBottom(3);
         int align=TableCol.AlignLeft;
         switch (col.align){

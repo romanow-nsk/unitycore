@@ -21,6 +21,7 @@ public class TableExcel extends TableData{
     private final static short HeadRowHight=500;
     private final static short NormalRowHight=250;
     private final static double fontK=1.05;
+    private final static double midOver=1.05;
     public final static short colors[]={
             IndexedColors.BLACK.getIndex(), //ColorNone=0;
             IndexedColors.RED.getIndex(),   //ColorRed=1;
@@ -111,7 +112,7 @@ public class TableExcel extends TableData{
         style0.setVerticalAlignment(CellStyle.VERTICAL_TOP);
         cell.setCellStyle(style0);
         //------------------------- подсчет размерностей ячеек
-        createColSizes();
+        createColSizesXLS();
         for(int i=0;i<ncol;i++){                // Размерность в символах
             curSheet.setColumnWidth(i,(int)(cols.get(i).finSize * fontK * 256));
             }
@@ -193,6 +194,37 @@ public class TableExcel extends TableData{
             out.close();
             } catch (IOException e) { UniException.io(e); }
         }
+    public void createColSizesXLS(){
+        int ncol = cols();
+        int nrow = rows();
+        for(int i=0;i<ncol;i++){
+            TableCol cc = cols.get(i);
+            int sz = cc.size;
+            if (!verticalHeader && cc.name.length()>sz)
+                sz = cc.name.length();
+            cc.maxSize = cc.midSize = sz;
+        }
+        for(int i=0;i<nrow;i++){
+            for(int j=0;j<ncol;j++){
+                int ss = data.get(i).get(j).value.length();
+                TableCol cc = cols.get(j);
+                cc.midSize+=ss;
+                if (ss > cc.maxSize)
+                    cc.maxSize=ss;
+            }
+        }
+        for(int j=0;j<ncol;j++){
+            TableCol cc = cols.get(j);
+            if (cc.multiString){
+                cc.midSize/=(nrow+1);
+                cc.finSize = (int)(cc.midSize*midOver); // По среднему
+                if (cc.size>cc.finSize)
+                    cc.finSize = cc.size;
+            }
+            else
+                cc.finSize = (int)((cc.maxSize+2)*midOver);
+        }
+    }
     public static void main(String ss[]){
         System.out.println(CellRangeAddress.valueOf("$A$2:$B$3"));
     }
